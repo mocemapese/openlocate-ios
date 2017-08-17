@@ -1,0 +1,99 @@
+# Customise this file, documentation can be found here:
+# https://github.com/fastlane/fastlane/tree/master/fastlane/docs
+# All available actions: https://docs.fastlane.tools/actions
+# can also be listed using the `fastlane actions` command
+
+# Change the syntax highlighting to Ruby
+# All lines starting with a # are ignored when running `fastlane`
+
+# If you want to automatically update fastlane if a new version is available:
+# update_fastlane
+
+# This is the minimum version number required.
+# Update this, if you use features of a newer version
+fastlane_version "2.47.0"
+
+default_platform :ios
+
+platform :ios do
+
+  desc 'Test framework'
+  desc 'Generate coverage'
+  lane :test_framework do
+    scan(
+      workspace: 'OpenLocate.xcworkspace',
+      scheme: 'OpenLocate',
+      device: 'iPhone 7',
+      code_coverage: true,
+      skip_build: true,
+      slack_message: 'OpenLocate Unit Tests'
+    )
+    
+    xcov(
+      workspace: 'OpenLocate.xcworkspace',
+      scheme: 'OpenLocate',
+    )
+
+  end
+
+  desc 'Ensure git is clean'
+  desc 'Test framework'
+  desc 'build'
+  desc 'Push to testflight'
+  lane :testflight_debug do
+    xcodeproj = 'Example/iOS Example.xcodeproj'
+    scheme = 'iOS Example'
+
+    # ensure that the branch is clean
+    ensure_git_status_clean
+
+    # test framework
+    test_framework
+
+    # Change build number to current time stamp
+    build_number = Time.new.strftime("%Y.%m.%d.%H.%M.%S")
+    increment_build_number(
+      build_number: build_number,
+      xcodeproj: xcodeproj,
+    )
+
+    # build example app
+    gym(
+      scheme: scheme,
+      output_directory: 'build',
+      output_name: 'example',
+    )
+
+    # release to testflight
+    pilot(
+      skip_submission: true,
+      ipa: 'build/example.ipa',
+    )
+    
+    # post message to slack
+    slack(
+      message: 'Latest and greatest example app uploaded to TestFlight :rocket:',
+      success: true,
+      payload: {
+        'Build Number' => build_number,
+      },
+    )
+    
+  end
+
+  desc 'Post to slack if error'
+  error do |lane, exception|
+    slack(
+      message: exception.message,
+      success: false,
+    )
+  end
+
+end
+
+
+# More information about multiple platforms in fastlane: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Platforms.md
+# All available actions: https://docs.fastlane.tools/actions
+
+# fastlane reports which actions are used. No personal data is recorded. 
+# Learn more at https://github.com/fastlane/fastlane#metrics

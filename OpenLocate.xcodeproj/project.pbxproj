@@ -1,0 +1,774 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		480356201F2F0B03000BED59 /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4803561F1F2F0B03000BED59 /* Scheduler.swift */; };
+		480356221F2F0DEA000BED59 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480356211F2F0DEA000BED59 /* Task.swift */; };
+		4832EF471F14852F004B3EC2 /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4832EF461F14852F004B3EC2 /* HttpRequest.swift */; };
+		48355C491F2BA6270019AA5B /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48355C481F2BA6270019AA5B /* Logger.swift */; };
+		48355C4B1F2BA73E0019AA5B /* LoggerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48355C4A1F2BA73E0019AA5B /* LoggerDataSource.swift */; };
+		48355C4D1F2BA74D0019AA5B /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48355C4C1F2BA74D0019AA5B /* Log.swift */; };
+		48355C511F2C6F860019AA5B /* LoggerDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48355C501F2C6F860019AA5B /* LoggerDataSourceTests.swift */; };
+		48355C531F2C779E0019AA5B /* LoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48355C521F2C779E0019AA5B /* LoggerTests.swift */; };
+		484A7FC41F17579700D63E6A /* DatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484A7FC31F17579700D63E6A /* DatabaseTests.swift */; };
+		484A7FC61F175CA900D63E6A /* Statement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484A7FC51F175CA900D63E6A /* Statement.swift */; };
+		484A7FC81F175CE800D63E6A /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484A7FC71F175CE800D63E6A /* Result.swift */; };
+		485A63F11F445E140005F86D /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485A63F01F445E140005F86D /* Configuration.swift */; };
+		486521AD1F2A1184009B20CF /* TcpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486521AC1F2A1184009B20CF /* TcpClient.swift */; };
+		486521AF1F2A1198009B20CF /* TcpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486521AE1F2A1198009B20CF /* TcpRequest.swift */; };
+		486521B11F2A11AC009B20CF /* TcpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486521B01F2A11AC009B20CF /* TcpResponse.swift */; };
+		4876E9601F09EB45006EF61C /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4876E95F1F09EB45006EF61C /* LocationService.swift */; };
+		489660331F3B42160073E0E5 /* TcpResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489660321F3B42160073E0E5 /* TcpResponseTests.swift */; };
+		489700D61F04E82000D8C27C /* OpenLocate.h in Headers */ = {isa = PBXBuildFile; fileRef = 489700D41F04E82000D8C27C /* OpenLocate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		489700DA1F04EA7D00D8C27C /* OpenLocate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489700D91F04EA7D00D8C27C /* OpenLocate.swift */; };
+		489701641F05034200D8C27C /* OpenLocate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 489701171F04F6AE00D8C27C /* OpenLocate.framework */; };
+		4897016F1F05183100D8C27C /* HttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4897016E1F05183100D8C27C /* HttpClient.swift */; };
+		48C4D8C11F1F9D3F00640145 /* OpenLocateError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C4D8C01F1F9D3F00640145 /* OpenLocateError.swift */; };
+		48C4D8C31F1F9E1000640145 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C4D8C21F1F9E1000640145 /* LocationManager.swift */; };
+		48D134671F0A3DAE0075EFBC /* Dictionary+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D134661F0A3DAE0075EFBC /* Dictionary+Extensions.swift */; };
+		48D134691F0A56830075EFBC /* LocationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D134681F0A56830075EFBC /* LocationServiceTests.swift */; };
+		48D3AA6F1F1797EF00BC3992 /* LocationDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D3AA6E1F1797EF00BC3992 /* LocationDataSourceTests.swift */; };
+		48D6E7F81F38790D00EC76A8 /* Advertising.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D6E7F71F38790D00EC76A8 /* Advertising.swift */; };
+		48D6E7FC1F3AD07300EC76A8 /* DictionaryExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D6E7FB1F3AD07300EC76A8 /* DictionaryExtensionTests.swift */; };
+		48D6E7FF1F3AE60C00EC76A8 /* TaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D6E7FE1F3AE60C00EC76A8 /* TaskTests.swift */; };
+		48D6E8011F3AF35100EC76A8 /* SchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D6E8001F3AF35100EC76A8 /* SchedulerTests.swift */; };
+		48D6E8031F3B124600EC76A8 /* HttpRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D6E8021F3B124600EC76A8 /* HttpRequestTests.swift */; };
+		48DBDB231F0A8A7D006D17EC /* OpenLocateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DBDB221F0A8A7D006D17EC /* OpenLocateTests.swift */; };
+		48DE7F501F4030F4008BD4A4 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DE7F4F1F4030F4008BD4A4 /* URLSession.swift */; };
+		48DE7F521F40403B008BD4A4 /* TcpClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DE7F511F40403B008BD4A4 /* TcpClientTests.swift */; };
+		48DE7F551F405BCE008BD4A4 /* LocationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DE7F541F405BCE008BD4A4 /* LocationManagerTests.swift */; };
+		48E0EE5E1F15E9D60053BCC3 /* HttpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0EE5D1F15E9D60053BCC3 /* HttpResponse.swift */; };
+		48E0EE601F161D6B0053BCC3 /* LocationDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0EE5F1F161D6A0053BCC3 /* LocationDataSource.swift */; };
+		48E0EE621F1625320053BCC3 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 48E0EE611F1625240053BCC3 /* libsqlite3.tbd */; };
+		48E0EE651F1625F10053BCC3 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0EE641F1625F10053BCC3 /* Database.swift */; };
+		48E45DE31F052A5F006EAF6F /* BaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E45DE11F052A47006EAF6F /* BaseTestCase.swift */; };
+		48E45DE61F052AA8006EAF6F /* HttpClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E45DE51F052AA8006EAF6F /* HttpClientTests.swift */; };
+		48E45DEF1F09384C006EAF6F /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E45DEE1F09384B006EAF6F /* Location.swift */; };
+		48E45DF11F094506006EAF6F /* LocationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E45DF01F094506006EAF6F /* LocationTests.swift */; };
+		48F0DCC51F3B30DA004C4943 /* LogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F0DCC41F3B30DA004C4943 /* LogTests.swift */; };
+		48F0DCC71F3B3A89004C4943 /* HttpResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F0DCC61F3B3A89004C4943 /* HttpResponseTests.swift */; };
+		48F0DCCC1F3B40A1004C4943 /* TcpRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F0DCCB1F3B4083004C4943 /* TcpRequestTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		489701651F05034200D8C27C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 489700AE1F04D80A00D8C27C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 489700B61F04D80A00D8C27C;
+			remoteInfo = OpenLocate;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4803561F1F2F0B03000BED59 /* Scheduler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Scheduler.swift; path = Source/Scheduler.swift; sourceTree = "<group>"; };
+		480356211F2F0DEA000BED59 /* Task.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Task.swift; path = Source/Task.swift; sourceTree = "<group>"; };
+		4832EF461F14852F004B3EC2 /* HttpRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HttpRequest.swift; path = Source/HttpRequest.swift; sourceTree = "<group>"; };
+		48355C481F2BA6270019AA5B /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Logger.swift; path = Source/Logger.swift; sourceTree = "<group>"; };
+		48355C4A1F2BA73E0019AA5B /* LoggerDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LoggerDataSource.swift; path = Source/LoggerDataSource.swift; sourceTree = "<group>"; };
+		48355C4C1F2BA74D0019AA5B /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Log.swift; path = Source/Log.swift; sourceTree = "<group>"; };
+		48355C501F2C6F860019AA5B /* LoggerDataSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerDataSourceTests.swift; sourceTree = "<group>"; };
+		48355C521F2C779E0019AA5B /* LoggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerTests.swift; sourceTree = "<group>"; };
+		484A7FC31F17579700D63E6A /* DatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseTests.swift; sourceTree = "<group>"; };
+		484A7FC51F175CA900D63E6A /* Statement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Statement.swift; path = Source/Statement.swift; sourceTree = "<group>"; };
+		484A7FC71F175CE800D63E6A /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Result.swift; path = Source/Result.swift; sourceTree = "<group>"; };
+		485A63F01F445E140005F86D /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Configuration.swift; path = Source/Configuration.swift; sourceTree = "<group>"; };
+		486521AC1F2A1184009B20CF /* TcpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TcpClient.swift; path = Source/TcpClient.swift; sourceTree = "<group>"; };
+		486521AE1F2A1198009B20CF /* TcpRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TcpRequest.swift; path = Source/TcpRequest.swift; sourceTree = "<group>"; };
+		486521B01F2A11AC009B20CF /* TcpResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TcpResponse.swift; path = Source/TcpResponse.swift; sourceTree = "<group>"; };
+		4876E95F1F09EB45006EF61C /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LocationService.swift; path = Source/LocationService.swift; sourceTree = "<group>"; };
+		4876E9631F09ED11006EF61C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		489660321F3B42160073E0E5 /* TcpResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TcpResponseTests.swift; sourceTree = "<group>"; };
+		489700D31F04E82000D8C27C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Source/Info.plist; sourceTree = "<group>"; };
+		489700D41F04E82000D8C27C /* OpenLocate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenLocate.h; path = Source/OpenLocate.h; sourceTree = "<group>"; };
+		489700D91F04EA7D00D8C27C /* OpenLocate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OpenLocate.swift; path = Source/OpenLocate.swift; sourceTree = "<group>"; };
+		489701171F04F6AE00D8C27C /* OpenLocate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OpenLocate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4897016E1F05183100D8C27C /* HttpClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HttpClient.swift; path = Source/HttpClient.swift; sourceTree = "<group>"; };
+		48C4D8C01F1F9D3F00640145 /* OpenLocateError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OpenLocateError.swift; path = Source/OpenLocateError.swift; sourceTree = "<group>"; };
+		48C4D8C21F1F9E1000640145 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LocationManager.swift; path = Source/LocationManager.swift; sourceTree = "<group>"; };
+		48D134661F0A3DAE0075EFBC /* Dictionary+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Dictionary+Extensions.swift"; path = "Source/Dictionary+Extensions.swift"; sourceTree = "<group>"; };
+		48D134681F0A56830075EFBC /* LocationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationServiceTests.swift; sourceTree = "<group>"; };
+		48D3AA6E1F1797EF00BC3992 /* LocationDataSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDataSourceTests.swift; sourceTree = "<group>"; };
+		48D6E7F71F38790D00EC76A8 /* Advertising.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Advertising.swift; path = Source/Advertising.swift; sourceTree = "<group>"; };
+		48D6E7FB1F3AD07300EC76A8 /* DictionaryExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtensionTests.swift; sourceTree = "<group>"; };
+		48D6E7FE1F3AE60C00EC76A8 /* TaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTests.swift; sourceTree = "<group>"; };
+		48D6E8001F3AF35100EC76A8 /* SchedulerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulerTests.swift; sourceTree = "<group>"; };
+		48D6E8021F3B124600EC76A8 /* HttpRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpRequestTests.swift; sourceTree = "<group>"; };
+		48DBDB221F0A8A7D006D17EC /* OpenLocateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLocateTests.swift; sourceTree = "<group>"; };
+		48DE7F4F1F4030F4008BD4A4 /* URLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
+		48DE7F511F40403B008BD4A4 /* TcpClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TcpClientTests.swift; sourceTree = "<group>"; };
+		48DE7F541F405BCE008BD4A4 /* LocationManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManagerTests.swift; sourceTree = "<group>"; };
+		48E0EE5D1F15E9D60053BCC3 /* HttpResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HttpResponse.swift; path = Source/HttpResponse.swift; sourceTree = "<group>"; };
+		48E0EE5F1F161D6A0053BCC3 /* LocationDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LocationDataSource.swift; path = Source/LocationDataSource.swift; sourceTree = "<group>"; };
+		48E0EE611F1625240053BCC3 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		48E0EE641F1625F10053BCC3 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Database.swift; path = Source/Database.swift; sourceTree = "<group>"; };
+		48E45DDF1F052344006EAF6F /* OpenLocate Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "OpenLocate Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		48E45DE11F052A47006EAF6F /* BaseTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTestCase.swift; sourceTree = "<group>"; };
+		48E45DE51F052AA8006EAF6F /* HttpClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpClientTests.swift; sourceTree = "<group>"; };
+		48E45DEC1F052E28006EAF6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Tests/Info.plist; sourceTree = SOURCE_ROOT; };
+		48E45DEE1F09384B006EAF6F /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Location.swift; path = Source/Location.swift; sourceTree = "<group>"; };
+		48E45DF01F094506006EAF6F /* LocationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTests.swift; sourceTree = "<group>"; };
+		48F0DCC41F3B30DA004C4943 /* LogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogTests.swift; sourceTree = "<group>"; };
+		48F0DCC61F3B3A89004C4943 /* HttpResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpResponseTests.swift; sourceTree = "<group>"; };
+		48F0DCCB1F3B4083004C4943 /* TcpRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TcpRequestTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		489700B31F04D80A00D8C27C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				48E0EE621F1625320053BCC3 /* libsqlite3.tbd in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4897015C1F05034200D8C27C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				489701641F05034200D8C27C /* OpenLocate.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4803561E1F2F0ADF000BED59 /* Scheduler */ = {
+			isa = PBXGroup;
+			children = (
+				4803561F1F2F0B03000BED59 /* Scheduler.swift */,
+				480356211F2F0DEA000BED59 /* Task.swift */,
+			);
+			name = Scheduler;
+			sourceTree = "<group>";
+		};
+		4832EF451F148423004B3EC2 /* Http */ = {
+			isa = PBXGroup;
+			children = (
+				4897016E1F05183100D8C27C /* HttpClient.swift */,
+				4832EF461F14852F004B3EC2 /* HttpRequest.swift */,
+				48E0EE5D1F15E9D60053BCC3 /* HttpResponse.swift */,
+			);
+			name = Http;
+			sourceTree = "<group>";
+		};
+		48355C4F1F2C6F720019AA5B /* Logger */ = {
+			isa = PBXGroup;
+			children = (
+				48355C501F2C6F860019AA5B /* LoggerDataSourceTests.swift */,
+				48355C521F2C779E0019AA5B /* LoggerTests.swift */,
+				48F0DCC41F3B30DA004C4943 /* LogTests.swift */,
+			);
+			name = Logger;
+			sourceTree = "<group>";
+		};
+		484A7FC21F17577B00D63E6A /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				484A7FC31F17579700D63E6A /* DatabaseTests.swift */,
+			);
+			name = Database;
+			sourceTree = "<group>";
+		};
+		485A63EF1F445DD20005F86D /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				485A63F01F445E140005F86D /* Configuration.swift */,
+			);
+			name = Config;
+			sourceTree = "<group>";
+		};
+		486521AB1F2A116C009B20CF /* Tcp */ = {
+			isa = PBXGroup;
+			children = (
+				486521AC1F2A1184009B20CF /* TcpClient.swift */,
+				486521AE1F2A1198009B20CF /* TcpRequest.swift */,
+				486521B01F2A11AC009B20CF /* TcpResponse.swift */,
+			);
+			name = Tcp;
+			sourceTree = "<group>";
+		};
+		48698A921F2B7B1800E7D67C /* Logger */ = {
+			isa = PBXGroup;
+			children = (
+				48355C481F2BA6270019AA5B /* Logger.swift */,
+				48355C4A1F2BA73E0019AA5B /* LoggerDataSource.swift */,
+				48355C4C1F2BA74D0019AA5B /* Log.swift */,
+			);
+			name = Logger;
+			sourceTree = "<group>";
+		};
+		4876E9621F09ED10006EF61C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				48E0EE611F1625240053BCC3 /* libsqlite3.tbd */,
+				4876E9631F09ED11006EF61C /* CoreLocation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		489700AD1F04D80A00D8C27C = {
+			isa = PBXGroup;
+			children = (
+				489700D81F04EA5300D8C27C /* Source */,
+				489701181F04F6E300D8C27C /* Products */,
+				4897015A1F05025E00D8C27C /* Tests */,
+				48E45DDF1F052344006EAF6F /* OpenLocate Tests.xctest */,
+				4876E9621F09ED10006EF61C /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		489700D21F04E7FD00D8C27C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				489700D31F04E82000D8C27C /* Info.plist */,
+				489700D41F04E82000D8C27C /* OpenLocate.h */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		489700D81F04EA5300D8C27C /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				485A63EF1F445DD20005F86D /* Config */,
+				4897016D1F05181400D8C27C /* Core */,
+				4832EF451F148423004B3EC2 /* Http */,
+				486521AB1F2A116C009B20CF /* Tcp */,
+				48698A921F2B7B1800E7D67C /* Logger */,
+				48E0EE631F1625D80053BCC3 /* Database */,
+				4803561E1F2F0ADF000BED59 /* Scheduler */,
+				48D134611F0A21A60075EFBC /* Extensions */,
+				489700D21F04E7FD00D8C27C /* Supporting Files */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		489701181F04F6E300D8C27C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				489701171F04F6AE00D8C27C /* OpenLocate.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4897015A1F05025E00D8C27C /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				48E45DE11F052A47006EAF6F /* BaseTestCase.swift */,
+				48DBDB221F0A8A7D006D17EC /* OpenLocateTests.swift */,
+				48E45DE41F052A84006EAF6F /* Core */,
+				48D3AA6D1F1797BC00BC3992 /* Http */,
+				48F0DCC81F3B3E80004C4943 /* Tcp */,
+				484A7FC21F17577B00D63E6A /* Database */,
+				48355C4F1F2C6F720019AA5B /* Logger */,
+				48D6E7FD1F3AE5F000EC76A8 /* Scheduler */,
+				48AFAE0E1F23DFD000E8ECAD /* Extensions */,
+				48E45DED1F052E3D006EAF6F /* Supporting Files */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		4897016D1F05181400D8C27C /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				48E45DEE1F09384B006EAF6F /* Location.swift */,
+				489700D91F04EA7D00D8C27C /* OpenLocate.swift */,
+				4876E95F1F09EB45006EF61C /* LocationService.swift */,
+				48E0EE5F1F161D6A0053BCC3 /* LocationDataSource.swift */,
+				48C4D8C01F1F9D3F00640145 /* OpenLocateError.swift */,
+				48C4D8C21F1F9E1000640145 /* LocationManager.swift */,
+				48D6E7F71F38790D00EC76A8 /* Advertising.swift */,
+			);
+			name = Core;
+			sourceTree = "<group>";
+		};
+		48AFAE0E1F23DFD000E8ECAD /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				48D6E7FB1F3AD07300EC76A8 /* DictionaryExtensionTests.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
+		48D134611F0A21A60075EFBC /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				48D134661F0A3DAE0075EFBC /* Dictionary+Extensions.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
+		48D3AA6D1F1797BC00BC3992 /* Http */ = {
+			isa = PBXGroup;
+			children = (
+				48E45DE51F052AA8006EAF6F /* HttpClientTests.swift */,
+				48D6E8021F3B124600EC76A8 /* HttpRequestTests.swift */,
+				48F0DCC61F3B3A89004C4943 /* HttpResponseTests.swift */,
+				48DE7F4F1F4030F4008BD4A4 /* URLSession.swift */,
+			);
+			name = Http;
+			sourceTree = "<group>";
+		};
+		48D6E7FD1F3AE5F000EC76A8 /* Scheduler */ = {
+			isa = PBXGroup;
+			children = (
+				48D6E7FE1F3AE60C00EC76A8 /* TaskTests.swift */,
+				48D6E8001F3AF35100EC76A8 /* SchedulerTests.swift */,
+			);
+			name = Scheduler;
+			sourceTree = "<group>";
+		};
+		48E0EE631F1625D80053BCC3 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				48E0EE641F1625F10053BCC3 /* Database.swift */,
+				484A7FC51F175CA900D63E6A /* Statement.swift */,
+				484A7FC71F175CE800D63E6A /* Result.swift */,
+			);
+			name = Database;
+			sourceTree = "<group>";
+		};
+		48E45DE41F052A84006EAF6F /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				48E45DF01F094506006EAF6F /* LocationTests.swift */,
+				48D134681F0A56830075EFBC /* LocationServiceTests.swift */,
+				48D3AA6E1F1797EF00BC3992 /* LocationDataSourceTests.swift */,
+				48DE7F541F405BCE008BD4A4 /* LocationManagerTests.swift */,
+			);
+			name = Core;
+			sourceTree = "<group>";
+		};
+		48E45DED1F052E3D006EAF6F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				48E45DEC1F052E28006EAF6F /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		48F0DCC81F3B3E80004C4943 /* Tcp */ = {
+			isa = PBXGroup;
+			children = (
+				48F0DCCB1F3B4083004C4943 /* TcpRequestTests.swift */,
+				489660321F3B42160073E0E5 /* TcpResponseTests.swift */,
+				48DE7F511F40403B008BD4A4 /* TcpClientTests.swift */,
+			);
+			name = Tcp;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		489700B41F04D80A00D8C27C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				489700D61F04E82000D8C27C /* OpenLocate.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		489700B61F04D80A00D8C27C /* OpenLocate */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 489700CB1F04D80A00D8C27C /* Build configuration list for PBXNativeTarget "OpenLocate" */;
+			buildPhases = (
+				489700B21F04D80A00D8C27C /* Sources */,
+				489700B31F04D80A00D8C27C /* Frameworks */,
+				489700B41F04D80A00D8C27C /* Headers */,
+				489700B51F04D80A00D8C27C /* Resources */,
+				48698A981F2B7D5F00E7D67C /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OpenLocate;
+			productName = OpenLocate;
+			productReference = 489701171F04F6AE00D8C27C /* OpenLocate.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		4897015E1F05034200D8C27C /* OpenLocate Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 489701671F05034200D8C27C /* Build configuration list for PBXNativeTarget "OpenLocate Tests" */;
+			buildPhases = (
+				4897015B1F05034200D8C27C /* Sources */,
+				4897015C1F05034200D8C27C /* Frameworks */,
+				4897015D1F05034200D8C27C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				489701661F05034200D8C27C /* PBXTargetDependency */,
+			);
+			name = "OpenLocate Tests";
+			productName = "OpenLocate Tests";
+			productReference = 48E45DDF1F052344006EAF6F /* OpenLocate Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		489700AE1F04D80A00D8C27C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0830;
+				LastUpgradeCheck = 0900;
+				ORGANIZATIONNAME = OpenLocate;
+				TargetAttributes = {
+					489700B61F04D80A00D8C27C = {
+						CreatedOnToolsVersion = 8.3.3;
+						LastSwiftMigration = 0900;
+						ProvisioningStyle = Automatic;
+					};
+					4897015E1F05034200D8C27C = {
+						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = ME79TBXDPP;
+						LastSwiftMigration = 0900;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 489700B11F04D80A00D8C27C /* Build configuration list for PBXProject "OpenLocate" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 489700AD1F04D80A00D8C27C;
+			productRefGroup = 489700AD1F04D80A00D8C27C;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				489700B61F04D80A00D8C27C /* OpenLocate */,
+				4897015E1F05034200D8C27C /* OpenLocate Tests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		489700B51F04D80A00D8C27C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4897015D1F05034200D8C27C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		48698A981F2B7D5F00E7D67C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		489700B21F04D80A00D8C27C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				48355C4B1F2BA73E0019AA5B /* LoggerDataSource.swift in Sources */,
+				48355C491F2BA6270019AA5B /* Logger.swift in Sources */,
+				486521AD1F2A1184009B20CF /* TcpClient.swift in Sources */,
+				4897016F1F05183100D8C27C /* HttpClient.swift in Sources */,
+				480356221F2F0DEA000BED59 /* Task.swift in Sources */,
+				4832EF471F14852F004B3EC2 /* HttpRequest.swift in Sources */,
+				48E45DEF1F09384C006EAF6F /* Location.swift in Sources */,
+				48D134671F0A3DAE0075EFBC /* Dictionary+Extensions.swift in Sources */,
+				4876E9601F09EB45006EF61C /* LocationService.swift in Sources */,
+				48355C4D1F2BA74D0019AA5B /* Log.swift in Sources */,
+				489700DA1F04EA7D00D8C27C /* OpenLocate.swift in Sources */,
+				486521AF1F2A1198009B20CF /* TcpRequest.swift in Sources */,
+				48D6E7F81F38790D00EC76A8 /* Advertising.swift in Sources */,
+				480356201F2F0B03000BED59 /* Scheduler.swift in Sources */,
+				48E0EE651F1625F10053BCC3 /* Database.swift in Sources */,
+				48E0EE601F161D6B0053BCC3 /* LocationDataSource.swift in Sources */,
+				48E0EE5E1F15E9D60053BCC3 /* HttpResponse.swift in Sources */,
+				48C4D8C31F1F9E1000640145 /* LocationManager.swift in Sources */,
+				486521B11F2A11AC009B20CF /* TcpResponse.swift in Sources */,
+				48C4D8C11F1F9D3F00640145 /* OpenLocateError.swift in Sources */,
+				485A63F11F445E140005F86D /* Configuration.swift in Sources */,
+				484A7FC61F175CA900D63E6A /* Statement.swift in Sources */,
+				484A7FC81F175CE800D63E6A /* Result.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4897015B1F05034200D8C27C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				48F0DCC51F3B30DA004C4943 /* LogTests.swift in Sources */,
+				484A7FC41F17579700D63E6A /* DatabaseTests.swift in Sources */,
+				48D6E7FC1F3AD07300EC76A8 /* DictionaryExtensionTests.swift in Sources */,
+				48F0DCCC1F3B40A1004C4943 /* TcpRequestTests.swift in Sources */,
+				489660331F3B42160073E0E5 /* TcpResponseTests.swift in Sources */,
+				48E45DE61F052AA8006EAF6F /* HttpClientTests.swift in Sources */,
+				48D6E8031F3B124600EC76A8 /* HttpRequestTests.swift in Sources */,
+				48E45DF11F094506006EAF6F /* LocationTests.swift in Sources */,
+				48F0DCC71F3B3A89004C4943 /* HttpResponseTests.swift in Sources */,
+				48D134691F0A56830075EFBC /* LocationServiceTests.swift in Sources */,
+				48DBDB231F0A8A7D006D17EC /* OpenLocateTests.swift in Sources */,
+				48355C531F2C779E0019AA5B /* LoggerTests.swift in Sources */,
+				48DE7F551F405BCE008BD4A4 /* LocationManagerTests.swift in Sources */,
+				48DE7F521F40403B008BD4A4 /* TcpClientTests.swift in Sources */,
+				48E45DE31F052A5F006EAF6F /* BaseTestCase.swift in Sources */,
+				48355C511F2C6F860019AA5B /* LoggerDataSourceTests.swift in Sources */,
+				48DE7F501F4030F4008BD4A4 /* URLSession.swift in Sources */,
+				48D6E8011F3AF35100EC76A8 /* SchedulerTests.swift in Sources */,
+				48D3AA6F1F1797EF00BC3992 /* LocationDataSourceTests.swift in Sources */,
+				48D6E7FF1F3AE60C00EC76A8 /* TaskTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		489701661F05034200D8C27C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 489700B61F04D80A00D8C27C /* OpenLocate */;
+			targetProxy = 489701651F05034200D8C27C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		489700C91F04D80A00D8C27C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		489700CA1F04D80A00D8C27C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		489700CC1F04D80A00D8C27C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Source/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.openlocate.iOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		489700CD1F04D80A00D8C27C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Source/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.openlocate.iOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
+		489701681F05034200D8C27C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = ME79TBXDPP;
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.openlocate.iOS-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		489701691F05034200D8C27C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = ME79TBXDPP;
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.openlocate.iOS-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		489700B11F04D80A00D8C27C /* Build configuration list for PBXProject "OpenLocate" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				489700C91F04D80A00D8C27C /* Debug */,
+				489700CA1F04D80A00D8C27C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		489700CB1F04D80A00D8C27C /* Build configuration list for PBXNativeTarget "OpenLocate" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				489700CC1F04D80A00D8C27C /* Debug */,
+				489700CD1F04D80A00D8C27C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		489701671F05034200D8C27C /* Build configuration list for PBXNativeTarget "OpenLocate Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				489701681F05034200D8C27C /* Debug */,
+				489701691F05034200D8C27C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 489700AE1F04D80A00D8C27C /* Project object */;
+}
