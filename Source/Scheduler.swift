@@ -24,9 +24,9 @@
 
 import Foundation
 
-private let dispatchLocationTimeInterval = 300.0
-
 protocol Scheduler {
+    var timeInterval: TimeInterval { get set }
+
     func schedule(task: Task)
     func cancel(task: Task)
     var scheduled: Bool { get }
@@ -34,11 +34,16 @@ protocol Scheduler {
 
 final class TaskScheduler: Scheduler {
 
-    private var timeInterval: TimeInterval
+    var timeInterval: TimeInterval {
+        didSet {
+            stopTimer()
+            startTimerIfNeeded()
+        }
+    }
     private var tasks = [Task]()
     private var timer: Timer?
 
-    init(timeInterval: TimeInterval = dispatchLocationTimeInterval) {
+    init(timeInterval: TimeInterval) {
         self.timeInterval = timeInterval
     }
 

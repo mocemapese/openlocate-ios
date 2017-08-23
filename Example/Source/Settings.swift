@@ -1,5 +1,5 @@
 //
-//  Configuration.swift
+//  Settings.swift
 //
 //  Copyright (c) 2017 OpenLocate
 //
@@ -23,19 +23,38 @@
 //
 
 import Foundation
+import OpenLocate
 
-public typealias Headers = [String: String]
+typealias Minute = Int
 
-// Configuration
+let locationAccuracyDidChange = "LocationAccuracyChangedNotification"
+let locationIntervalDidChange = "LocationIntervalChangedNotification"
+let transmissionIntervalDidChange = "TransmissionIntervalChangedNotification"
 
-public protocol Configuration {
-    var url: String { get }
-    var headers: Headers? { get }
-    var valid: Bool { get }
-}
+class Settings {
 
-extension Configuration {
-    public var valid: Bool {
-        return !url.isEmpty
+    static let shared = Settings()
+
+    var accuracy = LocationAccuracy.high {
+        didSet {
+            NotificationCenter.default.post(
+                Notification(name: Notification.Name(rawValue: locationAccuracyDidChange))
+            )
+        }
     }
+    var locationInterval: Minute = 2 {
+        didSet {
+            NotificationCenter.default.post(
+                Notification(name: Notification.Name(rawValue: locationIntervalDidChange))
+            )
+        }
+    }
+    var transmissionInterval: Minute = 5 {
+        didSet {
+            NotificationCenter.default.post(
+                Notification(name: Notification.Name(rawValue: transmissionIntervalDidChange))
+            )
+        }
+    }
+
 }

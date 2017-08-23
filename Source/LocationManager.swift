@@ -36,7 +36,7 @@ protocol CLLocationManagerProtocol {
     var pausesLocationUpdatesAutomatically: Bool { get set }
     var allowsBackgroundLocationUpdates: Bool { get set }
 
-    func requestWhenInUseAuthorization()
+    func requestAlwaysAuthorization()
     func startUpdatingLocation()
     func stopUpdatingLocation()
 
@@ -51,6 +51,7 @@ extension CLLocationManager: CLLocationManagerProtocol { }
 protocol LocationManagerType {
     func subscribe(_ locationHandler: @escaping LocationHandler)
     func cancel()
+    func set(accuracy: LocationAccuracy)
 
     var updatingLocation: Bool { get }
 
@@ -86,7 +87,7 @@ extension LocationManager: CLLocationManagerDelegate {
 
     private func requestAuthorizationIfNeeded() {
         if LocationManager.authorizationStatus() == .notDetermined {
-            manager.requestWhenInUseAuthorization()
+            manager.requestAlwaysAuthorization()
         }
     }
 
@@ -119,6 +120,17 @@ extension LocationManager {
     func cancel() {
         requests.removeAll()
         manager.stopUpdatingLocation()
+    }
+
+    func set(accuracy: LocationAccuracy) {
+        switch accuracy {
+        case .low:
+            manager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        case .medium:
+            manager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        default:
+            manager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+        }
     }
 
     var updatingLocation: Bool {

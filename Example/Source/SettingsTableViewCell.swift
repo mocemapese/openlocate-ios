@@ -1,5 +1,5 @@
 //
-//  Configuration.swift
+//  SettingsTableViewCell.swift
 //
 //  Copyright (c) 2017 OpenLocate
 //
@@ -22,20 +22,11 @@
 //  SOFTWARE.
 //
 
-import Foundation
+import UIKit
 
-public typealias Headers = [String: String]
+class SettingsTableViewCell: UITableViewCell {
 
-// Configuration
+    @IBOutlet weak var title: UILabel!
+    @IBOutlet weak var value: UILabel!
 
-public protocol Configuration {
-    var url: String { get }
-    var headers: Headers? { get }
-    var valid: Bool { get }
-}
-
-extension Configuration {
-    public var valid: Bool {
-        return !url.isEmpty
-    }
 }

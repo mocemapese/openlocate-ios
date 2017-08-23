@@ -34,7 +34,7 @@
 	</dict>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSLocationWhenInUseUsageDescription</key>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>OpenLocate would like to access location.</string>
 	<key>ProviderId</key>
 	<string>***REMOVED***</string>

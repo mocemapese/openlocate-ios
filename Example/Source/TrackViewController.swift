@@ -1,5 +1,5 @@
 //
-//  TestViewController.swift
+//  TrackViewController.swift
 //
 //  Copyright (c) 2017 OpenLocate
 //
@@ -25,7 +25,33 @@
 import UIKit
 import OpenLocate
 
-class TestViewController: UIViewController {
+class TrackViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.navigationItem.titleView = UIImageView(image: UIImage(named: "tab_logo"))
+
+        _ = NotificationCenter.default.addObserver(
+        forName: Notification.Name(rawValue: locationAccuracyDidChange),
+        object: nil,
+        queue: nil) { _ in
+            OpenLocate.shared.locationAccuracy = Settings.shared.accuracy
+        }
+
+        _ = NotificationCenter.default.addObserver(
+            forName: Notification.Name(rawValue: locationIntervalDidChange),
+            object: nil,
+            queue: nil) { _ in
+                OpenLocate.shared.locationInterval = Double(Settings.shared.locationInterval * 60)
+        }
+
+        _ = NotificationCenter.default.addObserver(
+            forName: Notification.Name(rawValue: transmissionIntervalDidChange),
+            object: nil,
+            queue: nil) { _ in
+                OpenLocate.shared.transmissionInterval = Double(Settings.shared.transmissionInterval * 60)
+        }
+    }
 
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var stopButton: UIButton!
@@ -61,13 +87,13 @@ class TestViewController: UIViewController {
     }
 
     private func onStartTracking() {
-        startButton.isEnabled = false
-        stopButton.isEnabled = true
+        startButton.isHidden = true
+        stopButton.isHidden = false
     }
 
     private func onStopTracking() {
-        startButton.isEnabled = true
-        stopButton.isEnabled = false
+        startButton.isHidden = false
+        stopButton.isHidden = true
     }
 
     private func showError(message: String) {

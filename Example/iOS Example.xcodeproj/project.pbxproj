@@ -7,13 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		489603241F4AE01400EC4360 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489603231F4AE01400EC4360 /* Settings.swift */; };
+		489603261F4AE97A00EC4360 /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489603251F4AE97A00EC4360 /* SettingsTableViewCell.swift */; };
+		489603281F4D70DF00EC4360 /* SafeGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489603271F4D70DE00EC4360 /* SafeGraph.swift */; };
 		4897011B1F04F7CA00D8C27C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4897011A1F04F7CA00D8C27C /* AppDelegate.swift */; };
 		489701241F04F7ED00D8C27C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4897011D1F04F7ED00D8C27C /* Assets.xcassets */; };
 		489701281F04F8C000D8C27C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4897011F1F04F7ED00D8C27C /* LaunchScreen.storyboard */; };
 		489701291F04F8C000D8C27C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 489701211F04F7ED00D8C27C /* Main.storyboard */; };
+		48A0D5E41F4706CF00E12C54 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A0D5E31F4706CF00E12C54 /* SettingsViewController.swift */; };
+		48A0D5E81F4706E900E12C54 /* TrackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A0D5E71F4706E900E12C54 /* TrackViewController.swift */; };
 		48A171D51F347BBE00AC9F22 /* OpenLocate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48A171D41F347BBE00AC9F22 /* OpenLocate.framework */; };
 		48A171D61F347BBE00AC9F22 /* OpenLocate.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 48A171D41F347BBE00AC9F22 /* OpenLocate.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		48D1345E1F0A12E30075EFBC /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D1345D1F0A12E30075EFBC /* TestViewController.swift */; };
 		E2E33C69BC71D4991E5BA3CB /* Pods_iOS_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DAE725BE77344580A00D223 /* Pods_iOS_Example.framework */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +54,9 @@
 
 /* Begin PBXFileReference section */
 		326819F92D49F85C167CCB5D /* Pods-iOS Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS Example.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-iOS Example/Pods-iOS Example.debug.xcconfig"; sourceTree = "<group>"; };
+		489603231F4AE01400EC4360 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Settings.swift; path = Source/Settings.swift; sourceTree = "<group>"; };
+		489603251F4AE97A00EC4360 /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsTableViewCell.swift; path = Source/SettingsTableViewCell.swift; sourceTree = "<group>"; };
+		489603271F4D70DE00EC4360 /* SafeGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SafeGraph.swift; path = Source/SafeGraph.swift; sourceTree = "<group>"; };
 		4897011A1F04F7CA00D8C27C /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Source/AppDelegate.swift; sourceTree = "<group>"; };
 		4897011D1F04F7ED00D8C27C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Resources/Assets.xcassets; sourceTree = "<group>"; };
 		489701201F04F7ED00D8C27C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -57,8 +64,9 @@
 		489701231F04F7ED00D8C27C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Resources/Info.plist; sourceTree = "<group>"; };
 		489D2D061F38771B00826BE6 /* iOS Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		489D2D071F38772300826BE6 /* OpenLocate.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OpenLocate.xcodeproj; path = ../OpenLocate.xcodeproj; sourceTree = "<group>"; };
+		48A0D5E31F4706CF00E12C54 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsViewController.swift; path = Source/SettingsViewController.swift; sourceTree = "<group>"; };
+		48A0D5E71F4706E900E12C54 /* TrackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TrackViewController.swift; path = Source/TrackViewController.swift; sourceTree = "<group>"; };
 		48A171D41F347BBE00AC9F22 /* OpenLocate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = OpenLocate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		48D1345D1F0A12E30075EFBC /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TestViewController.swift; path = Source/TestViewController.swift; sourceTree = "<group>"; };
 		6DAE725BE77344580A00D223 /* Pods_iOS_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOS_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC74795B2F74CB8DF4C70A5D /* Pods-iOS Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS Example.release.xcconfig"; path = "../Pods/Target Support Files/Pods-iOS Example/Pods-iOS Example.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -100,7 +108,11 @@
 			isa = PBXGroup;
 			children = (
 				4897011A1F04F7CA00D8C27C /* AppDelegate.swift */,
-				48D1345D1F0A12E30075EFBC /* TestViewController.swift */,
+				48A0D5E31F4706CF00E12C54 /* SettingsViewController.swift */,
+				48A0D5E71F4706E900E12C54 /* TrackViewController.swift */,
+				489603231F4AE01400EC4360 /* Settings.swift */,
+				489603251F4AE97A00EC4360 /* SettingsTableViewCell.swift */,
+				489603271F4D70DE00EC4360 /* SafeGraph.swift */,
 				4897011C1F04F7CF00D8C27C /* Supporting Files */,
 			);
 			name = Source;
@@ -327,8 +339,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				48D1345E1F0A12E30075EFBC /* TestViewController.swift in Sources */,
+				48A0D5E81F4706E900E12C54 /* TrackViewController.swift in Sources */,
 				4897011B1F04F7CA00D8C27C /* AppDelegate.swift in Sources */,
+				489603241F4AE01400EC4360 /* Settings.swift in Sources */,
+				489603261F4AE97A00EC4360 /* SettingsTableViewCell.swift in Sources */,
+				48A0D5E41F4706CF00E12C54 /* SettingsViewController.swift in Sources */,
+				489603281F4D70DF00EC4360 /* SafeGraph.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

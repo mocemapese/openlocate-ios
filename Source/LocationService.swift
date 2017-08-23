@@ -26,14 +26,29 @@ import Foundation
 import CoreLocation
 
 protocol LocationServiceType {
+    var locationAccuracy: LocationAccuracy { get set }
+    var locationInterval: TimeInterval { get set }
+    var transmissionInterval: TimeInterval { get set }
+
     func start()
     func stop()
 }
 
-private let locationTimeInterval: TimeInterval = 120.0
 private let locationsKey = "locations"
 
 final class LocationService: LocationServiceType {
+
+    var locationInterval: TimeInterval
+    var locationAccuracy: LocationAccuracy {
+        didSet {
+            locationManager.set(accuracy: locationAccuracy)
+        }
+    }
+    var transmissionInterval: TimeInterval {
+        didSet {
+            scheduler.timeInterval = transmissionInterval
+        }
+    }
 
     private let locationManager: LocationManagerType
     private let httpClient: Postable
@@ -41,7 +56,7 @@ final class LocationService: LocationServiceType {
     private let locationDataSource: LocationDataSourceType
     private let logger: Logger
     private let loggerDataSource: LoggerDataSourceType?
-    private let scheduler: Scheduler
+    private var scheduler: Scheduler
     private var advertisingInfo: AdvertisingInfo
 
     private var url: String
@@ -62,6 +77,9 @@ final class LocationService: LocationServiceType {
         headers: Headers?,
         advertisingInfo: AdvertisingInfo,
         locationManager: LocationManagerType,
+        locationAccuracy: LocationAccuracy,
+        locationInterval: TimeInterval,
+        transmissionInterval: TimeInterval,
         loggerDataSource: LoggerDataSourceType? = nil) {
 
         httpClient = postable
@@ -74,6 +92,9 @@ final class LocationService: LocationServiceType {
         self.advertisingInfo = advertisingInfo
         self.url = url
         self.headers = headers
+        self.locationAccuracy = locationAccuracy
+        self.locationInterval = locationInterval
+        self.transmissionInterval = transmissionInterval
     }
 
     func start() {
@@ -83,7 +104,7 @@ final class LocationService: LocationServiceType {
         locationManager.subscribe { location in
 
             if let lastLocation = self.lastKnownLocation,
-                lastLocation.timestamp + locationTimeInterval > location.timestamp {
+                lastLocation.timestamp + self.locationInterval > location.timestamp {
                 return
             }
             self.lastKnownLocation = location
@@ -207,7 +228,8 @@ extension LocationService {
     static func isAuthorizationKeysValid() -> Bool {
         let always = Bundle.main.object(forInfoDictionaryKey: "NSLocationAlwaysUsageDescription")
         let inUse = Bundle.main.object(forInfoDictionaryKey: "NSLocationWhenInUseUsageDescription")
-        return always != nil || inUse != nil
+        let alwaysAndinUse = Bundle.main.object(forInfoDictionaryKey: "NSLocationAlwaysAndWhenInUseUsageDescription")
+        return always != nil || inUse != nil || alwaysAndinUse != nil
     }
 }
 
