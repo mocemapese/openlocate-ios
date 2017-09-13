@@ -28,7 +28,7 @@ import XCTest
 class TaskSchedulerTests: BaseTestCase {
 
     func testTaskSchedulerScheduleTasks() {
-        let scheduler = TaskScheduler()
+        let scheduler = TaskScheduler(timeInterval: 30)
         XCTAssertFalse(scheduler.scheduled)
 
         let task1 = PeriodicTask.Builder().build()
@@ -49,7 +49,7 @@ class TaskSchedulerTests: BaseTestCase {
 
     func testCancelWithoutScheduling() {
         // Given
-        let scheduler = TaskScheduler()
+        let scheduler = TaskScheduler(timeInterval: 30)
         let task1 = PeriodicTask.Builder().build()
 
         // When

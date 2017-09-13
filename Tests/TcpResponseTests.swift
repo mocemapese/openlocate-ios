@@ -38,7 +38,7 @@ class TcpResponseTests: BaseTestCase {
     func testErrorResponse() {
         // Given
         let response = TcpResponse.Builder()
-            .set(error: OpenLocateError.invalidToken(message: "Test"))
+            .set(error: OpenLocateError.invalidConfiguration(message: "Test"))
             .build()
 
         // Then

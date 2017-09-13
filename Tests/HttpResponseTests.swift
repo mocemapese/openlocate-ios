@@ -42,7 +42,7 @@ class HttpResponseTests: BaseTestCase {
         // Given
         let response = HttpResponse.Builder()
         .set(statusCode: 400)
-        .set(error: OpenLocateError.invalidToken(message: ""))
+        .set(error: OpenLocateError.invalidConfiguration(message: ""))
         .build()
 
         // Then

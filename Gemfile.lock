@@ -1,9 +1,23 @@
+PATH
+  remote: fastlane-plugin-upload_to_s3
+  specs:
+    fastlane-plugin-upload_to_s3 (0.1.0)
+      aws-sdk (~> 2.3)
+
 GEM
   remote: https://rubygems.org/
   specs:
     CFPropertyList (2.3.5)
     addressable (2.5.1)
       public_suffix (~> 2.0, >= 2.0.2)
+    aws-sdk (2.10.32)
+      aws-sdk-resources (= 2.10.32)
+    aws-sdk-core (2.10.32)
+      aws-sigv4 (~> 1.0)
+      jmespath (~> 1.0)
+    aws-sdk-resources (2.10.32)
+      aws-sdk-core (= 2.10.32)
+    aws-sigv4 (1.0.1)
     babosa (1.0.2)
     claide (1.0.2)
     colored (1.2)
@@ -76,6 +90,7 @@ GEM
     http-cookie (1.0.3)
       domain_name (~> 0.5)
     httpclient (2.8.3)
+    jmespath (1.3.1)
     json (2.1.0)
     jwt (1.5.6)
     little-plugger (1.1.4)
@@ -139,6 +154,7 @@ PLATFORMS
 
 DEPENDENCIES
   fastlane
+  fastlane-plugin-upload_to_s3!
   xcov
 
 BUNDLED WITH

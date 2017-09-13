@@ -30,11 +30,11 @@ class HttpClientTests: BaseTestCase {
     func testPostResult() {
         // Given
         let timeOut: TimeInterval = 0.1
-        let client = HttpClient(baseUrl: "https://httpbin.org", urlSession: SuccessURLSession())
+        let client = HttpClient(urlSession: SuccessURLSession())
         let expect = expectation(description: "Post should return")
 
         // When
-        try? client.post(params: nil, api: "/post/", additionalHeaders: nil, success: { _, _ in
+        try? client.post(params: nil, url: "http://www.google.com", additionalHeaders: nil, success: { _, _ in
             XCTAssertTrue(true)
             expect.fulfill()
         }) { _, _ in
@@ -48,11 +48,11 @@ class HttpClientTests: BaseTestCase {
     func testFailurePostResult() {
         // Given
         let timeOut: TimeInterval = 0.1
-        let client = HttpClient(baseUrl: "https://httpbin.org", urlSession: FailureURLSession())
+        let client = HttpClient(urlSession: FailureURLSession())
         let expect = expectation(description: "Post should return")
 
         // When
-        try? client.post(params: nil, api: "/post/", additionalHeaders: nil, success: { _, _ in
+        try? client.post(params: nil, url: "http://www.google.com/", additionalHeaders: nil, success: { _, _ in
             XCTFail()
             expect.fulfill()
         }) { _, _ in
@@ -65,11 +65,11 @@ class HttpClientTests: BaseTestCase {
 
     func testInvalidPostUrl() {
         // Given
-        let client = HttpClient(baseUrl: "4132", urlSession: FailureURLSession())
+        let client = HttpClient(urlSession: FailureURLSession())
 
         // When
         XCTAssertThrowsError(try client.post(params: nil,
-            api: "\\",
+            url: "\\",
             additionalHeaders: nil,
             success: { _, _ in
                 XCTAssertTrue(true)
@@ -82,11 +82,11 @@ class HttpClientTests: BaseTestCase {
     func testNonHttpUrlResponse() {
         // Given
         let timeOut: TimeInterval = 0.1
-        let client = HttpClient(baseUrl: "https://httpbin.org", urlSession: NonHttpURLSession())
+        let client = HttpClient(urlSession: NonHttpURLSession())
         let expect = expectation(description: "Post should return")
 
         // When
-        try? client.post(params: nil, api: "/post/", additionalHeaders: nil, success: { _, _ in
+        try? client.post(params: nil, url: "/post/", additionalHeaders: nil, success: { _, _ in
             XCTFail()
             expect.fulfill()
         }) { _, _ in

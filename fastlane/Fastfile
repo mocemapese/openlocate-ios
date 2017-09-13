@@ -1,16 +1,5 @@
-# Customise this file, documentation can be found here:
-# https://github.com/fastlane/fastlane/tree/master/fastlane/docs
-# All available actions: https://docs.fastlane.tools/actions
-# can also be listed using the `fastlane actions` command
+require 'fileutils'
 
-# Change the syntax highlighting to Ruby
-# All lines starting with a # are ignored when running `fastlane`
-
-# If you want to automatically update fastlane if a new version is available:
-# update_fastlane
-
-# This is the minimum version number required.
-# Update this, if you use features of a newer version
 fastlane_version "2.47.0"
 
 default_platform :ios
@@ -19,7 +8,7 @@ platform :ios do
 
   desc 'Test framework'
   desc 'Generate coverage'
-  lane :test_framework do
+  lane :test do
     scan(
       workspace: 'OpenLocate.xcworkspace',
       scheme: 'OpenLocate',
@@ -48,7 +37,7 @@ platform :ios do
     ensure_git_status_clean
 
     # test framework
-    test_framework
+    test
 
     # Change build number to current time stamp
     build_number = Time.new.strftime("%Y.%m.%d.%H.%M.%S")
@@ -81,6 +70,112 @@ platform :ios do
     
   end
 
+  desc "Zip and copy to right folder"
+  private_lane :package do |lane|
+
+    if !lane[:version]
+      raise "No version specified!".red
+    end
+
+    version = lane[:version]
+
+    zip_file = "#{version}.zip"
+
+    FileUtils::rm_rf "../build/Source" #../build/Source
+    FileUtils::cp_r "../Source", "../build/Source" 
+    FileUtils::rm_rf "../build/#{zip_file}" #../build/0.4.5.zip
+
+    sh "cd ..
+      mkdir -p build
+      cd build
+      zip -r -X #{zip_file} Source"
+  end
+
+  desc "Deploy/upload framework"
+  private_lane :deploy do |lane|
+
+    if !lane[:version]
+      raise "No version specified!".red
+    end
+
+    version = lane[:version]
+    file = "build/#{version}.zip"
+
+    upload_to_s3(
+      region: "ENV['S3_REGION'],
+      bucket: ENV['S3_BUCKET'],
+      access_key: ENV['S3_ACCESS_KEY'],
+      secret_access_key: ENV['S3_SECRET_ACCESS_KEY'],
+      acl: "public-read",
+      key: "#{version}.zip",
+      file: file
+    )
+  end
+
+  desc "Updates framework podspec version"
+  private_lane :update_podspec do |lane|
+
+    if !lane[:version]
+      raise "No version specified!".red
+    end
+
+    version = lane[:version]
+    podspec = "OpenLocate.podspec"
+    version_bump_podspec(
+      path: podspec,
+      version_number: version
+    )
+  end
+
+  desc "Pushes framework podspec to HyperTrack specs"
+  private_lane :push_podspec do |lane|
+
+    podspec = "OpenLocate.podspec"
+
+    pod_push(
+      path: podspec,
+    )
+  end
+
+  desc 'Ensure git clean and master'
+  desc 'Test Framework'
+  desc 'Build Framework'
+  desc 'Increment Framework'
+  desc 'Packages framework'
+  desc 'Updates podspec file'
+  desc 'Push pod spec'
+  lane :release do |lane|
+    
+    if !lane[:version]
+      raise "No version specified!".red
+    end
+    
+    ensure_git_status_clean
+    ensure_git_branch
+
+    test
+
+    version = lane[:version]
+    
+    increment_version_number(
+      version_number: version
+    )
+    package version: version
+    deploy version: version
+    update_podspec version: version
+    push_podspec
+
+    # post message to slack
+    slack(
+      message: 'Published new version of the SDK :rocket:',
+      success: true,
+      payload: {
+        'Version' => version,
+      },
+    )
+    
+  end
+
   desc 'Post to slack if error'
   error do |lane, exception|
     slack(
@@ -90,10 +185,3 @@ platform :ios do
   end
 
 end
-
-
-# More information about multiple platforms in fastlane: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Platforms.md
-# All available actions: https://docs.fastlane.tools/actions
-
-# fastlane reports which actions are used. No personal data is recorded. 
-# Learn more at https://github.com/fastlane/fastlane#metrics

@@ -41,18 +41,21 @@ class LocationRequestTests: BaseTestCase {
         let mockLocationManager = MockCLLocationManager()
         let locationManager = LocationManager(manager: mockLocationManager)
         let locationService = LocationService(
-            postable: HttpClient(baseUrl: "https://httpbin.org", urlSession: SuccessURLSession()),
+            postable: HttpClient(urlSession: SuccessURLSession()),
             writeable: TcpClient(host: "1.2.3.4", port: 1234, session: SuccessTcpSession()),
             locationDataSource: LocationList(),
             logger: ConsoleLogger(logLevel: .info),
-            scheduler: TaskScheduler(),
-            providerId: UUID(uuidString: "123e4567-e89b-12d3-a456-426655440000")!,
-            token: "1234",
+            scheduler: TaskScheduler(timeInterval: 300),
+            url: "http://www.google.com",
+            headers: nil,
             advertisingInfo: AdvertisingInfo.Builder()
                 .set(advertisingId: "1234")
                 .set(isLimitedAdTrackingEnabled: true)
                 .build(),
-            locationManager: locationManager
+            locationManager: locationManager,
+            locationAccuracy: .high,
+            locationInterval: 300,
+            transmissionInterval: 300
         )
         let location = CLLocation(latitude: 12.43, longitude: 124.43)
 
@@ -69,18 +72,21 @@ class LocationRequestTests: BaseTestCase {
         let mockLocationManager = MockCLLocationManager()
         let locationManager = LocationManager(manager: mockLocationManager)
         let locationService = LocationService(
-            postable: HttpClient(baseUrl: "https://httpbin.org", urlSession: SuccessURLSession()),
+            postable: HttpClient(urlSession: SuccessURLSession()),
             writeable: TcpClient(host: "1.2.3.4", port: 1234, session: SuccessTcpSession()),
             locationDataSource: LocationList(),
             logger: ConsoleLogger(logLevel: .info),
-            scheduler: TaskScheduler(),
-            providerId: UUID(uuidString: "123e4567-e89b-12d3-a456-426655440000")!,
-            token: "1234",
+            scheduler: TaskScheduler(timeInterval: 300),
+            url: "http://www.google.com",
+            headers: nil,
             advertisingInfo: AdvertisingInfo.Builder()
                 .set(advertisingId: "1234")
                 .set(isLimitedAdTrackingEnabled: true)
                 .build(),
-            locationManager: locationManager
+            locationManager: locationManager,
+            locationAccuracy: .high,
+            locationInterval: 300,
+            transmissionInterval: 300
         )
         let location = CLLocation(latitude: 12.43, longitude: 124.43)
 

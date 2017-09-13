@@ -25,6 +25,15 @@
 import XCTest
 @testable import OpenLocate
 
+class TestConfiguration: Configuration {
+    var url: String {
+        return "http://www.openlocate.com"
+    }
+
+    var headers: Headers?
+
+}
+
 class OpenLocateTests: BaseTestCase {
 
     func testOpenLocateSharedInstance() {
@@ -51,30 +60,18 @@ class OpenLocateTests: BaseTestCase {
 
     func testStartTrackingWithInvalidToken() {
         // Given
-        guard let uuid = UUID(uuidString: "123e4567-e89b-12d3-a456-426655440000") else {
-            XCTFail("Invalid uuid")
-            return
-        }
-
-        let token = ""
         let openLocate = OpenLocate.shared
 
         // When
-        XCTAssertThrowsError(try openLocate.startTracking(uuid: uuid, token: token))
+        XCTAssertThrowsError(try openLocate.startTracking(with: TestConfiguration()))
     }
 
     func testStartTracking() {
         // Given
-        guard let uuid = UUID(uuidString: "123e4567-e89b-12d3-a456-426655440000") else {
-            XCTFail("Invalid uuid")
-            return
-        }
-
-        let token = "1234"
         let openLocate = OpenLocate.shared
 
         // When
-        XCTAssertThrowsError(try openLocate.startTracking(uuid: uuid, token: token))
+        XCTAssertThrowsError(try openLocate.startTracking(with: TestConfiguration()))
     }
 
     func testStopTracking() {

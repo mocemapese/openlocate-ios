@@ -47,9 +47,9 @@ final class OpenLocateLocationTests: BaseTestCase {
         let json = jsonDict!
 
         //Then
-        XCTAssertEqual((json["latitude"] as? String)!, "10.0")
-        XCTAssertEqual((json["longitude"] as? String)!, "10.0")
-        XCTAssertEqual((json["utc_timestamp"] as? Double)!, Double(exactly: 1234))
+        XCTAssertEqual((json["latitude"] as? Double)!, Double(exactly: 10.0))
+        XCTAssertEqual((json["longitude"] as? Double)!, Double(exactly: 10.0))
+        XCTAssertEqual((json["utc_timestamp"] as? Int)!, 1234)
         XCTAssertEqual((json["horizontal_accuracy"] as? Double)!, Double(exactly: 10))
         XCTAssertEqual((json["ad_id"] as? String)!, "2345")
         XCTAssertEqual((json["ad_opt_out"] as? Bool)!, true)

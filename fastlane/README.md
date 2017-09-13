@@ -48,6 +48,26 @@ Test framework
 build
 
 Push to testflight
+### ios deploy
+```
+fastlane ios deploy
+```
+Deploy/upload framework
+### ios release
+```
+fastlane ios release
+```
+Ensure git clean and master
+
+Test Framework
+
+Build Framework
+
+Increment Framework
+
+Packages framework
+
+Updates podspec file
 
 ----
 
