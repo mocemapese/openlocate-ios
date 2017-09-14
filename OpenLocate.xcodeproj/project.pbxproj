@@ -11,14 +11,11 @@
 		480356221F2F0DEA000BED59 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480356211F2F0DEA000BED59 /* Task.swift */; };
 		482E13F61F6959800013E66B /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482E13F51F6959800013E66B /* Place.swift */; };
 		4832EF471F14852F004B3EC2 /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4832EF461F14852F004B3EC2 /* HttpRequest.swift */; };
-		48355C511F2C6F860019AA5B /* LoggerDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48355C501F2C6F860019AA5B /* LoggerDataSourceTests.swift */; };
-		48355C531F2C779E0019AA5B /* LoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48355C521F2C779E0019AA5B /* LoggerTests.swift */; };
 		484A7FC41F17579700D63E6A /* DatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484A7FC31F17579700D63E6A /* DatabaseTests.swift */; };
 		484A7FC61F175CA900D63E6A /* Statement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484A7FC51F175CA900D63E6A /* Statement.swift */; };
 		484A7FC81F175CE800D63E6A /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484A7FC71F175CE800D63E6A /* Result.swift */; };
 		485A63F11F445E140005F86D /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485A63F01F445E140005F86D /* Configuration.swift */; };
 		4876E9601F09EB45006EF61C /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4876E95F1F09EB45006EF61C /* LocationService.swift */; };
-		489660331F3B42160073E0E5 /* TcpResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489660321F3B42160073E0E5 /* TcpResponseTests.swift */; };
 		489700D61F04E82000D8C27C /* OpenLocate.h in Headers */ = {isa = PBXBuildFile; fileRef = 489700D41F04E82000D8C27C /* OpenLocate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		489700DA1F04EA7D00D8C27C /* OpenLocate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489700D91F04EA7D00D8C27C /* OpenLocate.swift */; };
 		489701641F05034200D8C27C /* OpenLocate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 489701171F04F6AE00D8C27C /* OpenLocate.framework */; };
@@ -35,7 +32,6 @@
 		48D6E8031F3B124600EC76A8 /* HttpRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D6E8021F3B124600EC76A8 /* HttpRequestTests.swift */; };
 		48DBDB231F0A8A7D006D17EC /* OpenLocateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DBDB221F0A8A7D006D17EC /* OpenLocateTests.swift */; };
 		48DE7F501F4030F4008BD4A4 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DE7F4F1F4030F4008BD4A4 /* URLSession.swift */; };
-		48DE7F521F40403B008BD4A4 /* TcpClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DE7F511F40403B008BD4A4 /* TcpClientTests.swift */; };
 		48DE7F551F405BCE008BD4A4 /* LocationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DE7F541F405BCE008BD4A4 /* LocationManagerTests.swift */; };
 		48E0EE5E1F15E9D60053BCC3 /* HttpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0EE5D1F15E9D60053BCC3 /* HttpResponse.swift */; };
 		48E0EE601F161D6B0053BCC3 /* LocationDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E0EE5F1F161D6A0053BCC3 /* LocationDataSource.swift */; };
@@ -45,9 +41,7 @@
 		48E45DE61F052AA8006EAF6F /* HttpClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E45DE51F052AA8006EAF6F /* HttpClientTests.swift */; };
 		48E45DEF1F09384C006EAF6F /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E45DEE1F09384B006EAF6F /* Location.swift */; };
 		48E45DF11F094506006EAF6F /* LocationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E45DF01F094506006EAF6F /* LocationTests.swift */; };
-		48F0DCC51F3B30DA004C4943 /* LogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F0DCC41F3B30DA004C4943 /* LogTests.swift */; };
 		48F0DCC71F3B3A89004C4943 /* HttpResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F0DCC61F3B3A89004C4943 /* HttpResponseTests.swift */; };
-		48F0DCCC1F3B40A1004C4943 /* TcpRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F0DCCB1F3B4083004C4943 /* TcpRequestTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,15 +59,12 @@
 		480356211F2F0DEA000BED59 /* Task.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Task.swift; path = Source/Task.swift; sourceTree = "<group>"; };
 		482E13F51F6959800013E66B /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Place.swift; path = Source/Place.swift; sourceTree = "<group>"; };
 		4832EF461F14852F004B3EC2 /* HttpRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HttpRequest.swift; path = Source/HttpRequest.swift; sourceTree = "<group>"; };
-		48355C501F2C6F860019AA5B /* LoggerDataSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerDataSourceTests.swift; sourceTree = "<group>"; };
-		48355C521F2C779E0019AA5B /* LoggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerTests.swift; sourceTree = "<group>"; };
 		484A7FC31F17579700D63E6A /* DatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseTests.swift; sourceTree = "<group>"; };
 		484A7FC51F175CA900D63E6A /* Statement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Statement.swift; path = Source/Statement.swift; sourceTree = "<group>"; };
 		484A7FC71F175CE800D63E6A /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Result.swift; path = Source/Result.swift; sourceTree = "<group>"; };
 		485A63F01F445E140005F86D /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Configuration.swift; path = Source/Configuration.swift; sourceTree = "<group>"; };
 		4876E95F1F09EB45006EF61C /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LocationService.swift; path = Source/LocationService.swift; sourceTree = "<group>"; };
 		4876E9631F09ED11006EF61C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		489660321F3B42160073E0E5 /* TcpResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TcpResponseTests.swift; sourceTree = "<group>"; };
 		489700D31F04E82000D8C27C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Source/Info.plist; sourceTree = "<group>"; };
 		489700D41F04E82000D8C27C /* OpenLocate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenLocate.h; path = Source/OpenLocate.h; sourceTree = "<group>"; };
 		489700D91F04EA7D00D8C27C /* OpenLocate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OpenLocate.swift; path = Source/OpenLocate.swift; sourceTree = "<group>"; };
@@ -91,7 +82,6 @@
 		48D6E8021F3B124600EC76A8 /* HttpRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpRequestTests.swift; sourceTree = "<group>"; };
 		48DBDB221F0A8A7D006D17EC /* OpenLocateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenLocateTests.swift; sourceTree = "<group>"; };
 		48DE7F4F1F4030F4008BD4A4 /* URLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
-		48DE7F511F40403B008BD4A4 /* TcpClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TcpClientTests.swift; sourceTree = "<group>"; };
 		48DE7F541F405BCE008BD4A4 /* LocationManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManagerTests.swift; sourceTree = "<group>"; };
 		48E0EE5D1F15E9D60053BCC3 /* HttpResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HttpResponse.swift; path = Source/HttpResponse.swift; sourceTree = "<group>"; };
 		48E0EE5F1F161D6A0053BCC3 /* LocationDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LocationDataSource.swift; path = Source/LocationDataSource.swift; sourceTree = "<group>"; };
@@ -103,9 +93,7 @@
 		48E45DEC1F052E28006EAF6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Tests/Info.plist; sourceTree = SOURCE_ROOT; };
 		48E45DEE1F09384B006EAF6F /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Location.swift; path = Source/Location.swift; sourceTree = "<group>"; };
 		48E45DF01F094506006EAF6F /* LocationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTests.swift; sourceTree = "<group>"; };
-		48F0DCC41F3B30DA004C4943 /* LogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogTests.swift; sourceTree = "<group>"; };
 		48F0DCC61F3B3A89004C4943 /* HttpResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpResponseTests.swift; sourceTree = "<group>"; };
-		48F0DCCB1F3B4083004C4943 /* TcpRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TcpRequestTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,16 +133,6 @@
 				48E0EE5D1F15E9D60053BCC3 /* HttpResponse.swift */,
 			);
 			name = Http;
-			sourceTree = "<group>";
-		};
-		48355C4F1F2C6F720019AA5B /* Logger */ = {
-			isa = PBXGroup;
-			children = (
-				48355C501F2C6F860019AA5B /* LoggerDataSourceTests.swift */,
-				48355C521F2C779E0019AA5B /* LoggerTests.swift */,
-				48F0DCC41F3B30DA004C4943 /* LogTests.swift */,
-			);
-			name = Logger;
 			sourceTree = "<group>";
 		};
 		484A7FC21F17577B00D63E6A /* Database */ = {
@@ -240,9 +218,7 @@
 				48DBDB221F0A8A7D006D17EC /* OpenLocateTests.swift */,
 				48E45DE41F052A84006EAF6F /* Core */,
 				48D3AA6D1F1797BC00BC3992 /* Http */,
-				48F0DCC81F3B3E80004C4943 /* Tcp */,
 				484A7FC21F17577B00D63E6A /* Database */,
-				48355C4F1F2C6F720019AA5B /* Logger */,
 				48D6E7FD1F3AE5F000EC76A8 /* Scheduler */,
 				48AFAE0E1F23DFD000E8ECAD /* Extensions */,
 				48E45DED1F052E3D006EAF6F /* Supporting Files */,
@@ -327,16 +303,6 @@
 				48E45DEC1F052E28006EAF6F /* Info.plist */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		48F0DCC81F3B3E80004C4943 /* Tcp */ = {
-			isa = PBXGroup;
-			children = (
-				48F0DCCB1F3B4083004C4943 /* TcpRequestTests.swift */,
-				489660321F3B42160073E0E5 /* TcpResponseTests.swift */,
-				48DE7F511F40403B008BD4A4 /* TcpClientTests.swift */,
-			);
-			name = Tcp;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -494,22 +460,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				48F0DCC51F3B30DA004C4943 /* LogTests.swift in Sources */,
 				484A7FC41F17579700D63E6A /* DatabaseTests.swift in Sources */,
 				48D6E7FC1F3AD07300EC76A8 /* DictionaryExtensionTests.swift in Sources */,
-				48F0DCCC1F3B40A1004C4943 /* TcpRequestTests.swift in Sources */,
-				489660331F3B42160073E0E5 /* TcpResponseTests.swift in Sources */,
 				48E45DE61F052AA8006EAF6F /* HttpClientTests.swift in Sources */,
 				48D6E8031F3B124600EC76A8 /* HttpRequestTests.swift in Sources */,
 				48E45DF11F094506006EAF6F /* LocationTests.swift in Sources */,
 				48F0DCC71F3B3A89004C4943 /* HttpResponseTests.swift in Sources */,
 				48D134691F0A56830075EFBC /* LocationServiceTests.swift in Sources */,
 				48DBDB231F0A8A7D006D17EC /* OpenLocateTests.swift in Sources */,
-				48355C531F2C779E0019AA5B /* LoggerTests.swift in Sources */,
 				48DE7F551F405BCE008BD4A4 /* LocationManagerTests.swift in Sources */,
-				48DE7F521F40403B008BD4A4 /* TcpClientTests.swift in Sources */,
 				48E45DE31F052A5F006EAF6F /* BaseTestCase.swift in Sources */,
-				48355C511F2C6F860019AA5B /* LoggerDataSourceTests.swift in Sources */,
 				48DE7F501F4030F4008BD4A4 /* URLSession.swift in Sources */,
 				48D6E8011F3AF35100EC76A8 /* SchedulerTests.swift in Sources */,
 				48D3AA6F1F1797EF00BC3992 /* LocationDataSourceTests.swift in Sources */,

@@ -109,21 +109,3 @@ class NonHttpURLSession: URLSessionProtocol {
     }
 
 }
-
-class SuccessWriteStreamTask: URLSessionStreamTaskWriteProtocol {
-    private var completion: WriteDataTaskResult?
-
-    func write(_ data: Data, timeout: TimeInterval, completionHandler: @escaping WriteDataTaskResult) {
-        completion = completionHandler
-    }
-
-    func resume() {
-        completion?(nil)
-    }
-}
-
-class SuccessTcpSession: URLSessionStreamTaskProtocol {
-    func streamTask(withHostName hostname: String, port: Int) -> URLSessionStreamTaskWriteProtocol {
-        return SuccessWriteStreamTask()
-    }
-}

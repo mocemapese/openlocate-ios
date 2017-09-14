@@ -42,9 +42,7 @@ class LocationRequestTests: BaseTestCase {
         let locationManager = LocationManager(manager: mockLocationManager)
         let locationService = LocationService(
             postable: HttpClient(urlSession: SuccessURLSession()),
-            writeable: TcpClient(host: "1.2.3.4", port: 1234, session: SuccessTcpSession()),
             locationDataSource: LocationList(),
-            logger: ConsoleLogger(logLevel: .info),
             scheduler: TaskScheduler(timeInterval: 300),
             url: "http://www.google.com",
             headers: nil,
@@ -73,9 +71,7 @@ class LocationRequestTests: BaseTestCase {
         let locationManager = LocationManager(manager: mockLocationManager)
         let locationService = LocationService(
             postable: HttpClient(urlSession: SuccessURLSession()),
-            writeable: TcpClient(host: "1.2.3.4", port: 1234, session: SuccessTcpSession()),
             locationDataSource: LocationList(),
-            logger: ConsoleLogger(logLevel: .info),
             scheduler: TaskScheduler(timeInterval: 300),
             url: "http://www.google.com",
             headers: nil,

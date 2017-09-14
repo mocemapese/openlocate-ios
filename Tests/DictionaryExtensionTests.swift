@@ -41,34 +41,6 @@ class DictionaryTests: BaseTestCase {
         XCTAssertEqual(first, third)
     }
 
-    func testJsonString() {
-        // Given
-        let coreLocation = CLLocation(
-            coordinate: CLLocationCoordinate2DMake(10.0, 10.0),
-            altitude: 30.0,
-            horizontalAccuracy: 10,
-            verticalAccuracy: 0,
-            course: 180,
-            speed: 20,
-            timestamp: Date(timeIntervalSince1970: 1234)
-        )
-
-        let coordinates = coreLocation.coodinates
-
-        // When
-
-        guard let jsonString = coordinates.jsonString else {
-            XCTAssertTrue(false)
-            return
-        }
-
-        XCTAssertEqual(
-            "{\"latitude\":\"10.0\",\"altitudeAccuracy\":\"0.0\",\"speed\":\"20.0\",\"longitude\":\"10.0\"" +
-            ",\"accuracy\":\"10.0\",\"timestamp\":\"1234.0\",\"altitude\":\"30.0\"}",
-            jsonString
-        )
-    }
-
     func testQueryParam() {
         // Given
         let params = [

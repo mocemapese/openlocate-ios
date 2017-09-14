@@ -34,7 +34,10 @@ class HttpClientTests: BaseTestCase {
         let expect = expectation(description: "Post should return")
 
         // When
-        try? client.post(params: nil, url: "http://www.google.com", additionalHeaders: nil, success: { _, _ in
+        try? client.post(
+            params: nil,
+            queryParams: nil,
+            url: "http://www.google.com", additionalHeaders: nil, success: { _, _ in
             XCTAssertTrue(true)
             expect.fulfill()
         }) { _, _ in
@@ -74,6 +77,7 @@ class HttpClientTests: BaseTestCase {
 
         // When
         XCTAssertThrowsError(try client.post(params: nil,
+                                             queryParams: nil,
             url: "\\",
             additionalHeaders: nil,
             success: { _, _ in
@@ -91,7 +95,7 @@ class HttpClientTests: BaseTestCase {
         let expect = expectation(description: "Post should return")
 
         // When
-        try? client.post(params: nil, url: "/post/", additionalHeaders: nil, success: { _, _ in
+        try? client.post(params: nil, queryParams: nil, url: "/post/", additionalHeaders: nil, success: { _, _ in
             XCTFail()
             expect.fulfill()
         }) { _, _ in
