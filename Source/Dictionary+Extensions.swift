@@ -31,4 +31,14 @@ extension Dictionary {
             lhs[key] = value
         }
     }
+
+    var jsonString: String? {
+        do {
+            let data = try JSONSerialization.data(withJSONObject: self, options: [])
+            return String(data: data, encoding: .ascii)
+        } catch {
+            print(error.localizedDescription)
+            return nil
+        }
+    }
 }

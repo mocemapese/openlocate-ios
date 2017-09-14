@@ -42,3 +42,11 @@ public enum OpenLocateError: Error {
         "Please enable it before continuing."
     }
 }
+
+public enum PlaceError: Error {
+    case invalidLocationJson(message: String)
+
+    struct ErrorMessage {
+        static let invalidLocationJsonMessage = "Invalid location. Please try again"
+    }
+}

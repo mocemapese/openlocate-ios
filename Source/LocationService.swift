@@ -52,10 +52,7 @@ final class LocationService: LocationServiceType {
 
     private let locationManager: LocationManagerType
     private let httpClient: Postable
-    private let tcpClient: Writeable
     private let locationDataSource: LocationDataSourceType
-    private let logger: Logger
-    private let loggerDataSource: LoggerDataSourceType?
     private var scheduler: Scheduler
     private var advertisingInfo: AdvertisingInfo
 
@@ -69,9 +66,7 @@ final class LocationService: LocationServiceType {
 
     init(
         postable: Postable,
-        writeable: Writeable,
         locationDataSource: LocationDataSourceType,
-        logger: Logger,
         scheduler: Scheduler,
         url: String,
         headers: Headers?,
@@ -79,16 +74,12 @@ final class LocationService: LocationServiceType {
         locationManager: LocationManagerType,
         locationAccuracy: LocationAccuracy,
         locationInterval: TimeInterval,
-        transmissionInterval: TimeInterval,
-        loggerDataSource: LoggerDataSourceType? = nil) {
+        transmissionInterval: TimeInterval) {
 
         httpClient = postable
-        tcpClient = writeable
         self.locationDataSource = locationDataSource
         self.locationManager = locationManager
-        self.logger = logger
         self.scheduler = scheduler
-        self.loggerDataSource = loggerDataSource
         self.advertisingInfo = advertisingInfo
         self.url = url
         self.headers = headers
@@ -98,7 +89,7 @@ final class LocationService: LocationServiceType {
     }
 
     func start() {
-        logger.info("Location service started for url : \(url)")
+        debugPrint("Location service started for url : \(url)")
         schedule()
 
         locationManager.subscribe { location in
@@ -117,7 +108,7 @@ final class LocationService: LocationServiceType {
             do {
                 try self.locationDataSource.add(location: openLocateLocation)
             } catch let error {
-                self.logger.error(
+                debugPrint(
                     "Could not add location to database for url : \(self.url)." +
                     " Reason : \(error.localizedDescription)"
                 )
@@ -136,7 +127,6 @@ final class LocationService: LocationServiceType {
 extension LocationService {
     private func schedule() {
         scheduleLocationDispatch()
-        scheduleLogDispatch()
     }
 
     private func scheduleLocationDispatch() {
@@ -150,25 +140,8 @@ extension LocationService {
         scheduler.schedule(task: locationTask!)
     }
 
-    private func scheduleLogDispatch() {
-        logTask = PeriodicTask.Builder()
-            .set { _ in
-                guard let datasource = self.loggerDataSource else {
-                    return
-                }
-
-                self.postLogs(datasource: datasource)
-            }
-            .build()
-        scheduler.schedule(task: logTask!)
-    }
-
     private func unschedule() {
         if let task = locationTask {
-            scheduler.cancel(task: task)
-        }
-
-        if let task = logTask {
             scheduler.cancel(task: task)
         }
     }
@@ -182,36 +155,17 @@ extension LocationService {
         do {
             try httpClient.post(
                 params: params,
+                queryParams: nil,
                 url: url,
                 additionalHeaders: headers,
                 success: { _, _ in
             }
             ) { _, _ in
                 self.locationDataSource.addAll(locations: locations)
-                self.logger.error("failure in posting locations!!!")
+                print("failure in posting locations!!!")
             }
         } catch let error {
-            logger.error(error.localizedDescription)
-        }
-    }
-
-    private func postLogs(datasource: LoggerDataSourceType) {
-        let logs = datasource.popAll()
-
-        if logs.isEmpty {
-            return
-        }
-
-        logs.forEach { log in
-            do {
-                try tcpClient.write(data: log.stringFormat) { _, response in
-                    if response.error != nil {
-                        datasource.add(log: log)
-                    }
-                }
-            } catch let error {
-                logger.error(error.localizedDescription)
-            }
+            print(error.localizedDescription)
         }
     }
 }

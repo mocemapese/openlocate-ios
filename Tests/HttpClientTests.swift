@@ -52,7 +52,12 @@ class HttpClientTests: BaseTestCase {
         let expect = expectation(description: "Post should return")
 
         // When
-        try? client.post(params: nil, url: "http://www.google.com/", additionalHeaders: nil, success: { _, _ in
+        try? client.post(
+            params: nil,
+            queryParams: nil,
+            url: "http://www.google.com/",
+            additionalHeaders: nil,
+            success: { _, _ in
             XCTFail()
             expect.fulfill()
         }) { _, _ in

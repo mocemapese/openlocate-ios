@@ -27,6 +27,7 @@ import Foundation
 typealias HttpClientCompletionHandler = (HttpRequest, HttpResponse) -> Void
 
 typealias Parameters = Any
+typealias QueryParameters = [String: String]
 typealias ResponseBody = Any
 typealias StatusCode = Int
 
@@ -59,6 +60,17 @@ extension URLSessionDataTask: URLSessionDataTaskProtocol { }
 protocol Postable {
     func post(
         params: Parameters?,
+        queryParams: QueryParameters?,
+        url: String,
+        additionalHeaders: Headers?,
+        success: @escaping HttpClientCompletionHandler,
+        failure: @escaping HttpClientCompletionHandler) throws
+}
+
+protocol Getable {
+    func get(
+        params: Parameters?,
+        queryParams: QueryParameters?,
         url: String,
         additionalHeaders: Headers?,
         success: @escaping HttpClientCompletionHandler,
@@ -70,7 +82,7 @@ enum HttpClientError: Error {
 }
 
 // Used to make REST API calls to the backend.
-protocol HttpClientType: Postable {
+protocol HttpClientType: Postable, Getable {
 }
 
 final class HttpClient: HttpClientType {
@@ -151,6 +163,7 @@ extension HttpClient {
 extension HttpClient {
     func post(
         params: Parameters?,
+        queryParams: QueryParameters?,
         url: String,
         additionalHeaders: Headers?,
         success: @escaping HttpClientCompletionHandler,
@@ -159,6 +172,27 @@ extension HttpClient {
             .set(url: url)
             .set(method: .post)
             .set(params: params)
+            .set(queryParams: queryParams)
+            .set(additionalHeaders: additionalHeaders)
+            .set(success: success)
+            .set(failure: failure)
+            .build()
+
+        try execute(request)
+    }
+
+    func get(
+        params: Parameters?,
+        queryParams: QueryParameters?,
+        url: String,
+        additionalHeaders: Headers?,
+        success: @escaping HttpClientCompletionHandler,
+        failure: @escaping HttpClientCompletionHandler) throws {
+        let request = HttpRequest.Builder()
+            .set(url: url)
+            .set(method: .get)
+            .set(params: params)
+            .set(queryParams: queryParams)
             .set(additionalHeaders: additionalHeaders)
             .set(success: success)
             .set(failure: failure)

@@ -27,11 +27,17 @@ import Foundation
 // Enum for HTTP method type
 enum MethodType: String {
     case post = "POST"
+    case get = "GET"
 }
 
 extension URLRequest {
     init?(_ request: HttpRequest) {
-        guard let url = URL(string: request.url) else {
+        var requestUrl = request.url
+        if let queryParams = request.queryParams {
+            requestUrl += queryParams.queryString
+        }
+
+        guard let url = URL(string: requestUrl) else {
             return nil
         }
 
@@ -55,10 +61,26 @@ extension URLRequest {
     }
 }
 
+extension Dictionary where Dictionary.Key == String, Dictionary.Value == String {
+
+    var queryString: String {
+        var urlVars: [String] = []
+
+        for (k, value) in self {
+            if let encodedValue = value.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+                urlVars.append(k + "=" + encodedValue)
+            }
+        }
+
+        return urlVars.isEmpty ? "" : "?" + urlVars.joined(separator: "&")
+    }
+}
+
 struct HttpRequest {
     let url: String
     let method: MethodType
     let params: Parameters?
+    let queryParams: QueryParameters?
     let additionalHeaders: Headers?
     let successCompletion: HttpClientCompletionHandler?
     let failureCompletion: HttpClientCompletionHandler?
@@ -67,6 +89,7 @@ struct HttpRequest {
         url: String,
         method: MethodType,
         params: Parameters?,
+        queryParams: QueryParameters?,
         additionalHeaders: Headers?,
         success: HttpClientCompletionHandler?,
         failure: HttpClientCompletionHandler?
@@ -77,6 +100,7 @@ struct HttpRequest {
         self.additionalHeaders = additionalHeaders
         self.successCompletion = success
         self.failureCompletion = failure
+        self.queryParams = queryParams
     }
 }
 
@@ -89,6 +113,7 @@ extension HttpRequest {
         private var additionalHeaders: Headers?
         private var success: HttpClientCompletionHandler?
         private var failure: HttpClientCompletionHandler?
+        private var queryParams: QueryParameters?
 
         func set(url: String) -> Builder {
             self.url = url
@@ -102,6 +127,11 @@ extension HttpRequest {
 
         func set(params: Parameters?) -> Builder {
             self.params = params
+            return self
+        }
+
+        func set(queryParams: QueryParameters?) -> Builder {
+            self.queryParams = queryParams
             return self
         }
 
@@ -125,6 +155,7 @@ extension HttpRequest {
                 url: url,
                 method: method,
                 params: params,
+                queryParams: queryParams,
                 additionalHeaders: additionalHeaders,
                 success: success,
                 failure: failure
