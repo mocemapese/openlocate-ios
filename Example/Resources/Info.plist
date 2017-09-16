@@ -36,6 +36,10 @@
 	<true/>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>OpenLocate would like to access location.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>OpenLocate would like to access location.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>OpenLocate would like to access location.</string>
 	<key>ProviderId</key>
 	<string>***REMOVED***</string>
 	<key>Token</key>

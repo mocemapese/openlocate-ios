@@ -30,6 +30,7 @@ protocol LocationDataSourceType {
     func add(location: OpenLocateLocationType) throws
     func addAll(locations: [OpenLocateLocationType])
     var count: Int { get }
+    func all() -> [IndexedLocation]
     func popAll() -> [IndexedLocation]
 }
 
@@ -118,33 +119,38 @@ final class LocationDatabase: LocationDataSourceType {
         }
     }
 
-    func popAll() -> [IndexedLocation] {
+    func all() -> [IndexedLocation] {
         let query = "SELECT * FROM \(Constants.tableName)"
         let statement = SQLStatement.Builder()
-        .set(query: query)
-        .set(cached: true)
-        .build()
-
+            .set(query: query)
+            .set(cached: true)
+            .build()
+        
         var locations = [IndexedLocation]()
-
+        
         do {
             let result = try database.execute(statement: statement)
-
+            
             while result.next() {
                 let index = result.intValue(column: Constants.columnId)
                 let data = result.dataValue(column: Constants.columnLocation)
-
+                
                 if let data = data {
                     locations.append(
                         (index, OpenLocateLocation(data: data))
                     )
                 }
             }
-
+            
         } catch let error {
             debugPrint(error.localizedDescription)
         }
-
+        
+        return locations
+    }
+    
+    func popAll() -> [IndexedLocation] {
+        let locations = all()
         clear()
         return locations
     }
@@ -191,13 +197,17 @@ final class LocationList: LocationDataSourceType {
     var count: Int {
         return self.locations.count
     }
-
-    func popAll() -> [IndexedLocation] {
+    
+    func all() -> [IndexedLocation] {
         var locations = [IndexedLocation]()
         self.locations.enumerated().forEach { indexedLocation in
             locations.append(indexedLocation)
         }
+        return locations
+    }
 
+    func popAll() -> [IndexedLocation] {
+        let locations = all()
         self.locations.removeAll()
         return locations
     }

@@ -55,7 +55,7 @@ protocol OpenLocateLocationType: JsonParameterType, DataType {
 
 }
 
-struct OpenLocateLocation: OpenLocateLocationType {
+struct OpenLocateLocation: OpenLocateLocationType, CustomDebugStringConvertible {
 
     private struct Keys {
         static let adId = "ad_id"
@@ -73,11 +73,16 @@ struct OpenLocateLocation: OpenLocateLocationType {
 
     private let location: CLLocation
     private let advertisingInfo: AdvertisingInfo
+    
+    var debugDescription: String {
+        return "OpenLocateLocation(location: \(location), advertisingInfo: \(advertisingInfo))"
+    }
 
     init(location: CLLocation, advertisingInfo: AdvertisingInfo) {
         self.location = location
         self.advertisingInfo = advertisingInfo
     }
+    
 }
 
 extension OpenLocateLocation {

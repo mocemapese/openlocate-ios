@@ -26,10 +26,6 @@ import Foundation
 import CoreLocation
 
 protocol LocationServiceType {
-    var locationAccuracy: LocationAccuracy { get set }
-    var locationInterval: TimeInterval { get set }
-    var transmissionInterval: TimeInterval { get set }
-
     func start()
     func stop()
 }
@@ -37,18 +33,6 @@ protocol LocationServiceType {
 private let locationsKey = "locations"
 
 final class LocationService: LocationServiceType {
-
-    var locationInterval: TimeInterval
-    var locationAccuracy: LocationAccuracy {
-        didSet {
-            locationManager.set(accuracy: locationAccuracy)
-        }
-    }
-    var transmissionInterval: TimeInterval {
-        didSet {
-            scheduler.timeInterval = transmissionInterval
-        }
-    }
 
     private let locationManager: LocationManagerType
     private let httpClient: Postable
@@ -58,8 +42,6 @@ final class LocationService: LocationServiceType {
 
     private var url: String
     private var headers: Headers?
-
-    private var lastKnownLocation: CLLocation?
 
     private var locationTask: Task?
     private var logTask: Task?
@@ -71,10 +53,7 @@ final class LocationService: LocationServiceType {
         url: String,
         headers: Headers?,
         advertisingInfo: AdvertisingInfo,
-        locationManager: LocationManagerType,
-        locationAccuracy: LocationAccuracy,
-        locationInterval: TimeInterval,
-        transmissionInterval: TimeInterval) {
+        locationManager: LocationManagerType) {
 
         httpClient = postable
         self.locationDataSource = locationDataSource
@@ -83,37 +62,20 @@ final class LocationService: LocationServiceType {
         self.advertisingInfo = advertisingInfo
         self.url = url
         self.headers = headers
-        self.locationAccuracy = locationAccuracy
-        self.locationInterval = locationInterval
-        self.transmissionInterval = transmissionInterval
     }
 
     func start() {
         debugPrint("Location service started for url : \(url)")
-        schedule()
+        //schedule()
 
-        locationManager.subscribe { location in
-
-            if let lastLocation = self.lastKnownLocation,
-                lastLocation.timestamp + self.locationInterval > location.timestamp {
-                return
+        locationManager.subscribe { locations in
+            
+            let openLocateLocations = locations.map {
+                return OpenLocateLocation(location: $0, advertisingInfo: self.advertisingInfo)
             }
-            self.lastKnownLocation = location
-
-            let openLocateLocation = OpenLocateLocation(
-                location: location,
-                advertisingInfo: self.advertisingInfo
-            )
-
-            do {
-                try self.locationDataSource.add(location: openLocateLocation)
-            } catch let error {
-                debugPrint(
-                    "Could not add location to database for url : \(self.url)." +
-                    " Reason : \(error.localizedDescription)"
-                )
-                debugPrint(error.localizedDescription)
-            }
+            
+            self.locationDataSource.addAll(locations: openLocateLocations)
+            
             debugPrint(self.locationDataSource.count)
         }
     }

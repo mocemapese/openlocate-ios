@@ -30,26 +30,9 @@ class TrackViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.titleView = UIImageView(image: UIImage(named: "tab_logo"))
-
-        _ = NotificationCenter.default.addObserver(
-        forName: Notification.Name(rawValue: locationAccuracyDidChange),
-        object: nil,
-        queue: nil) { _ in
-            OpenLocate.shared.locationAccuracy = Settings.shared.accuracy
-        }
-
-        _ = NotificationCenter.default.addObserver(
-            forName: Notification.Name(rawValue: locationIntervalDidChange),
-            object: nil,
-            queue: nil) { _ in
-                OpenLocate.shared.locationInterval = Double(Settings.shared.locationInterval * 60)
-        }
-
-        _ = NotificationCenter.default.addObserver(
-            forName: Notification.Name(rawValue: transmissionIntervalDidChange),
-            object: nil,
-            queue: nil) { _ in
-                OpenLocate.shared.transmissionInterval = Double(Settings.shared.transmissionInterval * 60)
+        
+        if OpenLocate.shared.tracking {
+            onStartTracking()
         }
     }
 

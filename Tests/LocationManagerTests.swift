@@ -26,40 +26,34 @@ import XCTest
 import CoreLocation
 @testable import OpenLocate
 
-class MockCLLocationManager: CLLocationManagerProtocol {
-    func requestAlwaysAuthorization() {
+class MockCLLocationManager: CLLocationManager {
+    override func requestAlwaysAuthorization() {
 
     }
 
-    static func locationServicesEnabled() -> Bool {
+    override static func locationServicesEnabled() -> Bool {
         return true
     }
 
-    static func authorizationStatus() -> CLAuthorizationStatus {
+    override static func authorizationStatus() -> CLAuthorizationStatus {
         return .authorizedWhenInUse
     }
 
-    var activityType: CLActivityType = .automotiveNavigation
-    var desiredAccuracy: CLLocationAccuracy = kCLLocationAccuracyBestForNavigation
-    var pausesLocationUpdatesAutomatically: Bool = false
-    var allowsBackgroundLocationUpdates: Bool = false
-    weak var delegate: CLLocationManagerDelegate?
-
     var didStartUpdating = false
 
-    init() {
+    override init() {
 
     }
 
-    func requestWhenInUseAuthorization() {
+    override func requestWhenInUseAuthorization() {
 
     }
 
-    func startUpdatingLocation() {
+    override func startMonitoringVisits() {
         didStartUpdating = true
     }
 
-    func stopUpdatingLocation() {
+    override func stopUpdatingLocation() {
 
     }
 }
@@ -127,9 +121,12 @@ class LocationManagerTests: BaseTestCase {
         // Given
         let locationManager = MockCLLocationManager()
         let manager = LocationManager(manager: locationManager)
+        manager.subscribe { locations in
+            // Nothing
+        }
 
         // When
-        manager.locationManager(CLLocationManager(), didChangeAuthorization: .authorizedWhenInUse)
+        manager.locationManager(CLLocationManager(), didChangeAuthorization: .authorizedAlways)
 
         // Then
         XCTAssertTrue(locationManager.didStartUpdating)

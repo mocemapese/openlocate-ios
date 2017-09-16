@@ -25,125 +25,105 @@
 import Foundation
 import CoreLocation
 
-typealias LocationHandler = (CLLocation) -> Void
-
-// LocationManagerProtocol
-
-protocol CLLocationManagerProtocol {
-    var delegate: CLLocationManagerDelegate? { get set }
-    var activityType: CLActivityType { get set }
-    var desiredAccuracy: CLLocationAccuracy { get set }
-    var pausesLocationUpdatesAutomatically: Bool { get set }
-    var allowsBackgroundLocationUpdates: Bool { get set }
-
-    func requestAlwaysAuthorization()
-    func startUpdatingLocation()
-    func stopUpdatingLocation()
-
-    static func authorizationStatus() -> CLAuthorizationStatus
-    static func locationServicesEnabled() -> Bool
-}
-
-extension CLLocationManager: CLLocationManagerProtocol { }
+typealias LocationsHandler = ([CLLocation]) -> Void
 
 // Location Manager
 
 protocol LocationManagerType {
-    func subscribe(_ locationHandler: @escaping LocationHandler)
+    func subscribe(_ locationHandler: @escaping LocationsHandler)
     func cancel()
-    func set(accuracy: LocationAccuracy)
 
     var updatingLocation: Bool { get }
-
-    static func authorizationStatus(_ locationManagerProtocol: CLLocationManagerProtocol.Type) -> CLAuthorizationStatus
-    static func locationServicesEnabled(_ locationManagerProtocol: CLLocationManagerProtocol.Type) -> Bool
 }
 
-final class LocationManager: NSObject, LocationManagerType {
+final class LocationManager: NSObject, LocationManagerType, CLLocationManagerDelegate {
 
-    private var manager: CLLocationManagerProtocol
-    private var requests: [LocationHandler] = []
+    private let manager: CLLocationManager
+    private var requests: [LocationsHandler] = []
 
-    required init(manager: CLLocationManagerProtocol = CLLocationManager()) {
+    required init(manager: CLLocationManager = CLLocationManager()) {
         self.manager = manager
         super.init()
-        configure()
-    }
-}
-
-extension LocationManager: CLLocationManagerDelegate {
-    private func configure() {
         manager.delegate = self
-
-        manager.activityType = .automotiveNavigation
-        manager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-        manager.pausesLocationUpdatesAutomatically = false
-
-        let backgroundModes = Bundle.main.object(forInfoDictionaryKey: "UIBackgroundModes") as? [String]
-        if let modes = backgroundModes, modes.contains("location") {
-            manager.allowsBackgroundLocationUpdates = true
-        }
     }
-
-    private func requestAuthorizationIfNeeded() {
-        if LocationManager.authorizationStatus() == .notDetermined {
-            manager.requestAlwaysAuthorization()
-        }
+    
+    static func authorizationStatus() -> CLAuthorizationStatus {
+        return CLLocationManager.authorizationStatus()
     }
-
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.first else {
-            return
+    
+    static func locationServicesEnabled() -> Bool {
+        return CLLocationManager.locationServicesEnabled()
+    }
+    
+    // MARK: CLLocationManager
+    
+    func locationManager(_ manager: CLLocationManager, didVisit visit: CLVisit) {
+        
+        var date = Date()
+        if visit.departureDate != Date.distantFuture {
+            date = visit.departureDate
+        } else if visit.arrivalDate != Date.distantPast {
+            date = visit.arrivalDate
         }
+        
+        let location = CLLocation(coordinate: visit.coordinate,
+                                  altitude: 0,
+                                  horizontalAccuracy: visit.horizontalAccuracy,
+                                  verticalAccuracy: -1.0,
+                                  timestamp: date)
 
+        var locations = [location]
+        if let currentLocation = manager.location {
+            locations.append(currentLocation)
+        }
+        
         for request in requests {
-            request(location)
+            request(locations)
         }
     }
-
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        for request in requests {
+            request(locations)
+        }
+    }
+    
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         debugPrint(error)
     }
-
+    
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        self.manager.startUpdatingLocation()
-    }
-}
-
-extension LocationManager {
-    func subscribe(_ locationHandler: @escaping LocationHandler) {
-        requests.append(locationHandler)
-        requestAuthorizationIfNeeded()
-        manager.startUpdatingLocation()
-    }
-
-    func cancel() {
-        requests.removeAll()
-        manager.stopUpdatingLocation()
-    }
-
-    func set(accuracy: LocationAccuracy) {
-        switch accuracy {
-        case .low:
-            manager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-        case .medium:
-            manager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        default:
-            manager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+        if status == .authorizedAlways && updatingLocation {
+            manager.startMonitoringVisits()
+            manager.startMonitoringSignificantLocationChanges()
         }
     }
-
+    
+    // MARK: LocationManagerType
+    
+    func subscribe(_ locationHandler: @escaping LocationsHandler) {
+        requests.append(locationHandler)
+        requestAuthorizationIfNeeded()
+        manager.startMonitoringVisits()
+        manager.startMonitoringSignificantLocationChanges()
+    }
+    
+    func cancel() {
+        requests.removeAll()
+        manager.stopMonitoringVisits()
+        manager.stopMonitoringSignificantLocationChanges()
+    }
+    
     var updatingLocation: Bool {
         return !requests.isEmpty
     }
-
-    static func authorizationStatus(
-        _ locationManagerProtocol: CLLocationManagerProtocol.Type = CLLocationManager.self) -> CLAuthorizationStatus {
-        return locationManagerProtocol.authorizationStatus()
-    }
-
-    static func locationServicesEnabled(
-        _ locationManagerProtocol: CLLocationManagerProtocol.Type = CLLocationManager.self) -> Bool {
-        return locationManagerProtocol.locationServicesEnabled()
+    
+    // MARK: Private
+    
+    private func requestAuthorizationIfNeeded() {
+        let status = CLLocationManager.authorizationStatus()
+        if status == .notDetermined || status == .authorizedWhenInUse {
+            manager.requestAlwaysAuthorization()
+        }
     }
 }

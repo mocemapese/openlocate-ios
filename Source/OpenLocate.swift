@@ -30,47 +30,15 @@ public typealias PlacesCompletionHandler = ([Place]?, Error?) -> Void
 private protocol OpenLocateType {
     static var shared: OpenLocate { get }
 
-    var locationAccuracy: LocationAccuracy { get set }
-    var transmissionInterval: TimeInterval { get set }
-    var locationInterval: TimeInterval { get set }
-
     func startTracking(with configuration: Configuration) throws
     func stopTracking()
 
     var tracking: Bool { get }
 }
 
-public enum LocationAccuracy: String {
-    case high
-    case medium
-    case low
-}
-
-private let defaultTransmissionInterval: TimeInterval = 300
-private let defaultLocationAccuracy = LocationAccuracy.high
-private let defaultLocationInterval: TimeInterval = 120
-
 public final class OpenLocate: OpenLocateType {
 
     public static let shared = OpenLocate()
-
-    public var locationAccuracy = defaultLocationAccuracy {
-        didSet {
-            locationService?.locationAccuracy = locationAccuracy
-        }
-    }
-
-    public var transmissionInterval = defaultTransmissionInterval {
-        didSet {
-            locationService?.transmissionInterval = transmissionInterval
-        }
-    }
-
-    public var locationInterval = defaultLocationInterval {
-        didSet {
-            locationService?.locationInterval = locationInterval
-        }
-    }
 
     private var locationService: LocationServiceType?
 }
@@ -78,14 +46,15 @@ public final class OpenLocate: OpenLocateType {
 extension OpenLocate {
     private func initLocationService(configuration: Configuration) {
         let httpClient = HttpClient()
-        let scheduler = TaskScheduler(timeInterval: transmissionInterval)
+        let scheduler = TaskScheduler(timeInterval: 2)
 
         let locationDataSource: LocationDataSourceType
 
         do {
             let database = try SQLiteDatabase.openLocateDatabase()
             locationDataSource = LocationDatabase(database: database)
-        } catch _ {
+        } catch {
+            print(error)
             locationDataSource = LocationList()
         }
 
@@ -103,11 +72,14 @@ extension OpenLocate {
             url: configuration.url,
             headers: configuration.headers,
             advertisingInfo: advertisingInfo,
-            locationManager: locationManager,
-            locationAccuracy: locationAccuracy,
-            locationInterval: locationInterval,
-            transmissionInterval: transmissionInterval
+            locationManager: locationManager
         )
+        
+        debugPrint("Location History:")
+        locationDataSource.all().forEach {
+            debugPrint($0)
+        }
+        
     }
 
     public func startTracking(with configuration: Configuration) throws {
