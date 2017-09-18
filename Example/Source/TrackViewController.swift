@@ -29,9 +29,10 @@ class TrackViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.navigationItem.titleView = UIImageView(image: UIImage(named: "tab_logo"))
         
-        if OpenLocate.shared.tracking {
+        if OpenLocate.shared.isTrackingEnabled {
             onStartTracking()
         }
     }
@@ -40,28 +41,8 @@ class TrackViewController: UIViewController {
     @IBOutlet weak var stopButton: UIButton!
 
     @IBAction func startTracking(_ sender: Any) {
-
-        do {
-            let uuid = UUID(uuidString: (Bundle.main.object(forInfoDictionaryKey: "ProviderId") as? String)!)
-            let configuration = SafeGraphConfiguration(
-                uuid: uuid!,
-                token: (Bundle.main.object(forInfoDictionaryKey: "Token") as? String)!
-            )
-            try OpenLocate.shared.startTracking(with: configuration)
-            onStartTracking()
-        } catch OpenLocateError.invalidConfiguration(let message) {
-            showError(message: message)
-        } catch OpenLocateError.locationDisabled(let message) {
-            showError(message: message)
-        } catch OpenLocateError.locationUnAuthorized(let message) {
-            showError(message: message)
-        } catch OpenLocateError.locationServiceConflict(let message) {
-            showError(message: message)
-        } catch OpenLocateError.locationMissingAuthorizationKeys(let message) {
-            showError(message: message)
-        } catch {
-            showError(message: error.localizedDescription)
-        }
+        OpenLocate.shared.startTracking()
+        onStartTracking()
     }
 
     @IBAction func stopTracking(_ sender: Any) {
@@ -79,18 +60,4 @@ class TrackViewController: UIViewController {
         stopButton.isHidden = true
     }
 
-    private func showError(message: String) {
-        let alert = UIAlertController(
-            title: "error",
-            message: message,
-            preferredStyle: .alert
-        )
-
-        let action = UIAlertAction(title: "OK", style: .default) { _ in
-            alert.dismiss(animated: true, completion: nil)
-        }
-        alert.addAction(action)
-
-        present(alert, animated: true, completion: nil)
-    }
 }

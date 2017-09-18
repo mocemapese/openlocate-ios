@@ -71,8 +71,8 @@ struct OpenLocateLocation: OpenLocateLocationType, CustomDebugStringConvertible 
 
     private let idTypeValue = "idfa"
 
-    private let location: CLLocation
-    private let advertisingInfo: AdvertisingInfo
+    let location: CLLocation
+    let advertisingInfo: AdvertisingInfo
     
     var debugDescription: String {
         return "OpenLocateLocation(location: \(location), advertisingInfo: \(advertisingInfo))"

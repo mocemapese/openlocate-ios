@@ -39,13 +39,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         Fabric.with([Crashlytics.self])
         
-        // Remove this once we fix SDK interface
-        let uuid = UUID(uuidString: (Bundle.main.object(forInfoDictionaryKey: "ProviderId") as? String)!)
-        let configuration = SafeGraphConfiguration(
-            uuid: uuid!,
-            token: (Bundle.main.object(forInfoDictionaryKey: "Token") as? String)!
-        )
-        try? OpenLocate.shared.startTracking(with: configuration)
+        if let configuration = SafeGraphConfiguration() {
+            try? OpenLocate.shared.initialize(with: configuration)
+        }
         
         return true
     }

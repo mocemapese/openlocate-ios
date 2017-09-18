@@ -45,7 +45,7 @@ class LocationDataSourceTests: BaseTestCase {
         do {
             let database = try SQLiteDatabase.testDB()
             dataSource = LocationDatabase(database: database)
-            _ = dataSource!.popAll()
+            _ = dataSource!.clear()
         } catch let error {
             debugPrint(error.localizedDescription)
         }
@@ -85,7 +85,7 @@ class LocationDataSourceTests: BaseTestCase {
         XCTAssertEqual(locations.count, 3)
     }
 
-    func testPopLocations() {
+    func testPopAllLocations() {
         // Given
         guard let locations = dataSource else {
             XCTFail("No database")
@@ -95,11 +95,32 @@ class LocationDataSourceTests: BaseTestCase {
         // When
         let multiple = [testLocation, testLocation, testLocation, testLocation]
         locations.addAll(locations: multiple)
-        let popped = locations.popAll()
-
+        let popped = locations.all()
+        locations.clear()
+        
         // Then
         XCTAssertEqual(popped.count, 4)
         XCTAssertEqual(locations.count, 0)
+    }
+    
+    func testFirstLocation() {
+        // Given
+        guard let locations = dataSource else {
+            XCTFail("No database")
+            return
+        }
+        
+        // When
+        let multiple = [testLocation, testLocation, testLocation, testLocation]
+        locations.addAll(locations: multiple)
+        let firstIndexedLocation = locations.first()
+        
+        // Then
+        let firstLocation = OpenLocateLocation(data: firstIndexedLocation!.1.data)
+        XCTAssertEqual(firstLocation.location.coordinate.latitude, testLocation.location.coordinate.latitude)
+        XCTAssertEqual(firstLocation.location.coordinate.longitude, testLocation.location.coordinate.longitude)
+        XCTAssertEqual(firstLocation.location.timestamp.timeIntervalSince1970,
+                       testLocation.location.timestamp.timeIntervalSince1970, accuracy: 0.1)
     }
 }
 
@@ -120,7 +141,7 @@ class LocationListDataSource: BaseTestCase {
 
     override func setUp() {
         dataSource = LocationList()
-        _ = dataSource!.popAll()
+        _ = dataSource!.clear()
     }
 
     func testAddLocations() {
@@ -167,10 +188,31 @@ class LocationListDataSource: BaseTestCase {
         // When
         let multiple = [testLocation, testLocation, testLocation, testLocation]
         locations.addAll(locations: multiple)
-        let popped = locations.popAll()
-
+        let popped = locations.all()
+        locations.clear()
+        
         // Then
         XCTAssertEqual(popped.count, 4)
         XCTAssertEqual(locations.count, 0)
+    }
+    
+    func testFirstLocation() {
+        // Given
+        guard let locations = dataSource else {
+            XCTFail("No database")
+            return
+        }
+        
+        // When
+        let multiple = [testLocation, testLocation, testLocation, testLocation]
+        locations.addAll(locations: multiple)
+        let firstIndexedLocation = locations.first()
+        
+        // Then
+        let firstLocation = OpenLocateLocation(data: firstIndexedLocation!.1.data)
+        XCTAssertEqual(firstLocation.location.coordinate.latitude, testLocation.location.coordinate.latitude)
+        XCTAssertEqual(firstLocation.location.coordinate.longitude, testLocation.location.coordinate.longitude)
+        XCTAssertEqual(firstLocation.location.timestamp.timeIntervalSince1970,
+                       testLocation.location.timestamp.timeIntervalSince1970, accuracy: 0.1)
     }
 }

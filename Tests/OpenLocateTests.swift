@@ -26,6 +26,11 @@ import XCTest
 @testable import OpenLocate
 
 class TestConfiguration: Configuration {
+    
+    var transmissionInterval: TimeInterval {
+        return 1
+    }
+    
     var url: String {
         return "http://www.openlocate.com"
     }
@@ -52,7 +57,7 @@ class OpenLocateTests: BaseTestCase {
         let openLocate = OpenLocate.shared
 
         // When
-        let isTracking = openLocate.tracking
+        let isTracking = openLocate.isTrackingEnabled
 
         // Then
         XCTAssertFalse(isTracking)
@@ -63,15 +68,7 @@ class OpenLocateTests: BaseTestCase {
         let openLocate = OpenLocate.shared
 
         // When
-        XCTAssertThrowsError(try openLocate.startTracking(with: TestConfiguration()))
-    }
-
-    func testStartTracking() {
-        // Given
-        let openLocate = OpenLocate.shared
-
-        // When
-        XCTAssertThrowsError(try openLocate.startTracking(with: TestConfiguration()))
+        XCTAssertThrowsError(try openLocate.initialize(with: TestConfiguration()))
     }
 
     func testStopTracking() {
@@ -80,6 +77,6 @@ class OpenLocateTests: BaseTestCase {
 
         // When
         openLocate.stopTracking()
-        XCTAssertFalse(openLocate.tracking)
+        XCTAssertFalse(openLocate.isTrackingEnabled)
     }
 }

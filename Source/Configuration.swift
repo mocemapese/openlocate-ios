@@ -32,6 +32,7 @@ public protocol Configuration {
     var url: String { get }
     var headers: Headers? { get }
     var valid: Bool { get }
+    var transmissionInterval: TimeInterval { get }
 }
 
 extension Configuration {

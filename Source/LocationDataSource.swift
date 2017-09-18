@@ -27,11 +27,16 @@ import Foundation
 typealias IndexedLocation = (Int, OpenLocateLocationType)
 
 protocol LocationDataSourceType {
+    
+    var count: Int { get }
+    
     func add(location: OpenLocateLocationType) throws
     func addAll(locations: [OpenLocateLocationType])
-    var count: Int { get }
+    
+    func first() -> IndexedLocation?
     func all() -> [IndexedLocation]
-    func popAll() -> [IndexedLocation]
+    
+    func clear()
 }
 
 final class LocationDatabase: LocationDataSourceType {
@@ -106,7 +111,7 @@ final class LocationDatabase: LocationDataSourceType {
         }
     }
 
-    private func clear() {
+    func clear() {
         let query = "DELETE FROM \(Constants.tableName)"
         let statement = SQLStatement.Builder()
             .set(query: query)
@@ -118,7 +123,31 @@ final class LocationDatabase: LocationDataSourceType {
             debugPrint(error.localizedDescription)
         }
     }
-
+    
+    func first() -> IndexedLocation? {
+        let query = "SELECT * FROM \(Constants.tableName) LIMIT 1"
+        let statement = SQLStatement.Builder()
+            .set(query: query)
+            .set(cached: true)
+            .build()
+        
+        do {
+            let result = try database.execute(statement: statement)
+            if result.next() {
+                let index = result.intValue(column: Constants.columnId)
+                let data = result.dataValue(column: Constants.columnLocation)
+                
+                if let data = data {
+                    return (index, OpenLocateLocation(data: data))
+                }
+            }
+        } catch let error {
+            debugPrint(error.localizedDescription)
+        }
+        
+        return nil
+    }
+    
     func all() -> [IndexedLocation] {
         let query = "SELECT * FROM \(Constants.tableName)"
         let statement = SQLStatement.Builder()
@@ -148,12 +177,6 @@ final class LocationDatabase: LocationDataSourceType {
         
         return locations
     }
-    
-    func popAll() -> [IndexedLocation] {
-        let locations = all()
-        clear()
-        return locations
-    }
 
     init(database: Database) {
         self.database = database
@@ -180,7 +203,12 @@ final class LocationDatabase: LocationDataSourceType {
 }
 
 final class LocationList: LocationDataSourceType {
+    
     private var locations: [OpenLocateLocationType]
+    
+    var count: Int {
+        return self.locations.count
+    }
 
     init() {
         self.locations = [OpenLocateLocationType]()
@@ -194,8 +222,11 @@ final class LocationList: LocationDataSourceType {
         self.locations.append(contentsOf: locations)
     }
 
-    var count: Int {
-        return self.locations.count
+    func first() -> IndexedLocation? {
+        if let location = self.locations.first {
+            return (0, location)
+        }
+        return nil
     }
     
     func all() -> [IndexedLocation] {
@@ -206,9 +237,7 @@ final class LocationList: LocationDataSourceType {
         return locations
     }
 
-    func popAll() -> [IndexedLocation] {
-        let locations = all()
+    func clear() {
         self.locations.removeAll()
-        return locations
     }
 }

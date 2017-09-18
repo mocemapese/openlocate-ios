@@ -132,16 +132,4 @@ class LocationManagerTests: BaseTestCase {
         XCTAssertTrue(locationManager.didStartUpdating)
     }
 
-    func testLocationManagerOnFailure() {
-        // Given
-        let locationManager = MockCLLocationManager()
-        let manager = LocationManager(manager: locationManager)
-
-        // When
-        manager.locationManager(CLLocationManager(), didFailWithError: OpenLocateError.locationDisabled(message: ""))
-
-        // Then
-        XCTAssertTrue(true)
-    }
-
 }

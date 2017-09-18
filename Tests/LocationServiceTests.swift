@@ -28,14 +28,6 @@ import CoreLocation
 
 class LocationRequestTests: BaseTestCase {
 
-    func testIsLocationServiceEnabled() {
-        // Given
-        let enabled = LocationService.isEnabled()
-
-        // Then
-        XCTAssertTrue(enabled)
-    }
-
     func testLocationServiceStart() {
         // Given
         let mockLocationManager = MockCLLocationManager()
@@ -43,14 +35,14 @@ class LocationRequestTests: BaseTestCase {
         let locationService = LocationService(
             postable: HttpClient(urlSession: SuccessURLSession()),
             locationDataSource: LocationList(),
-            scheduler: TaskScheduler(timeInterval: 300),
             url: "http://www.google.com",
             headers: nil,
             advertisingInfo: AdvertisingInfo.Builder()
                 .set(advertisingId: "1234")
                 .set(isLimitedAdTrackingEnabled: true)
                 .build(),
-            locationManager: locationManager
+            locationManager: locationManager,
+            transmissionInterval: 300
         )
         let location = CLLocation(latitude: 12.43, longitude: 124.43)
 
@@ -69,14 +61,14 @@ class LocationRequestTests: BaseTestCase {
         let locationService = LocationService(
             postable: HttpClient(urlSession: SuccessURLSession()),
             locationDataSource: LocationList(),
-            scheduler: TaskScheduler(timeInterval: 300),
             url: "http://www.google.com",
             headers: nil,
             advertisingInfo: AdvertisingInfo.Builder()
                 .set(advertisingId: "1234")
                 .set(isLimitedAdTrackingEnabled: true)
                 .build(),
-            locationManager: locationManager
+            locationManager: locationManager,
+            transmissionInterval: 300
         )
         let location = CLLocation(latitude: 12.43, longitude: 124.43)
 
