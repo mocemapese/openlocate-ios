@@ -43,7 +43,7 @@ pod 'OpenLocate'
 
 ## Usage
 
-### Start tracking of location
+### Initialize tracking
 
 1. Add `NSLocationAlwaysAndWhenInUseUsageDescription` in the `info.plist` of your application
 
@@ -52,20 +52,30 @@ pod 'OpenLocate'
 <string>This application would like to access your location.</string>
 ```
 
-Build your configuration with your URL and headers and supply it to the `startTracking` method.
+Build your configuration with your URL and headers and supply it to the `initialize` method. Ensure that the initialize method is invoked in the `application:didFinishLaunchingWithOptions:` method in your `UIApplicationDelegate`
 
 ```swift
-guard let uuid = UUID(uuidString: "<YOUR_UUID>") else {
-  print("Invalid UUID")
-  return
-}
-let configuration = SafeGraphConfiguration(uuid: uuid, token: "<YOUR_TOKEN>")
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]? ) -> Bool {
 
-do {
-  try OpenLocate.shared.startTracking(with: configuration)
-} catch {
-  print("Could not start tracking")
+    let uuid = UUID(uuidString: "<YOUR_UUID>")!
+    let token = "YOUR_TOKEN"
+    let configuration = SafeGraphConfiguration(uuid: uuid, token: token)
+    
+    do {
+        try OpenLocate.shared.initialize(with: configuration)
+    } catch error {
+        print(error)
+    }
 }
+```
+
+
+### Start tracking of location
+
+To start the tracking location, call the `startTracking` method on the `OpenLocate`. Get the instance by calling `shared`.
+
+```swift
+OpenLocate.shared.startTracking()
 ```
 
 
@@ -75,6 +85,14 @@ To stop the tracking call `stopTracking` method on the `OpenLocate`. Get the ins
 
 ```swift
 OpenLocate.shared.stopTracking()
+```
+
+### Check the current state of location tracking
+
+Call `isTrackingEnabled` method on the `OpenLocate`. Get the instance by calling `shared`.
+
+```swift
+OpenLocate.shared.isTrackingEnabled()
 ```
 
 

@@ -51,6 +51,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		11D133381F6F8990007AB485 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		11D133391F6F899A007AB485 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		482E13F51F6959800013E66B /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Place.swift; path = Source/Place.swift; sourceTree = "<group>"; };
 		4832EF461F14852F004B3EC2 /* HttpRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HttpRequest.swift; path = Source/HttpRequest.swift; sourceTree = "<group>"; };
 		484A7FC31F17579700D63E6A /* DatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseTests.swift; sourceTree = "<group>"; };
@@ -167,6 +169,8 @@
 			children = (
 				489700D31F04E82000D8C27C /* Info.plist */,
 				489700D41F04E82000D8C27C /* OpenLocate.h */,
+				11D133381F6F8990007AB485 /* README.md */,
+				11D133391F6F899A007AB485 /* LICENSE */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
