@@ -24,8 +24,11 @@
 
 import UIKit
 import OpenLocate
+import CoreLocation
 
-class TrackViewController: UIViewController {
+class TrackViewController: UIViewController, CLLocationManagerDelegate {
+    
+    private let locationManager = CLLocationManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,11 +38,15 @@ class TrackViewController: UIViewController {
         if OpenLocate.shared.isTrackingEnabled {
             onStartTracking()
         }
+        
+        locationManager.delegate = self
     }
 
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var stopButton: UIButton!
-
+    @IBOutlet weak var errorLabel: UILabel!
+    @IBOutlet weak var appSettingsButton: UIButton!
+    
     @IBAction func startTracking(_ sender: Any) {
         OpenLocate.shared.startTracking()
         onStartTracking()
@@ -59,5 +66,27 @@ class TrackViewController: UIViewController {
         startButton.isHidden = false
         stopButton.isHidden = true
     }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        errorLabel.isHidden = false
+        appSettingsButton.isHidden = false
+        
+        switch status {
+        case .denied:
+            errorLabel.text = "Location Permission Denied"
+        case .authorizedWhenInUse:
+            errorLabel.text = "Location Permission is only When In Use"
+        case .restricted:
+            errorLabel.text = "Location Services is Restricted"
+        default:
+            errorLabel.isHidden = true
+            appSettingsButton.isHidden = true
+        }
+    }
 
+    @IBAction func didTapAppSettingsButton() {
+        if let appSettings = URL(string: UIApplicationOpenSettingsURLString) {
+            UIApplication.shared.open(appSettings, options: [:], completionHandler: nil)
+        }
+    }
 }
