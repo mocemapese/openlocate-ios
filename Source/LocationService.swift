@@ -166,6 +166,11 @@ extension LocationService {
         let always = Bundle.main.object(forInfoDictionaryKey: "NSLocationAlwaysUsageDescription")
         let inUse = Bundle.main.object(forInfoDictionaryKey: "NSLocationWhenInUseUsageDescription")
         let alwaysAndinUse = Bundle.main.object(forInfoDictionaryKey: "NSLocationAlwaysAndWhenInUseUsageDescription")
-        return always != nil || inUse != nil || alwaysAndinUse != nil
+        
+        if #available(iOS 11, *) {
+            return always != nil || inUse != nil || alwaysAndinUse != nil
+        }
+        
+        return always != nil
     }
 }
