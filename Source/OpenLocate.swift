@@ -79,12 +79,6 @@ extension OpenLocate {
         if let locationService = self.locationService, locationService.isStarted {
             locationService.start()
         }
-        
-        // TODO: Remove This!
-        debugPrint("Location History:")
-        locationDataSource.all().forEach {
-            debugPrint($0)
-        }
     }
     
     public func initialize(with configuration: Configuration) throws {
