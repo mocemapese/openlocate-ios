@@ -50,7 +50,6 @@ class LocationRequestTests: BaseTestCase {
                 .set(advertisingId: "1234")
                 .set(isLimitedAdTrackingEnabled: true)
                 .build(),
-            locationManager: locationManager,
             locationAccuracy: .high,
             locationInterval: 300,
             transmissionInterval: 300
@@ -79,7 +78,6 @@ class LocationRequestTests: BaseTestCase {
                 .set(advertisingId: "1234")
                 .set(isLimitedAdTrackingEnabled: true)
                 .build(),
-            locationManager: locationManager,
             locationAccuracy: .high,
             locationInterval: 300,
             transmissionInterval: 300

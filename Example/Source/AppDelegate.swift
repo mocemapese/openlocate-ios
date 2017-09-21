@@ -37,6 +37,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?
         ) -> Bool {
         Fabric.with([Crashlytics.self])
+
+        let uuid = UUID(uuidString: (Bundle.main.object(forInfoDictionaryKey: "ProviderId") as? String)!)
+        let configuration = SafeGraphConfiguration(
+            uuid: uuid!,
+            token: (Bundle.main.object(forInfoDictionaryKey: "Token") as? String)!
+        )
+        try? OpenLocate.shared.initialize(configuration: configuration)
         return true
     }
 

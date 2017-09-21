@@ -59,20 +59,13 @@ class TrackViewController: UIViewController {
     @IBAction func startTracking(_ sender: Any) {
 
         do {
-            let uuid = UUID(uuidString: (Bundle.main.object(forInfoDictionaryKey: "ProviderId") as? String)!)
-            let configuration = SafeGraphConfiguration(
-                uuid: uuid!,
-                token: (Bundle.main.object(forInfoDictionaryKey: "Token") as? String)!
-            )
-            try OpenLocate.shared.startTracking(with: configuration)
+            try OpenLocate.shared.startTracking()
             onStartTracking()
         } catch OpenLocateError.invalidConfiguration(let message) {
             showError(message: message)
         } catch OpenLocateError.locationDisabled(let message) {
             showError(message: message)
         } catch OpenLocateError.locationUnAuthorized(let message) {
-            showError(message: message)
-        } catch OpenLocateError.locationServiceConflict(let message) {
             showError(message: message)
         } catch OpenLocateError.locationMissingAuthorizationKeys(let message) {
             showError(message: message)

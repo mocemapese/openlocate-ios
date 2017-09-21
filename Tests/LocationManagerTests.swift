@@ -27,6 +27,8 @@ import CoreLocation
 @testable import OpenLocate
 
 class MockCLLocationManager: CLLocationManagerProtocol {
+    var location: CLLocation?
+
     func requestAlwaysAuthorization() {
 
     }

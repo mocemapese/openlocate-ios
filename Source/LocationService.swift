@@ -29,6 +29,9 @@ protocol LocationServiceType {
     var locationAccuracy: LocationAccuracy { get set }
     var locationInterval: TimeInterval { get set }
     var transmissionInterval: TimeInterval { get set }
+    var locationManager: LocationManagerType? { get set }
+
+    func add(locations: [OpenLocateLocation])
 
     func start()
     func stop()
@@ -41,7 +44,7 @@ final class LocationService: LocationServiceType {
     var locationInterval: TimeInterval
     var locationAccuracy: LocationAccuracy {
         didSet {
-            locationManager.set(accuracy: locationAccuracy)
+            locationManager?.set(accuracy: locationAccuracy)
         }
     }
     var transmissionInterval: TimeInterval {
@@ -50,7 +53,12 @@ final class LocationService: LocationServiceType {
         }
     }
 
-    private let locationManager: LocationManagerType
+    var locationManager: LocationManagerType? {
+        didSet {
+            subscribeLocation()
+        }
+    }
+
     private let httpClient: Postable
     private let locationDataSource: LocationDataSourceType
     private var scheduler: Scheduler
@@ -71,14 +79,12 @@ final class LocationService: LocationServiceType {
         url: String,
         headers: Headers?,
         advertisingInfo: AdvertisingInfo,
-        locationManager: LocationManagerType,
         locationAccuracy: LocationAccuracy,
         locationInterval: TimeInterval,
         transmissionInterval: TimeInterval) {
 
         httpClient = postable
         self.locationDataSource = locationDataSource
-        self.locationManager = locationManager
         self.scheduler = scheduler
         self.advertisingInfo = advertisingInfo
         self.url = url
@@ -91,8 +97,10 @@ final class LocationService: LocationServiceType {
     func start() {
         debugPrint("Location service started for url : \(url)")
         schedule()
+    }
 
-        locationManager.subscribe { location in
+    func subscribeLocation() {
+        locationManager?.subscribe { location in
 
             if let lastLocation = self.lastKnownLocation,
                 lastLocation.timestamp + self.locationInterval > location.timestamp {
@@ -120,7 +128,11 @@ final class LocationService: LocationServiceType {
 
     func stop() {
         unschedule()
-        locationManager.cancel()
+        locationManager?.cancel()
+    }
+
+    func add(locations: [OpenLocateLocation]) {
+        locationDataSource.addAll(locations: locations)
     }
 }
 

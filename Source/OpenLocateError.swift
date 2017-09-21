@@ -26,7 +26,6 @@ import Foundation
 
 public enum OpenLocateError: Error {
     case invalidConfiguration(message: String)
-    case locationServiceConflict(message: String)
     case locationDisabled(message: String)
     case locationUnAuthorized(message: String)
     case locationMissingAuthorizationKeys(message: String)
@@ -34,8 +33,6 @@ public enum OpenLocateError: Error {
 
     struct ErrorMessage {
         static let invalidConfigurationMessage = "Invalid Configuration. Please provide a correct url"
-        static let locationServiceConflictMessage = "Location tracking is already active." +
-        "Please stop the previous tracking before starting."
         static let unauthorizedLocationMessage = "Location has been unauthorized for the application." +
         "Please turn it on from the settings."
         static let missingAuthorizationKeysMessage = "Authorization keys are missing. Please add in plist file."

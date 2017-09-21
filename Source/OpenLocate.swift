@@ -24,20 +24,27 @@
 
 import Foundation
 import AdSupport
+import CoreLocation
 
 public typealias LocationCompletionHandler = (OpenLocateLocation?, Error?) -> Void
 
 private protocol OpenLocateType {
+
     static var shared: OpenLocate { get }
 
     var locationAccuracy: LocationAccuracy { get set }
     var transmissionInterval: TimeInterval { get set }
     var locationInterval: TimeInterval { get set }
 
-    func startTracking(with configuration: Configuration) throws
+    func startTracking() throws
     func stopTracking()
 
     func fetchCurrentLocation(completion: LocationCompletionHandler) throws
+
+    func add(location: CLLocation) throws
+    func add(locations: [CLLocation]) throws
+
+    func initialize(configuration: Configuration) throws
 
     var tracking: Bool { get }
 }
@@ -55,6 +62,9 @@ private let defaultLocationInterval: TimeInterval = 120
 public final class OpenLocate: OpenLocateType {
 
     public static let shared = OpenLocate()
+
+    private var configuration: Configuration?
+    private var locationService: LocationServiceType?
 
     public var locationAccuracy = defaultLocationAccuracy {
         didSet {
@@ -74,7 +84,10 @@ public final class OpenLocate: OpenLocateType {
         }
     }
 
-    private var locationService: LocationServiceType?
+    public func initialize(configuration: Configuration) throws {
+        try validate(configuration: configuration)
+        self.configuration = configuration
+    }
 }
 
 extension OpenLocate {
@@ -91,8 +104,6 @@ extension OpenLocate {
             locationDataSource = LocationList()
         }
 
-        let locationManager = LocationManager()
-
         self.locationService = LocationService(
             postable: httpClient,
             locationDataSource: locationDataSource,
@@ -100,22 +111,31 @@ extension OpenLocate {
             url: configuration.url,
             headers: configuration.headers,
             advertisingInfo: advertisingInfo,
-            locationManager: locationManager,
             locationAccuracy: locationAccuracy,
             locationInterval: locationInterval,
             transmissionInterval: transmissionInterval
         )
     }
 
-    public func startTracking(with configuration: Configuration) throws {
-        try validateLocationService()
+    public func startTracking() throws {
+        try validate()
+
+        startLocationService()
+        locationService?.locationManager = LocationManager()
+    }
+
+    private func startLocationService() {
+        if locationService == nil {
+            initLocationService(configuration: configuration!)
+            locationService?.start()
+        }
+    }
+
+    private func validate() throws {
         try validate(configuration: configuration)
         try validateLocationEnabled()
         try validateLocationAuthorization()
         try validateLocationAuthorizationKeys()
-
-        initLocationService(configuration: configuration)
-        locationService?.start()
     }
 
     public func stopTracking() {
@@ -166,9 +186,9 @@ extension OpenLocate {
 
 extension OpenLocate {
 
-    private func validate(configuration: Configuration) throws {
+    private func validate(configuration: Configuration?) throws {
         // throw error if token is empty
-        if !configuration.valid {
+        if configuration == nil || !configuration!.valid {
             debugPrint(OpenLocateError.ErrorMessage.invalidConfigurationMessage)
             throw OpenLocateError.invalidConfiguration(
                 message: OpenLocateError.ErrorMessage.invalidConfigurationMessage
@@ -202,15 +222,22 @@ extension OpenLocate {
             )
         }
     }
+}
 
-    private func validateLocationService() throws {
-        guard locationService != nil else {
-            return
-        }
+extension OpenLocate {
+    func add(location: CLLocation) throws {
+        try validate()
 
-        debugPrint(OpenLocateError.ErrorMessage.locationServiceConflictMessage)
-        throw OpenLocateError.locationServiceConflict(
-            message: OpenLocateError.ErrorMessage.locationServiceConflictMessage
-        )
+        let openLocateLocation = OpenLocateLocation(location: location, advertisingInfo: advertisingInfo)
+        startLocationService()
+        locationService?.add(locations: [openLocateLocation])
+    }
+
+    func add(locations: [CLLocation]) throws {
+        try validate()
+
+        let openLocateLocations = locations.map { OpenLocateLocation(location: $0, advertisingInfo: advertisingInfo) }
+        startLocationService()
+        locationService?.add(locations: openLocateLocations)
     }
 }

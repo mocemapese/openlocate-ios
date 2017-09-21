@@ -63,7 +63,7 @@ class OpenLocateTests: BaseTestCase {
         let openLocate = OpenLocate.shared
 
         // When
-        XCTAssertThrowsError(try openLocate.startTracking(with: TestConfiguration()))
+        XCTAssertThrowsError(try openLocate.startTracking())
     }
 
     func testStartTracking() {
@@ -71,7 +71,7 @@ class OpenLocateTests: BaseTestCase {
         let openLocate = OpenLocate.shared
 
         // When
-        XCTAssertThrowsError(try openLocate.startTracking(with: TestConfiguration()))
+        XCTAssertThrowsError(try openLocate.startTracking())
     }
 
     func testStopTracking() {
