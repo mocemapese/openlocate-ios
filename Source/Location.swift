@@ -55,7 +55,7 @@ protocol OpenLocateLocationType: JsonParameterType, DataType {
 
 }
 
-struct OpenLocateLocation: OpenLocateLocationType {
+public struct OpenLocateLocation: OpenLocateLocationType {
 
     private struct Keys {
         static let adId = "ad_id"
@@ -158,5 +158,27 @@ extension OpenLocateLocation {
             aCoder.encode(advertisingId, forKey: OpenLocateLocation.Keys.adId)
             aCoder.encode(isLimitedAdTrackingEnabled, forKey: OpenLocateLocation.Keys.adOptOut)
         }
+    }
+}
+
+extension OpenLocateLocation {
+    public var latitude: Double {
+        return location.coordinate.latitude
+    }
+
+    public var longitude: Double {
+        return location.coordinate.longitude
+    }
+
+    public var horizontalAccuracy: Double {
+        return location.horizontalAccuracy
+    }
+
+    public var advertisingId: String {
+        return advertisingInfo.advertisingId
+    }
+
+    public var advertisingIdType: String {
+        return "idfa"
     }
 }

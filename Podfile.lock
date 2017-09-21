@@ -1,19 +1,22 @@
 PODS:
+  - Alamofire (4.5.0)
   - Crashlytics (3.8.5):
     - Fabric (~> 1.6.3)
   - Fabric (1.6.12)
   - SwiftLint (0.20.1)
 
 DEPENDENCIES:
+  - Alamofire
   - Crashlytics
   - Fabric
   - SwiftLint
 
 SPEC CHECKSUMS:
+  Alamofire: f28cdffd29de33a7bfa022cbd63ae95a27fae140
   Crashlytics: dfbae35ef22ca189240d230ad501feea4ee85d2d
   Fabric: f050464eac45a2ce5a8e6e6a07e977c0df32fe28
   SwiftLint: f60095dc173a3f3ec505bb34f5229c3dfd779a54
 
-PODFILE CHECKSUM: 73e0b8fb6d47d93fc0de69034641597806f2e678
+PODFILE CHECKSUM: d598c5df7024ba3856bbb0a4a6930228aed441f2
 
 COCOAPODS: 1.2.1

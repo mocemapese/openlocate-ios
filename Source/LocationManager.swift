@@ -40,6 +40,8 @@ protocol CLLocationManagerProtocol {
     func startUpdatingLocation()
     func stopUpdatingLocation()
 
+    var location: CLLocation? { get }
+
     static func authorizationStatus() -> CLAuthorizationStatus
     static func locationServicesEnabled() -> Bool
 }
@@ -54,6 +56,7 @@ protocol LocationManagerType {
     func set(accuracy: LocationAccuracy)
 
     var updatingLocation: Bool { get }
+    var lastLocation: CLLocation? { get }
 
     static func authorizationStatus(_ locationManagerProtocol: CLLocationManagerProtocol.Type) -> CLAuthorizationStatus
     static func locationServicesEnabled(_ locationManagerProtocol: CLLocationManagerProtocol.Type) -> Bool
@@ -135,6 +138,10 @@ extension LocationManager {
 
     var updatingLocation: Bool {
         return !requests.isEmpty
+    }
+
+    var lastLocation: CLLocation? {
+        return manager.location
     }
 
     static func authorizationStatus(

@@ -25,7 +25,7 @@
 import Foundation
 import AdSupport
 
-public typealias PlacesCompletionHandler = ([Place]?, Error?) -> Void
+public typealias LocationCompletionHandler = (OpenLocateLocation?, Error?) -> Void
 
 private protocol OpenLocateType {
     static var shared: OpenLocate { get }
@@ -36,6 +36,8 @@ private protocol OpenLocateType {
 
     func startTracking(with configuration: Configuration) throws
     func stopTracking()
+
+    func fetchCurrentLocation(completion: LocationCompletionHandler) throws
 
     var tracking: Bool { get }
 }
@@ -89,11 +91,6 @@ extension OpenLocate {
             locationDataSource = LocationList()
         }
 
-        let manager = ASIdentifierManager.shared()
-        let advertisingInfo = AdvertisingInfo.Builder()
-            .set(advertisingId: manager.advertisingIdentifier.uuidString)
-            .set(isLimitedAdTrackingEnabled: manager.isAdvertisingTrackingEnabled)
-            .build()
         let locationManager = LocationManager()
 
         self.locationService = LocationService(
@@ -133,6 +130,37 @@ extension OpenLocate {
 
     public var tracking: Bool {
         return locationService != nil
+    }
+
+    private var advertisingInfo: AdvertisingInfo {
+        let manager = ASIdentifierManager.shared()
+        let advertisingInfo = AdvertisingInfo.Builder()
+            .set(advertisingId: manager.advertisingIdentifier.uuidString)
+            .set(isLimitedAdTrackingEnabled: manager.isAdvertisingTrackingEnabled)
+            .build()
+
+        return advertisingInfo
+    }
+}
+
+extension OpenLocate {
+    public func fetchCurrentLocation(completion: (OpenLocateLocation?, Error?) -> Void) throws {
+        try validateLocationEnabled()
+        try validateLocationAuthorization()
+        try validateLocationAuthorizationKeys()
+
+        let manager = LocationManager()
+        let lastLocation = manager.lastLocation
+
+        guard let location = lastLocation else {
+            completion(
+                nil,
+                OpenLocateError.locationFailure(message: OpenLocateError.ErrorMessage.locationFailureMessage))
+            return
+        }
+
+        let openlocateLocation = OpenLocateLocation(location: location, advertisingInfo: advertisingInfo)
+        completion(openlocateLocation, nil)
     }
 }
 

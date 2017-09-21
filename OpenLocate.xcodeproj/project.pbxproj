@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		480356201F2F0B03000BED59 /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4803561F1F2F0B03000BED59 /* Scheduler.swift */; };
 		480356221F2F0DEA000BED59 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480356211F2F0DEA000BED59 /* Task.swift */; };
-		482E13F61F6959800013E66B /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482E13F51F6959800013E66B /* Place.swift */; };
 		4832EF471F14852F004B3EC2 /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4832EF461F14852F004B3EC2 /* HttpRequest.swift */; };
 		484A7FC41F17579700D63E6A /* DatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484A7FC31F17579700D63E6A /* DatabaseTests.swift */; };
 		484A7FC61F175CA900D63E6A /* Statement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484A7FC51F175CA900D63E6A /* Statement.swift */; };
@@ -57,7 +56,6 @@
 /* Begin PBXFileReference section */
 		4803561F1F2F0B03000BED59 /* Scheduler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Scheduler.swift; path = Source/Scheduler.swift; sourceTree = "<group>"; };
 		480356211F2F0DEA000BED59 /* Task.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Task.swift; path = Source/Task.swift; sourceTree = "<group>"; };
-		482E13F51F6959800013E66B /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Place.swift; path = Source/Place.swift; sourceTree = "<group>"; };
 		4832EF461F14852F004B3EC2 /* HttpRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HttpRequest.swift; path = Source/HttpRequest.swift; sourceTree = "<group>"; };
 		484A7FC31F17579700D63E6A /* DatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseTests.swift; sourceTree = "<group>"; };
 		484A7FC51F175CA900D63E6A /* Statement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Statement.swift; path = Source/Statement.swift; sourceTree = "<group>"; };
@@ -151,14 +149,6 @@
 			name = Config;
 			sourceTree = "<group>";
 		};
-		485AB3C31F6A721E009C829D /* Place */ = {
-			isa = PBXGroup;
-			children = (
-				482E13F51F6959800013E66B /* Place.swift */,
-			);
-			name = Place;
-			sourceTree = "<group>";
-		};
 		4876E9621F09ED10006EF61C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -197,7 +187,6 @@
 				48E0EE631F1625D80053BCC3 /* Database */,
 				4803561E1F2F0ADF000BED59 /* Scheduler */,
 				48D134611F0A21A60075EFBC /* Extensions */,
-				485AB3C31F6A721E009C829D /* Place */,
 				489700D21F04E7FD00D8C27C /* Supporting Files */,
 			);
 			name = Source;
@@ -448,7 +437,6 @@
 				48E0EE601F161D6B0053BCC3 /* LocationDataSource.swift in Sources */,
 				48E0EE5E1F15E9D60053BCC3 /* HttpResponse.swift in Sources */,
 				48C4D8C31F1F9E1000640145 /* LocationManager.swift in Sources */,
-				482E13F61F6959800013E66B /* Place.swift in Sources */,
 				48C4D8C11F1F9D3F00640145 /* OpenLocateError.swift in Sources */,
 				485A63F11F445E140005F86D /* Configuration.swift in Sources */,
 				484A7FC61F175CA900D63E6A /* Statement.swift in Sources */,
