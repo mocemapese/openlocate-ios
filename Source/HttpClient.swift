@@ -91,6 +91,43 @@ final class HttpClient: HttpClientType {
     init(urlSession: URLSessionProtocol = URLSession(configuration: .default)) {
         self.session = urlSession
     }
+    
+    // User-Agent Header; see https://tools.ietf.org/html/rfc7231#section-5.5.3
+    // Example: `iOS Example/1.0 (org.openlocate.iOS-Example; build:1; iOS 11.0.0) OpenLocate/1.0.0`
+    var userAgent: String = {
+        if let info = Bundle.main.infoDictionary {
+            let executable = info[kCFBundleExecutableKey as String] as? String ?? "Unknown"
+            let bundle = info[kCFBundleIdentifierKey as String] as? String ?? "Unknown"
+            let appVersion = info["CFBundleShortVersionString"] as? String ?? "Unknown"
+            let appBuild = info[kCFBundleVersionKey as String] as? String ?? "Unknown"
+            
+            let osNameVersion: String = {
+                let version = ProcessInfo.processInfo.operatingSystemVersion
+                let versionString = "\(version.majorVersion).\(version.minorVersion).\(version.patchVersion)"
+                
+                let osName: String = {
+                    #if os(iOS)
+                        return "iOS"
+                    #else
+                        return "Unknown"
+                    #endif
+                }()
+                
+                return "\(osName) \(versionString)"
+            }()
+            
+            let openLocateVersion: String = {
+                guard let openLocateInfo = Bundle(for: OpenLocate.self).infoDictionary,
+                    let build = openLocateInfo["CFBundleShortVersionString"] else {
+                        return "Unknown"
+                }
+                return "OpenLocate/\(build)"
+            }()
+            
+            return "\(executable)/\(appVersion) (\(bundle); build:\(appBuild); \(osNameVersion)) \(openLocateVersion)"
+        }
+        return "OpenLocate"
+    }()
 }
 
 extension HttpClient {
@@ -103,6 +140,7 @@ extension HttpClient {
         // make url request from request
         urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
         urlRequest.addValue("application/json", forHTTPHeaderField: "Accept")
+        urlRequest.addValue(userAgent, forHTTPHeaderField: "User-Agent")
 
         // create the task object with the request
         let task = session.dataTask(with: urlRequest) { data, response, error in
