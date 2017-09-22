@@ -28,15 +28,17 @@ public typealias Headers = [String: String]
 
 // Configuration
 
-public protocol Configuration {
-    var url: String { get }
-    var headers: Headers? { get }
-    var valid: Bool { get }
-    var transmissionInterval: TimeInterval { get }
-}
-
-extension Configuration {
-    public var valid: Bool {
-        return !url.isEmpty
+public struct Configuration {
+    
+    let url: URL
+    let headers: Headers?
+    let transmissionInterval: TimeInterval
+    
+    public static let DefaultTransmissionInterval: TimeInterval = 8 * 60 * 60 // 8 Hours
+    
+    public init(url: URL, headers: Headers?, transmissionInterval: TimeInterval = DefaultTransmissionInterval) {
+        self.url = url
+        self.headers = headers
+        self.transmissionInterval = transmissionInterval
     }
 }

@@ -69,7 +69,7 @@ extension OpenLocate {
         self.locationService = LocationService(
             postable: httpClient,
             locationDataSource: locationDataSource,
-            url: configuration.url,
+            url: configuration.url.absoluteString,
             headers: configuration.headers,
             advertisingInfo: advertisingInfo,
             locationManager: locationManager,
@@ -82,7 +82,6 @@ extension OpenLocate {
     }
     
     public func initialize(with configuration: Configuration) throws {
-        try validate(configuration: configuration)
         try validateLocationAuthorizationKeys()
         
         initLocationService(configuration: configuration)
@@ -108,16 +107,6 @@ extension OpenLocate {
 }
 
 extension OpenLocate {
-
-    private func validate(configuration: Configuration) throws {
-        // throw error if token is empty
-        if !configuration.valid {
-            debugPrint(OpenLocateError.ErrorMessage.invalidConfigurationMessage)
-            throw OpenLocateError.invalidConfiguration(
-                message: OpenLocateError.ErrorMessage.invalidConfigurationMessage
-            )
-        }
-    }
 
     private func validateLocationAuthorizationKeys() throws {
         if !LocationService.isAuthorizationKeysValid() {

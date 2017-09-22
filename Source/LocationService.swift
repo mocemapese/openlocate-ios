@@ -140,8 +140,8 @@ extension LocationService {
                 success: {  [weak self] _, _ in
                     self?.endBackgroundTask()
             }
-            ) {  [weak self] _, _ in
-                debugPrint("failure in posting locations!!!")
+            ) {  [weak self] _, error in
+                debugPrint("failure in posting locations!!! Error: \(error)")
                 self?.locationDataSource.addAll(locations: locations)
                 self?.endBackgroundTask()
             }

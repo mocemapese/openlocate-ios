@@ -36,9 +36,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         Fabric.with([Crashlytics.self])
         
-        if let configuration = SafeGraphConfiguration() {
-            try? OpenLocate.shared.initialize(with: configuration)
-        }
+        let token = Bundle.main.object(forInfoDictionaryKey: "Token") as! String
+        let uuid = Bundle.main.object(forInfoDictionaryKey: "ProviderId") as! String
+        
+        let url = URL(string: "https://api.safegraph.com/v1/provider/\(uuid)/devicelocation")!
+        let headers = ["Authorization": "Bearer \(token)"]
+        
+        let configuration = Configuration(url: url, headers: headers)
+        try? OpenLocate.shared.initialize(with: configuration)
         
         return true
     }

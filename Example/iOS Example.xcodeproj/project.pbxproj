@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		489603281F4D70DF00EC4360 /* SafeGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489603271F4D70DE00EC4360 /* SafeGraph.swift */; };
 		4897011B1F04F7CA00D8C27C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4897011A1F04F7CA00D8C27C /* AppDelegate.swift */; };
 		489701241F04F7ED00D8C27C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4897011D1F04F7ED00D8C27C /* Assets.xcassets */; };
 		489701281F04F8C000D8C27C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4897011F1F04F7ED00D8C27C /* LaunchScreen.storyboard */; };
@@ -51,7 +50,6 @@
 
 /* Begin PBXFileReference section */
 		326819F92D49F85C167CCB5D /* Pods-iOS Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS Example.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-iOS Example/Pods-iOS Example.debug.xcconfig"; sourceTree = "<group>"; };
-		489603271F4D70DE00EC4360 /* SafeGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SafeGraph.swift; path = Source/SafeGraph.swift; sourceTree = "<group>"; };
 		4897011A1F04F7CA00D8C27C /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Source/AppDelegate.swift; sourceTree = "<group>"; };
 		4897011D1F04F7ED00D8C27C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Resources/Assets.xcassets; sourceTree = "<group>"; };
 		489701201F04F7ED00D8C27C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -103,7 +101,6 @@
 			children = (
 				4897011A1F04F7CA00D8C27C /* AppDelegate.swift */,
 				48A0D5E71F4706E900E12C54 /* TrackViewController.swift */,
-				489603271F4D70DE00EC4360 /* SafeGraph.swift */,
 				4897011C1F04F7CF00D8C27C /* Supporting Files */,
 			);
 			name = Source;
@@ -334,7 +331,6 @@
 			files = (
 				48A0D5E81F4706E900E12C54 /* TrackViewController.swift in Sources */,
 				4897011B1F04F7CA00D8C27C /* AppDelegate.swift in Sources */,
-				489603281F4D70DF00EC4360 /* SafeGraph.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

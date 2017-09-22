@@ -25,20 +25,6 @@
 import XCTest
 @testable import OpenLocate
 
-class TestConfiguration: Configuration {
-    
-    var transmissionInterval: TimeInterval {
-        return 1
-    }
-    
-    var url: String {
-        return "http://www.openlocate.com"
-    }
-
-    var headers: Headers?
-
-}
-
 class OpenLocateTests: BaseTestCase {
 
     func testOpenLocateSharedInstance() {
@@ -61,14 +47,6 @@ class OpenLocateTests: BaseTestCase {
 
         // Then
         XCTAssertFalse(isTracking)
-    }
-
-    func testStartTrackingWithInvalidToken() {
-        // Given
-        let openLocate = OpenLocate.shared
-
-        // When
-        XCTAssertThrowsError(try openLocate.initialize(with: TestConfiguration()))
     }
 
     func testStopTracking() {
