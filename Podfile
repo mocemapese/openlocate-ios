@@ -16,6 +16,7 @@ target 'iOS Example' do
   project Example
   fabric_pods
   pod 'SwiftLint'
+  pod 'Alamofire'
 end
 
 post_install do |installer|

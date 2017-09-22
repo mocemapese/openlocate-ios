@@ -34,6 +34,7 @@ protocol LocationManagerType {
     func cancel()
 
     var updatingLocation: Bool { get }
+    var lastLocation: CLLocation? { get }
 }
 
 final class LocationManager: NSObject, LocationManagerType, CLLocationManagerDelegate {
@@ -125,5 +126,9 @@ final class LocationManager: NSObject, LocationManagerType, CLLocationManagerDel
         if status == .notDetermined || status == .authorizedWhenInUse {
             manager.requestAlwaysAuthorization()
         }
+    }
+
+    var lastLocation: CLLocation? {
+        return manager.location
     }
 }

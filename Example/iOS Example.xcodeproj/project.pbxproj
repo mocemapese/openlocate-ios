@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4843DB081F6BC246004CE5F1 /* SafeGraphPlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4843DB071F6BC246004CE5F1 /* SafeGraphPlaceListViewController.swift */; };
+		489603281F4D70DF00EC4360 /* SafeGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489603271F4D70DE00EC4360 /* SafeGraph.swift */; };
+		4896F8681F6BCFDE0049E5BD /* SafeGraphPlaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4896F8671F6BCFDE0049E5BD /* SafeGraphPlaceTableViewCell.swift */; };
 		4897011B1F04F7CA00D8C27C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4897011A1F04F7CA00D8C27C /* AppDelegate.swift */; };
 		489701241F04F7ED00D8C27C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4897011D1F04F7ED00D8C27C /* Assets.xcassets */; };
 		489701281F04F8C000D8C27C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4897011F1F04F7ED00D8C27C /* LaunchScreen.storyboard */; };
@@ -50,6 +53,9 @@
 
 /* Begin PBXFileReference section */
 		326819F92D49F85C167CCB5D /* Pods-iOS Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS Example.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-iOS Example/Pods-iOS Example.debug.xcconfig"; sourceTree = "<group>"; };
+		4843DB071F6BC246004CE5F1 /* SafeGraphPlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SafeGraphPlaceListViewController.swift; path = Source/SafeGraphPlaceListViewController.swift; sourceTree = "<group>"; };
+		489603271F4D70DE00EC4360 /* SafeGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SafeGraph.swift; path = Source/SafeGraph.swift; sourceTree = "<group>"; };
+		4896F8671F6BCFDE0049E5BD /* SafeGraphPlaceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SafeGraphPlaceTableViewCell.swift; path = Source/SafeGraphPlaceTableViewCell.swift; sourceTree = "<group>"; };
 		4897011A1F04F7CA00D8C27C /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Source/AppDelegate.swift; sourceTree = "<group>"; };
 		4897011D1F04F7ED00D8C27C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Resources/Assets.xcassets; sourceTree = "<group>"; };
 		489701201F04F7ED00D8C27C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -101,6 +107,9 @@
 			children = (
 				4897011A1F04F7CA00D8C27C /* AppDelegate.swift */,
 				48A0D5E71F4706E900E12C54 /* TrackViewController.swift */,
+				489603271F4D70DE00EC4360 /* SafeGraph.swift */,
+				4843DB071F6BC246004CE5F1 /* SafeGraphPlaceListViewController.swift */,
+				4896F8671F6BCFDE0049E5BD /* SafeGraphPlaceTableViewCell.swift */,
 				4897011C1F04F7CF00D8C27C /* Supporting Files */,
 			);
 			name = Source;
@@ -280,9 +289,12 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/../Pods/Target Support Files/Pods-iOS Example/Pods-iOS Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -331,6 +343,9 @@
 			files = (
 				48A0D5E81F4706E900E12C54 /* TrackViewController.swift in Sources */,
 				4897011B1F04F7CA00D8C27C /* AppDelegate.swift in Sources */,
+				4843DB081F6BC246004CE5F1 /* SafeGraphPlaceListViewController.swift in Sources */,
+				489603281F4D70DF00EC4360 /* SafeGraph.swift in Sources */,
+				4896F8681F6BCFDE0049E5BD /* SafeGraphPlaceTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

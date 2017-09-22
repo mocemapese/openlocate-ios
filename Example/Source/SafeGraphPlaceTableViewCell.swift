@@ -1,5 +1,5 @@
 //
-//  OpenLocateError.swift
+//  SafeGraphPlaceTableViewCell.swift
 //
 //  Copyright (c) 2017 OpenLocate
 //
@@ -22,24 +22,30 @@
 //  SOFTWARE.
 //
 
-import Foundation
 
-public enum OpenLocateError: Error {
-    case invalidConfiguration(message: String)
-    case locationMissingAuthorizationKeys(message: String)
-    case locationFailure(message: String)
+import UIKit
 
-    struct ErrorMessage {
-        static let invalidConfigurationMessage = "Invalid Configuration. Please provide a correct url"
-        static let missingAuthorizationKeysMessage = "Authorization keys are missing. Please add in plist file."
-        static let noCurrentLocationExists = "There is currently no location"
-    }
-}
+class SafeGraphPlaceTableViewCell: UITableViewCell {
 
-public enum PlaceError: Error {
-    case invalidLocationJson(message: String)
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var streetAddressLabel: UILabel!
+    @IBOutlet weak var cityLabel: UILabel!
+    @IBOutlet weak var stateLabel: UILabel!
+    @IBOutlet weak var zipCodeLabel: UILabel!
+    @IBOutlet weak var categoryLabel: UILabel!
+    @IBOutlet weak var subCategoryLabel: UILabel!
+    @IBOutlet weak var codeLabel: UILabel!
+    @IBOutlet weak var distanceLabel: UILabel!
 
-    struct ErrorMessage {
-        static let invalidLocationJsonMessage = "Invalid location. Please try again"
+    func update(place: SafeGraphPlace) {
+        nameLabel.text = place.name
+        streetAddressLabel.text = place.streetAddress
+        cityLabel.text = place.city
+        stateLabel.text = place.state
+        zipCodeLabel.text = String(place.zipCode)
+        categoryLabel.text = place.naicsCategory
+        subCategoryLabel.text = place.naicsSubCategory
+        codeLabel.text = String(place.naicsCode)
+        distanceLabel.text = String(place.distance)
     }
 }
