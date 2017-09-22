@@ -121,7 +121,9 @@ extension OpenLocate {
         try validate()
 
         startLocationService()
-        locationService?.locationManager = LocationManager()
+        if locationService?.locationManager == nil {
+            locationService?.locationManager = LocationManager()
+        }
     }
 
     private func startLocationService() {
