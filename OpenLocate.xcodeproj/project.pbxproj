@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		482E13F61F6959800013E66B /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482E13F51F6959800013E66B /* Place.swift */; };
+		111E607F1F758494004B2D20 /* NetworkInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111E607E1F758494004B2D20 /* NetworkInfo.swift */; };
 		4832EF471F14852F004B3EC2 /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4832EF461F14852F004B3EC2 /* HttpRequest.swift */; };
 		484A7FC41F17579700D63E6A /* DatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484A7FC31F17579700D63E6A /* DatabaseTests.swift */; };
 		484A7FC61F175CA900D63E6A /* Statement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484A7FC51F175CA900D63E6A /* Statement.swift */; };
@@ -51,9 +51,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		111E607E1F758494004B2D20 /* NetworkInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NetworkInfo.swift; path = Source/NetworkInfo.swift; sourceTree = "<group>"; };
 		11D133381F6F8990007AB485 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		11D133391F6F899A007AB485 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		482E13F51F6959800013E66B /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Place.swift; path = Source/Place.swift; sourceTree = "<group>"; };
 		4832EF461F14852F004B3EC2 /* HttpRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HttpRequest.swift; path = Source/HttpRequest.swift; sourceTree = "<group>"; };
 		484A7FC31F17579700D63E6A /* DatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseTests.swift; sourceTree = "<group>"; };
 		484A7FC51F175CA900D63E6A /* Statement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Statement.swift; path = Source/Statement.swift; sourceTree = "<group>"; };
@@ -212,6 +212,7 @@
 				48C4D8C01F1F9D3F00640145 /* OpenLocateError.swift */,
 				48C4D8C21F1F9E1000640145 /* LocationManager.swift */,
 				48D6E7F71F38790D00EC76A8 /* Advertising.swift */,
+				111E607E1F758494004B2D20 /* NetworkInfo.swift */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -404,6 +405,7 @@
 			files = (
 				4897016F1F05183100D8C27C /* HttpClient.swift in Sources */,
 				4832EF471F14852F004B3EC2 /* HttpRequest.swift in Sources */,
+				111E607F1F758494004B2D20 /* NetworkInfo.swift in Sources */,
 				48E45DEF1F09384C006EAF6F /* Location.swift in Sources */,
 				48D134671F0A3DAE0075EFBC /* Dictionary+Extensions.swift in Sources */,
 				4876E9601F09EB45006EF61C /* LocationService.swift in Sources */,
@@ -574,7 +576,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.openlocate.iOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -596,7 +598,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.openlocate.iOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";

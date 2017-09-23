@@ -69,7 +69,8 @@ extension OpenLocate {
             headers: configuration.headers,
             advertisingInfo: advertisingInfo,
             locationManager: locationManager,
-            transmissionInterval: configuration.transmissionInterval
+            transmissionInterval: configuration.transmissionInterval,
+            logNetworkInfo: configuration.logNetworkInfo
         )
         
         if let locationService = self.locationService, locationService.isStarted {
@@ -125,8 +126,10 @@ extension OpenLocate {
                 OpenLocateError.locationFailure(message: OpenLocateError.ErrorMessage.noCurrentLocationExists))
             return
         }
-
-        let openlocateLocation = OpenLocateLocation(location: location, advertisingInfo: advertisingInfo)
+        let networkInfo = NetworkInfo()
+        let openlocateLocation = OpenLocateLocation(location: location,
+                                                    advertisingInfo: advertisingInfo,
+                                                    networkInfo: networkInfo)
         completion(openlocateLocation, nil)
     }
 }

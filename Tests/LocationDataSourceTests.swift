@@ -35,9 +35,11 @@ class LocationDataSourceTests: BaseTestCase {
             .set(isLimitedAdTrackingEnabled: false)
             .set(advertisingId: "123")
             .build()
+        let networkInfo = NetworkInfo(bssid: "bssid_goes_here", ssid: "ssid_goes_here")
         return OpenLocateLocation(
             location: coreLocation,
-            advertisingInfo: advertisingInfo
+            advertisingInfo: advertisingInfo,
+            networkInfo: networkInfo
         )
     }
 
@@ -133,9 +135,11 @@ class LocationListDataSource: BaseTestCase {
             .set(isLimitedAdTrackingEnabled: false)
             .set(advertisingId: "123")
             .build()
+        let networkInfo = NetworkInfo(bssid: "bssid_goes_here", ssid: "ssid_goes_here")
         return OpenLocateLocation(
             location: coreLocation,
-            advertisingInfo: advertisingInfo
+            advertisingInfo: advertisingInfo,
+            networkInfo: networkInfo
         )
     }
 

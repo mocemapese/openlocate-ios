@@ -25,7 +25,7 @@
 import Foundation
 import CoreLocation
 
-typealias LocationsHandler = ([CLLocation]) -> Void
+typealias LocationsHandler = ([(location: CLLocation, context: OpenLocateLocation.Context)]) -> Void
 
 // Location Manager
 
@@ -61,10 +61,13 @@ final class LocationManager: NSObject, LocationManagerType, CLLocationManagerDel
     func locationManager(_ manager: CLLocationManager, didVisit visit: CLVisit) {
         
         var date = Date()
+        var context = OpenLocateLocation.Context.unknown
         if visit.departureDate != Date.distantFuture {
             date = visit.departureDate
+            context = .visitExit
         } else if visit.arrivalDate != Date.distantPast {
             date = visit.arrivalDate
+            context = .visitEntry
         }
         
         let location = CLLocation(coordinate: visit.coordinate,
@@ -73,9 +76,9 @@ final class LocationManager: NSObject, LocationManagerType, CLLocationManagerDel
                                   verticalAccuracy: -1.0,
                                   timestamp: date)
 
-        var locations = [location]
+        var locations = [(location: location, context: context)]
         if let currentLocation = manager.location {
-            locations.append(currentLocation)
+            locations.append((location: currentLocation, context: .passive))
         }
         
         for request in requests {
@@ -85,7 +88,7 @@ final class LocationManager: NSObject, LocationManagerType, CLLocationManagerDel
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         for request in requests {
-            request(locations)
+            request(locations.map({return (location: $0, context: OpenLocateLocation.Context.regular)}))
         }
     }
     

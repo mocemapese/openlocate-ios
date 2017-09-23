@@ -37,14 +37,6 @@ protocol DataType {
     var data: Data { get }
 }
 
-// MARK: - Provider
-
-enum ProviderType: String {
-    case gps
-    case network
-    case passive
-}
-
 // MARK: - Location
 
 /**
@@ -67,22 +59,40 @@ public struct OpenLocateLocation: OpenLocateLocationType {
         static let horizontalAccuracy = "horizontal_accuracy"
         static let verticalAccuracy = "vertical_accuracy"
         static let altitude = "altitude"
+        static let wifiBssid = "wifi_bssid"
+        static let wifissid = "wifi_ssid"
+        static let locationContext = "location_context"
+    }
+    
+    enum Context: String {
+        case unknown = "unknown"
+        case passive = "passive"
+        case regular = "regular"
+        case visitEntry = "visit_entry"
+        case visitExit = "visit_exit"
     }
 
     private let idTypeValue = "idfa"
 
     let location: CLLocation
     let advertisingInfo: AdvertisingInfo
+    let networkInfo: NetworkInfo
+    let context: Context
     
     var debugDescription: String {
         return "OpenLocateLocation(location: \(location), advertisingInfo: \(advertisingInfo))"
     }
 
-    init(location: CLLocation, advertisingInfo: AdvertisingInfo) {
+    init(location: CLLocation,
+         advertisingInfo: AdvertisingInfo,
+         networkInfo: NetworkInfo,
+         context: Context = .unknown) {
+        
         self.location = location
         self.advertisingInfo = advertisingInfo
+        self.networkInfo = networkInfo
+        self.context = context
     }
-    
 }
 
 extension OpenLocateLocation {
@@ -94,7 +104,10 @@ extension OpenLocateLocation {
             Keys.latitude: location.coordinate.latitude,
             Keys.longitude: location.coordinate.longitude,
             Keys.timeStamp: Int(location.timestamp.timeIntervalSince1970),
-            Keys.horizontalAccuracy: location.horizontalAccuracy
+            Keys.horizontalAccuracy: location.horizontalAccuracy,
+            Keys.wifiBssid: networkInfo.bssid ?? NSNull(),
+            Keys.wifissid: networkInfo.ssid ?? NSNull(),
+            Keys.locationContext: context.rawValue
         ]
     }
 }
@@ -111,10 +124,19 @@ extension OpenLocateLocation {
             verticalAccuracy: coding.verticalAccuracy,
             timestamp: Date(timeIntervalSince1970: coding.timeStamp)
         )
+        
         self.advertisingInfo = AdvertisingInfo.Builder()
             .set(advertisingId: coding.advertisingId)
             .set(isLimitedAdTrackingEnabled: coding.isLimitedAdTrackingEnabled)
             .build()
+        
+        self.networkInfo = NetworkInfo(bssid: coding.bssid, ssid: coding.ssid)
+        
+        if let contextString = coding.context, let context = Context(rawValue: contextString) {
+            self.context = context
+        } else {
+            self.context = .unknown
+        }
     }
 
     var data: Data {
@@ -130,6 +152,9 @@ extension OpenLocateLocation {
         let altitude: CLLocationDistance
         let advertisingId: String
         let isLimitedAdTrackingEnabled: Bool
+        let bssid: String?
+        let ssid: String?
+        let context: String?
 
         init(_ location: OpenLocateLocation) {
             latitude = location.location.coordinate.latitude
@@ -140,6 +165,9 @@ extension OpenLocateLocation {
             altitude = location.location.altitude
             advertisingId = location.advertisingInfo.advertisingId
             isLimitedAdTrackingEnabled = location.advertisingInfo.isLimitedAdTrackingEnabled
+            bssid = location.networkInfo.bssid
+            ssid = location.networkInfo.ssid
+            context = location.context.rawValue
         }
 
         required init?(coder aDecoder: NSCoder) {
@@ -151,6 +179,9 @@ extension OpenLocateLocation {
             altitude = aDecoder.decodeDouble(forKey: OpenLocateLocation.Keys.altitude)
             advertisingId = (aDecoder.decodeObject(forKey: OpenLocateLocation.Keys.adId) as? String)!
             isLimitedAdTrackingEnabled = aDecoder.decodeBool(forKey: OpenLocateLocation.Keys.adOptOut)
+            bssid = aDecoder.decodeObject(forKey: OpenLocateLocation.Keys.wifiBssid) as? String
+            ssid = aDecoder.decodeObject(forKey: OpenLocateLocation.Keys.wifissid) as? String
+            context = aDecoder.decodeObject(forKey: OpenLocateLocation.Keys.locationContext) as? String
         }
 
         func encode(with aCoder: NSCoder) {
@@ -162,6 +193,9 @@ extension OpenLocateLocation {
             aCoder.encode(altitude, forKey: OpenLocateLocation.Keys.altitude)
             aCoder.encode(advertisingId, forKey: OpenLocateLocation.Keys.adId)
             aCoder.encode(isLimitedAdTrackingEnabled, forKey: OpenLocateLocation.Keys.adOptOut)
+            aCoder.encode(bssid, forKey: OpenLocateLocation.Keys.wifiBssid)
+            aCoder.encode(ssid, forKey: OpenLocateLocation.Keys.wifissid)
+            aCoder.encode(context, forKey: OpenLocateLocation.Keys.locationContext)
         }
     }
 }

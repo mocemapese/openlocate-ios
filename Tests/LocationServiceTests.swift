@@ -42,7 +42,8 @@ class LocationRequestTests: BaseTestCase {
                 .set(isLimitedAdTrackingEnabled: true)
                 .build(),
             locationManager: locationManager,
-            transmissionInterval: 300
+            transmissionInterval: 300,
+            logNetworkInfo: true
         )
         let location = CLLocation(latitude: 12.43, longitude: 124.43)
 
@@ -68,7 +69,8 @@ class LocationRequestTests: BaseTestCase {
                 .set(isLimitedAdTrackingEnabled: true)
                 .build(),
             locationManager: locationManager,
-            transmissionInterval: 300
+            transmissionInterval: 300,
+            logNetworkInfo: true
         )
         let location = CLLocation(latitude: 12.43, longitude: 124.43)
 
