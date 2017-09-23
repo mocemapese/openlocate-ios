@@ -59,7 +59,11 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
     let uuid = UUID(uuidString: "<YOUR_UUID>")!
     let token = "YOUR_TOKEN"
-    let configuration = SafeGraphConfiguration(uuid: uuid, token: token)
+    
+    let url = URL(string: "https://api.safegraph.com/v1/provider/\(uuid)/devicelocation")!
+    let headers = ["Authorization": "Bearer \(token)"]
+    
+    let configuration = Configuration(url: url, headers: headers)
     
     do {
         try OpenLocate.shared.initialize(with: configuration)
