@@ -38,7 +38,7 @@
 		48E45DEF1F09384C006EAF6F /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E45DEE1F09384B006EAF6F /* Location.swift */; };
 		48E45DF11F094506006EAF6F /* LocationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E45DF01F094506006EAF6F /* LocationTests.swift */; };
 		48F0DCC71F3B3A89004C4943 /* HttpResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F0DCC61F3B3A89004C4943 /* HttpResponseTests.swift */; };
-		DE24D5D61F77CE1100B7B8FF /* LocationManagerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE24D5D51F77CE1100B7B8FF /* LocationManagerType.swift */; };
+		DE2D17EC1F7838140074B3E4 /* LocationManagerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2D17EB1F7838140074B3E4 /* LocationManagerType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,7 +89,7 @@
 		48E45DEE1F09384B006EAF6F /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Location.swift; path = Source/Location.swift; sourceTree = "<group>"; };
 		48E45DF01F094506006EAF6F /* LocationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTests.swift; sourceTree = "<group>"; };
 		48F0DCC61F3B3A89004C4943 /* HttpResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpResponseTests.swift; sourceTree = "<group>"; };
-		DE24D5D51F77CE1100B7B8FF /* LocationManagerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManagerType.swift; sourceTree = "<group>"; };
+		DE2D17EB1F7838140074B3E4 /* LocationManagerType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocationManagerType.swift; path = Source/LocationManagerType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -207,6 +207,7 @@
 		4897016D1F05181400D8C27C /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				DE2D17EB1F7838140074B3E4 /* LocationManagerType.swift */,
 				48E45DEE1F09384B006EAF6F /* Location.swift */,
 				489700D91F04EA7D00D8C27C /* OpenLocate.swift */,
 				4876E95F1F09EB45006EF61C /* LocationService.swift */,
@@ -215,7 +216,6 @@
 				48C4D8C21F1F9E1000640145 /* LocationManager.swift */,
 				48D6E7F71F38790D00EC76A8 /* Advertising.swift */,
 				111E607E1F758494004B2D20 /* NetworkInfo.swift */,
-				DE24D5D51F77CE1100B7B8FF /* LocationManagerType.swift */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -420,7 +420,7 @@
 				48C4D8C31F1F9E1000640145 /* LocationManager.swift in Sources */,
 				48C4D8C11F1F9D3F00640145 /* OpenLocateError.swift in Sources */,
 				485A63F11F445E140005F86D /* Configuration.swift in Sources */,
-				DE24D5D61F77CE1100B7B8FF /* LocationManagerType.swift in Sources */,
+				DE2D17EC1F7838140074B3E4 /* LocationManagerType.swift in Sources */,
 				484A7FC61F175CA900D63E6A /* Statement.swift in Sources */,
 				484A7FC81F175CE800D63E6A /* Result.swift in Sources */,
 			);
