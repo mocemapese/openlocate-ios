@@ -52,11 +52,9 @@ extension URLRequest {
         }
 
         // add additional headers to the request
-        if let headers = request.additionalHeaders,
-            !headers.isEmpty,
-            var existing = allHTTPHeaderFields {
-            existing += headers
-            allHTTPHeaderFields = existing
+        if let headers = request.additionalHeaders, !headers.isEmpty, var existingHeaders = allHTTPHeaderFields {
+            existingHeaders += headers
+            allHTTPHeaderFields = existingHeaders
         }
     }
 }

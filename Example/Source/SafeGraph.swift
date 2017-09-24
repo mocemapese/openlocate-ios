@@ -22,7 +22,6 @@
 //  SOFTWARE.
 //
 
-
 import Foundation
 import OpenLocate
 import Alamofire

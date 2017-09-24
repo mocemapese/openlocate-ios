@@ -27,15 +27,15 @@ import Foundation
 typealias IndexedLocation = (Int, OpenLocateLocationType)
 
 protocol LocationDataSourceType {
-    
+
     var count: Int { get }
-    
+
     func add(location: OpenLocateLocationType) throws
     func addAll(locations: [OpenLocateLocationType])
-    
+
     func first() -> IndexedLocation?
     func all() -> [IndexedLocation]
-    
+
     func clear()
 }
 
@@ -56,9 +56,9 @@ final class LocationDatabase: LocationDataSourceType {
         "VALUES (?);"
 
         let statement = SQLStatement.Builder()
-        .set(query: query)
-        .set(args: [location.data])
-        .build()
+            .set(query: query)
+            .set(args: [location.data])
+            .build()
 
         _ = try database.execute(statement: statement)
     }
@@ -123,20 +123,20 @@ final class LocationDatabase: LocationDataSourceType {
             debugPrint(error.localizedDescription)
         }
     }
-    
+
     func first() -> IndexedLocation? {
         let query = "SELECT * FROM \(Constants.tableName) LIMIT 1"
         let statement = SQLStatement.Builder()
             .set(query: query)
             .set(cached: true)
             .build()
-        
+
         do {
             let result = try database.execute(statement: statement)
             if result.next() {
                 let index = result.intValue(column: Constants.columnId)
                 let data = result.dataValue(column: Constants.columnLocation)
-                
+
                 if let data = data {
                     return (index, OpenLocateLocation(data: data))
                 }
@@ -144,37 +144,37 @@ final class LocationDatabase: LocationDataSourceType {
         } catch let error {
             debugPrint(error.localizedDescription)
         }
-        
+
         return nil
     }
-    
+
     func all() -> [IndexedLocation] {
         let query = "SELECT * FROM \(Constants.tableName)"
         let statement = SQLStatement.Builder()
             .set(query: query)
             .set(cached: true)
             .build()
-        
+
         var locations = [IndexedLocation]()
-        
+
         do {
             let result = try database.execute(statement: statement)
-            
+
             while result.next() {
                 let index = result.intValue(column: Constants.columnId)
                 let data = result.dataValue(column: Constants.columnLocation)
-                
+
                 if let data = data {
                     locations.append(
                         (index, OpenLocateLocation(data: data))
                     )
                 }
             }
-            
+
         } catch let error {
             debugPrint(error.localizedDescription)
         }
-        
+
         return locations
     }
 
@@ -203,9 +203,9 @@ final class LocationDatabase: LocationDataSourceType {
 }
 
 final class LocationList: LocationDataSourceType {
-    
+
     private var locations: [OpenLocateLocationType]
-    
+
     var count: Int {
         return self.locations.count
     }
@@ -228,7 +228,7 @@ final class LocationList: LocationDataSourceType {
         }
         return nil
     }
-    
+
     func all() -> [IndexedLocation] {
         var locations = [IndexedLocation]()
         self.locations.enumerated().forEach { indexedLocation in

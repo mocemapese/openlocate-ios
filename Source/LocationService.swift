@@ -27,9 +27,9 @@ import CoreLocation
 
 protocol LocationServiceType {
     var transmissionInterval: TimeInterval { get set }
-    
+
     var isStarted: Bool { get }
-    
+
     func start()
     func stop()
 }
@@ -37,14 +37,14 @@ protocol LocationServiceType {
 private let locationsKey = "locations"
 
 final class LocationService: LocationServiceType {
-    
-    let IsStartedKey = "OpenLocate_isStarted"
-    
+
+    let isStartedKey = "OpenLocate_isStarted"
+
     var transmissionInterval: TimeInterval
     var logNetworkInfo: Bool
-    
+
     var isStarted: Bool {
-        return UserDefaults.standard.bool(forKey: IsStartedKey)
+        return UserDefaults.standard.bool(forKey: isStartedKey)
     }
 
     private let locationManager: LocationManagerType
@@ -54,7 +54,7 @@ final class LocationService: LocationServiceType {
 
     private var url: String
     private var headers: Headers?
-    
+
     var backgroundTask: UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid
 
     init(
@@ -81,7 +81,7 @@ final class LocationService: LocationServiceType {
         debugPrint("Location service started for url : \(url)")
 
         locationManager.subscribe { locations in
-            
+
             let networkInfo = self.logNetworkInfo ? NetworkInfo.currentNetworkInfo() : NetworkInfo()
             let openLocateLocations = locations.map {
                 return OpenLocateLocation(location: $0.location,
@@ -89,27 +89,27 @@ final class LocationService: LocationServiceType {
                                           networkInfo: networkInfo,
                                           context: $0.context)
             }
-            
+
             self.locationDataSource.addAll(locations: openLocateLocations)
-            
+
             debugPrint(self.locationDataSource.count)
-            
+
             self.postAllLocationsIfNeeded()
         }
-        
-        UserDefaults.standard.set(true, forKey: IsStartedKey)
+
+        UserDefaults.standard.set(true, forKey: isStartedKey)
     }
 
     func stop() {
         locationManager.cancel()
-        UserDefaults.standard.set(false, forKey: IsStartedKey)
+        UserDefaults.standard.set(false, forKey: isStartedKey)
         postAllLocations()
     }
-    
+
 }
 
 extension LocationService {
-    
+
     private func postAllLocationsIfNeeded() {
         if let earliestIndexedLocation = locationDataSource.first() {
             let earliestLocation = OpenLocateLocation(data: earliestIndexedLocation.1.data)
@@ -118,7 +118,7 @@ extension LocationService {
             }
         }
     }
-    
+
     private func postAllLocations() {
         let indexedLocations = locationDataSource.all()
         if indexedLocations.isEmpty == false {
@@ -129,55 +129,59 @@ extension LocationService {
     }
 
     private func postLocations(locations: [OpenLocateLocationType]) {
-        
+
         if locations.isEmpty {
             return
         }
 
         let params = [locationsKey: locations.map { $0.json }]
-        
+
         beginBackgroundTask()
-        
+
+        let requestParameters
+            = URLRequestParamters(url: url,
+                                  params: params,
+                                  queryParams: nil,
+                                  additionalHeaders: headers)
+
         do {
             try httpClient.post(
-                params: params,
-                queryParams: nil,
-                url: url,
-                additionalHeaders: headers,
+                parameters: requestParameters,
                 success: {  [weak self] _, _ in
                     self?.endBackgroundTask()
+            },
+                failure: { [weak self] _, error in
+                    debugPrint("failure in posting locations!!! Error: \(error)")
+                    self?.locationDataSource.addAll(locations: locations)
+                    self?.endBackgroundTask()
             }
-            ) {  [weak self] _, error in
-                debugPrint("failure in posting locations!!! Error: \(error)")
-                self?.locationDataSource.addAll(locations: locations)
-                self?.endBackgroundTask()
-            }
+            )
         } catch let error {
             print(error.localizedDescription)
             endBackgroundTask()
         }
     }
-    
+
     func beginBackgroundTask() {
         backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
             self?.endBackgroundTask()
         }
     }
-    
+
     func endBackgroundTask() {
         UIApplication.shared.endBackgroundTask(backgroundTask)
         backgroundTask = UIBackgroundTaskInvalid
     }
-    
+
     static func isAuthorizationKeysValid() -> Bool {
         let always = Bundle.main.object(forInfoDictionaryKey: "NSLocationAlwaysUsageDescription")
         let inUse = Bundle.main.object(forInfoDictionaryKey: "NSLocationWhenInUseUsageDescription")
         let alwaysAndinUse = Bundle.main.object(forInfoDictionaryKey: "NSLocationAlwaysAndWhenInUseUsageDescription")
-        
+
         if #available(iOS 11, *) {
             return always != nil && inUse != nil && alwaysAndinUse != nil
         }
-        
+
         return always != nil
     }
 }

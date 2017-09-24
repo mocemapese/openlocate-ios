@@ -39,27 +39,28 @@ protocol LocationManagerType {
 
 final class LocationManager: NSObject, LocationManagerType, CLLocationManagerDelegate {
 
-    private let manager: CLLocationManager
+    private let manager: CLLocationManagerType
     private var requests: [LocationsHandler] = []
 
-    required init(manager: CLLocationManager = CLLocationManager()) {
+    required init(manager: CLLocationManagerType = CLLocationManager()) {
         self.manager = manager
+
         super.init()
+
         manager.delegate = self
     }
-    
+
     static func authorizationStatus() -> CLAuthorizationStatus {
         return CLLocationManager.authorizationStatus()
     }
-    
+
     static func locationServicesEnabled() -> Bool {
         return CLLocationManager.locationServicesEnabled()
     }
-    
+
     // MARK: CLLocationManager
-    
+
     func locationManager(_ manager: CLLocationManager, didVisit visit: CLVisit) {
-        
         var date = Date()
         var context = OpenLocateLocation.Context.unknown
         if visit.departureDate != Date.distantFuture {
@@ -69,7 +70,7 @@ final class LocationManager: NSObject, LocationManagerType, CLLocationManagerDel
             date = visit.arrivalDate
             context = .visitEntry
         }
-        
+
         let location = CLLocation(coordinate: visit.coordinate,
                                   altitude: 0,
                                   horizontalAccuracy: visit.horizontalAccuracy,
@@ -80,50 +81,50 @@ final class LocationManager: NSObject, LocationManagerType, CLLocationManagerDel
         if let currentLocation = manager.location {
             locations.append((location: currentLocation, context: .passive))
         }
-        
+
         for request in requests {
             request(locations)
         }
     }
-    
+
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         for request in requests {
             request(locations.map({return (location: $0, context: OpenLocateLocation.Context.regular)}))
         }
     }
-    
+
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         debugPrint(error)
     }
-    
+
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedAlways && updatingLocation {
             manager.startMonitoringVisits()
             manager.startMonitoringSignificantLocationChanges()
         }
     }
-    
+
     // MARK: LocationManagerType
-    
+
     func subscribe(_ locationHandler: @escaping LocationsHandler) {
         requests.append(locationHandler)
         requestAuthorizationIfNeeded()
         manager.startMonitoringVisits()
         manager.startMonitoringSignificantLocationChanges()
     }
-    
+
     func cancel() {
         requests.removeAll()
         manager.stopMonitoringVisits()
         manager.stopMonitoringSignificantLocationChanges()
     }
-    
+
     var updatingLocation: Bool {
         return !requests.isEmpty
     }
-    
+
     // MARK: Private
-    
+
     private func requestAuthorizationIfNeeded() {
         let status = CLLocationManager.authorizationStatus()
         if status == .notDetermined || status == .authorizedWhenInUse {

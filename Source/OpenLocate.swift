@@ -31,9 +31,9 @@ private protocol OpenLocateType {
     static var shared: OpenLocate { get }
 
     var isTrackingEnabled: Bool { get }
-    
+
     func initialize(with configuration: Configuration) throws
-    
+
     func startTracking()
     func stopTracking()
 
@@ -41,9 +41,13 @@ private protocol OpenLocateType {
 }
 
 public final class OpenLocate: OpenLocateType {
-    public static let shared = OpenLocate()
-    
+    private enum Constants {
+        static let defaultTransmissionInterval: TimeInterval = 8 * 60 * 60 // 8 Hours
+    }
+
     private var locationService: LocationServiceType?
+
+    public static let shared = OpenLocate()
 }
 
 extension OpenLocate {
@@ -56,7 +60,6 @@ extension OpenLocate {
             let database = try SQLiteDatabase.openLocateDatabase()
             locationDataSource = LocationDatabase(database: database)
         } catch {
-            debugPrint(error)
             locationDataSource = LocationList()
         }
 
@@ -69,18 +72,18 @@ extension OpenLocate {
             headers: configuration.headers,
             advertisingInfo: advertisingInfo,
             locationManager: locationManager,
-            transmissionInterval: configuration.transmissionInterval,
-            logNetworkInfo: configuration.logNetworkInfo
+            transmissionInterval: Constants.defaultTransmissionInterval,
+            logNetworkInfo: configuration.isNetworkInfoLogging
         )
-        
+
         if let locationService = self.locationService, locationService.isStarted {
             locationService.start()
         }
     }
-    
+
     public func initialize(with configuration: Configuration) throws {
         try validateLocationAuthorizationKeys()
-        
+
         initLocationService(configuration: configuration)
     }
 
@@ -91,6 +94,7 @@ extension OpenLocate {
     public func stopTracking() {
         guard let service = locationService else {
             debugPrint("Trying to stop server even if it was never started.")
+
             return
         }
 
@@ -99,6 +103,7 @@ extension OpenLocate {
 
     public var isTrackingEnabled: Bool {
         guard let locationService = self.locationService else { return false }
+
         return locationService.isStarted
     }
 
@@ -135,7 +140,6 @@ extension OpenLocate {
 }
 
 extension OpenLocate {
-
     private func validateLocationAuthorizationKeys() throws {
         if !LocationService.isAuthorizationKeysValid() {
             debugPrint(OpenLocateError.ErrorMessage.missingAuthorizationKeysMessage)

@@ -82,7 +82,8 @@ class URLRequestTests: BaseTestCase {
 
         // When
         guard let urlRequest = URLRequest(request) else {
-            XCTFail()
+            XCTFail("urlRequest cannot be nil")
+
             return
         }
 

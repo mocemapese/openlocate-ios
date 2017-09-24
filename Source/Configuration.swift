@@ -29,22 +29,17 @@ public typealias Headers = [String: String]
 // Configuration
 
 public struct Configuration {
-    
+
     let url: URL
     let headers: Headers?
-    let transmissionInterval: TimeInterval
-    let logNetworkInfo: Bool
-    
-    public static let DefaultTransmissionInterval: TimeInterval = 8 * 60 * 60 // 8 Hours
-    
+    let isNetworkInfoLogging: Bool
+
     public init(url: URL,
-                headers: Headers?,
-                transmissionInterval: TimeInterval = DefaultTransmissionInterval,
-                logNetworkInfo: Bool = true) {
-        
+                headers: Headers? = nil,
+                isNetworkInfoLogging: Bool = true) {
+
         self.url = url
         self.headers = headers
-        self.transmissionInterval = transmissionInterval
-        self.logNetworkInfo = logNetworkInfo
+        self.isNetworkInfoLogging = isNetworkInfoLogging
     }
 }

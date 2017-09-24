@@ -32,19 +32,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]? ) -> Bool {
-        
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]? ) -> Bool {
+
         Fabric.with([Crashlytics.self])
-        
-        let token = Bundle.main.object(forInfoDictionaryKey: "Token") as! String
-        let uuid = Bundle.main.object(forInfoDictionaryKey: "ProviderId") as! String
-        
-        let url = URL(string: "https://api.safegraph.com/v1/provider/\(uuid)/devicelocation")!
-        let headers = ["Authorization": "Bearer \(token)"]
-        
-        let configuration = Configuration(url: url, headers: headers)
-        try? OpenLocate.shared.initialize(with: configuration)
-        
+
+        if let token = Bundle.main.object(forInfoDictionaryKey: "Token") as? String,
+            let uuid = Bundle.main.object(forInfoDictionaryKey: "ProviderId") as? String {
+
+            let url = URL(string: "https://api.safegraph.com/v1/provider/\(uuid)/devicelocation")!
+            let headers = ["Authorization": "Bearer \(token)"]
+
+            let configuration = Configuration(url: url, headers: headers)
+            try? OpenLocate.shared.initialize(with: configuration)
+        }
+
         return true
     }
 

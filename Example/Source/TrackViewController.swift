@@ -27,18 +27,18 @@ import OpenLocate
 import CoreLocation
 
 class TrackViewController: UIViewController, CLLocationManagerDelegate {
-    
+
     private let locationManager = CLLocationManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self.navigationItem.titleView = UIImageView(image: UIImage(named: "tab_logo"))
-        
+
         if OpenLocate.shared.isTrackingEnabled {
             onStartTracking()
         }
-        
+
         locationManager.delegate = self
     }
 
@@ -46,7 +46,7 @@ class TrackViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var stopButton: UIButton!
     @IBOutlet weak var errorLabel: UILabel!
     @IBOutlet weak var appSettingsButton: UIButton!
-    
+
     @IBAction func startTracking(_ sender: Any) {
         OpenLocate.shared.startTracking()
         onStartTracking()
@@ -66,11 +66,11 @@ class TrackViewController: UIViewController, CLLocationManagerDelegate {
         startButton.isHidden = false
         stopButton.isHidden = true
     }
-    
+
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         errorLabel.isHidden = false
         appSettingsButton.isHidden = false
-        
+
         switch status {
         case .denied:
             errorLabel.text = "Location Permission Denied"

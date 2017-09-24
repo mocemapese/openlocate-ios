@@ -43,9 +43,7 @@ protocol DataType {
  LocationType protocol defines a location type object.
  */
 
-protocol OpenLocateLocationType: JsonParameterType, DataType {
-
-}
+protocol OpenLocateLocationType: JsonParameterType, DataType {}
 
 public struct OpenLocateLocation: OpenLocateLocationType {
 
@@ -63,7 +61,7 @@ public struct OpenLocateLocation: OpenLocateLocationType {
         static let wifissid = "wifi_ssid"
         static let locationContext = "location_context"
     }
-    
+
     enum Context: String {
         case unknown = "unknown"
         case passive = "passive"
@@ -78,7 +76,7 @@ public struct OpenLocateLocation: OpenLocateLocationType {
     let advertisingInfo: AdvertisingInfo
     let networkInfo: NetworkInfo
     let context: Context
-    
+
     var debugDescription: String {
         return "OpenLocateLocation(location: \(location), advertisingInfo: \(advertisingInfo))"
     }
@@ -87,7 +85,7 @@ public struct OpenLocateLocation: OpenLocateLocationType {
          advertisingInfo: AdvertisingInfo,
          networkInfo: NetworkInfo,
          context: Context = .unknown) {
-        
+
         self.location = location
         self.advertisingInfo = advertisingInfo
         self.networkInfo = networkInfo
@@ -124,14 +122,14 @@ extension OpenLocateLocation {
             verticalAccuracy: coding.verticalAccuracy,
             timestamp: Date(timeIntervalSince1970: coding.timeStamp)
         )
-        
+
         self.advertisingInfo = AdvertisingInfo.Builder()
             .set(advertisingId: coding.advertisingId)
             .set(isLimitedAdTrackingEnabled: coding.isLimitedAdTrackingEnabled)
             .build()
-        
+
         self.networkInfo = NetworkInfo(bssid: coding.bssid, ssid: coding.ssid)
-        
+
         if let contextString = coding.context, let context = Context(rawValue: contextString) {
             self.context = context
         } else {

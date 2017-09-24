@@ -26,36 +26,36 @@ import XCTest
 import CoreLocation
 @testable import OpenLocate
 
-class MockCLLocationManager: CLLocationManager {
-    override func requestAlwaysAuthorization() {
+class MockCLLocationManager: CLLocationManagerType {
+    weak var delegate: CLLocationManagerDelegate?
 
-    }
-
-    override static func locationServicesEnabled() -> Bool {
-        return true
-    }
-
-    override static func authorizationStatus() -> CLAuthorizationStatus {
-        return .authorizedWhenInUse
-    }
+    var location: CLLocation?
 
     var didStartUpdating = false
 
-    override init() {
-
+    static func locationServicesEnabled() -> Bool {
+        return true
     }
 
-    override func requestWhenInUseAuthorization() {
-
+    static func authorizationStatus() -> CLAuthorizationStatus {
+        return .authorizedWhenInUse
     }
 
-    override func startMonitoringVisits() {
+    func startMonitoringVisits() {
         didStartUpdating = true
     }
 
-    override func stopUpdatingLocation() {
+    func startMonitoringSignificantLocationChanges() {}
 
-    }
+    func stopMonitoringVisits() {}
+
+    func stopMonitoringSignificantLocationChanges() {}
+
+    func requestAlwaysAuthorization() {}
+
+    func requestWhenInUseAuthorization() {}
+
+    func stopUpdatingLocation() {}
 }
 
 class LocationManagerTests: BaseTestCase {
@@ -121,7 +121,7 @@ class LocationManagerTests: BaseTestCase {
         // Given
         let locationManager = MockCLLocationManager()
         let manager = LocationManager(manager: locationManager)
-        manager.subscribe { locations in
+        manager.subscribe { _ in
             // Nothing
         }
 

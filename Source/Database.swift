@@ -65,7 +65,7 @@ extension SQLiteDatabase {
     static func openLocateDatabase() throws -> SQLiteDatabase {
         guard let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first,
             let url = URL(string: path) else {
-                
+
             throw SQLiteError.open(message: "Error getting directory")
         }
 

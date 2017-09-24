@@ -99,24 +99,24 @@ class LocationDataSourceTests: BaseTestCase {
         locations.addAll(locations: multiple)
         let popped = locations.all()
         locations.clear()
-        
+
         // Then
         XCTAssertEqual(popped.count, 4)
         XCTAssertEqual(locations.count, 0)
     }
-    
+
     func testFirstLocation() {
         // Given
         guard let locations = dataSource else {
             XCTFail("No database")
             return
         }
-        
+
         // When
         let multiple = [testLocation, testLocation, testLocation, testLocation]
         locations.addAll(locations: multiple)
         let firstIndexedLocation = locations.first()
-        
+
         // Then
         let firstLocation = OpenLocateLocation(data: firstIndexedLocation!.1.data)
         XCTAssertEqual(firstLocation.location.coordinate.latitude, testLocation.location.coordinate.latitude)
@@ -194,24 +194,24 @@ class LocationListDataSource: BaseTestCase {
         locations.addAll(locations: multiple)
         let popped = locations.all()
         locations.clear()
-        
+
         // Then
         XCTAssertEqual(popped.count, 4)
         XCTAssertEqual(locations.count, 0)
     }
-    
+
     func testFirstLocation() {
         // Given
         guard let locations = dataSource else {
             XCTFail("No database")
             return
         }
-        
+
         // When
         let multiple = [testLocation, testLocation, testLocation, testLocation]
         locations.addAll(locations: multiple)
         let firstIndexedLocation = locations.first()
-        
+
         // Then
         let firstLocation = OpenLocateLocation(data: firstIndexedLocation!.1.data)
         XCTAssertEqual(firstLocation.location.coordinate.latitude, testLocation.location.coordinate.latitude)

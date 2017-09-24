@@ -27,6 +27,24 @@ import XCTest
 
 class HttpClientTests: BaseTestCase {
 
+    let validRequestParameters
+        = URLRequestParamters(url: "http://www.google.com",
+                              params: nil,
+                              queryParams: nil,
+                              additionalHeaders: nil)
+
+    let invalidRequestParameters
+        = URLRequestParamters(url: "\\",
+                              params: nil,
+                              queryParams: nil,
+                              additionalHeaders: nil)
+
+    let nonHttpParameters
+        = URLRequestParamters(url: "/post/",
+                              params: nil,
+                              queryParams: nil,
+                              additionalHeaders: nil)
+
     func testPostResult() {
         // Given
         let timeOut: TimeInterval = 0.1
@@ -35,15 +53,16 @@ class HttpClientTests: BaseTestCase {
 
         // When
         try? client.post(
-            params: nil,
-            queryParams: nil,
-            url: "http://www.google.com", additionalHeaders: nil, success: { _, _ in
-            XCTAssertTrue(true)
-            expect.fulfill()
-        }) { _, _ in
-            XCTFail()
-            expect.fulfill()
+            parameters: validRequestParameters,
+            success: { _, _ in
+                XCTAssertTrue(true)
+                expect.fulfill()
+        },
+            failure: { _, _ in
+                XCTFail("Test for success post request cannot fail")
+                expect.fulfill()
         }
+        )
 
         waitForExpectations(timeout: timeOut, handler: nil)
     }
@@ -56,17 +75,16 @@ class HttpClientTests: BaseTestCase {
 
         // When
         try? client.post(
-            params: nil,
-            queryParams: nil,
-            url: "http://www.google.com/",
-            additionalHeaders: nil,
+            parameters: validRequestParameters,
             success: { _, _ in
-            XCTFail()
-            expect.fulfill()
-        }) { _, _ in
-            XCTAssertTrue(true)
-            expect.fulfill()
+                XCTFail("Test for failure post request cannot succed")
+                expect.fulfill()
+        },
+            failure: { _, _ in
+                XCTAssertTrue(true)
+                expect.fulfill()
         }
+        )
 
         waitForExpectations(timeout: timeOut, handler: nil)
     }
@@ -76,15 +94,15 @@ class HttpClientTests: BaseTestCase {
         let client = HttpClient(urlSession: FailureURLSession())
 
         // When
-        XCTAssertThrowsError(try client.post(params: nil,
-                                             queryParams: nil,
-            url: "\\",
-            additionalHeaders: nil,
-            success: { _, _ in
-                XCTAssertTrue(true)
-            }) { _, _ in
-                XCTAssertTrue(true)
-            }
+        XCTAssertThrowsError(
+            try client.post(
+                parameters: invalidRequestParameters,
+                success: { _, _ in
+                    XCTAssertTrue(true)
+            },
+                failure: { _, _ in
+                    XCTAssertTrue(true)
+            })
         )
     }
 
@@ -95,13 +113,16 @@ class HttpClientTests: BaseTestCase {
         let expect = expectation(description: "Post should return")
 
         // When
-        try? client.post(params: nil, queryParams: nil, url: "/post/", additionalHeaders: nil, success: { _, _ in
-            XCTFail()
-            expect.fulfill()
-        }) { _, _ in
-            XCTAssertTrue(true)
-            expect.fulfill()
-        }
+        try? client.post(
+            parameters: nonHttpParameters,
+            success: { _, _ in
+                XCTFail("Test of non http url response cannot succed")
+                expect.fulfill()
+        },
+            failure: { _, _ in
+                XCTAssertTrue(true)
+                expect.fulfill()
+        })
 
         waitForExpectations(timeout: timeOut, handler: nil)
     }
