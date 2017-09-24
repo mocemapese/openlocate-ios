@@ -26,9 +26,9 @@ import Foundation
 import CoreLocation
 
 protocol LocationServiceType {
-    var locationAccuracy: LocationAccuracy { get set }
-    var locationInterval: TimeInterval { get set }
     var transmissionInterval: TimeInterval { get set }
+
+    var isStarted: Bool { get }
 
     func start()
     func stop()
@@ -38,158 +38,150 @@ private let locationsKey = "locations"
 
 final class LocationService: LocationServiceType {
 
-    var locationInterval: TimeInterval
-    var locationAccuracy: LocationAccuracy {
-        didSet {
-            locationManager.set(accuracy: locationAccuracy)
-        }
-    }
-    var transmissionInterval: TimeInterval {
-        didSet {
-            scheduler.timeInterval = transmissionInterval
-        }
+    let isStartedKey = "OpenLocate_isStarted"
+
+    var transmissionInterval: TimeInterval
+    var logNetworkInfo: Bool
+
+    var isStarted: Bool {
+        return UserDefaults.standard.bool(forKey: isStartedKey)
     }
 
     private let locationManager: LocationManagerType
     private let httpClient: Postable
     private let locationDataSource: LocationDataSourceType
-    private var scheduler: Scheduler
     private var advertisingInfo: AdvertisingInfo
 
     private var url: String
     private var headers: Headers?
 
-    private var lastKnownLocation: CLLocation?
-
-    private var locationTask: Task?
-    private var logTask: Task?
+    var backgroundTask: UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid
 
     init(
         postable: Postable,
         locationDataSource: LocationDataSourceType,
-        scheduler: Scheduler,
         url: String,
         headers: Headers?,
         advertisingInfo: AdvertisingInfo,
         locationManager: LocationManagerType,
-        locationAccuracy: LocationAccuracy,
-        locationInterval: TimeInterval,
-        transmissionInterval: TimeInterval) {
+        transmissionInterval: TimeInterval,
+        logNetworkInfo: Bool) {
 
         httpClient = postable
         self.locationDataSource = locationDataSource
         self.locationManager = locationManager
-        self.scheduler = scheduler
         self.advertisingInfo = advertisingInfo
         self.url = url
         self.headers = headers
-        self.locationAccuracy = locationAccuracy
-        self.locationInterval = locationInterval
         self.transmissionInterval = transmissionInterval
+        self.logNetworkInfo = logNetworkInfo
     }
 
     func start() {
         debugPrint("Location service started for url : \(url)")
-        schedule()
 
-        locationManager.subscribe { location in
+        locationManager.subscribe { locations in
 
-            if let lastLocation = self.lastKnownLocation,
-                lastLocation.timestamp + self.locationInterval > location.timestamp {
-                return
+            let networkInfo = self.logNetworkInfo ? NetworkInfo.currentNetworkInfo() : NetworkInfo()
+            let openLocateLocations = locations.map {
+                return OpenLocateLocation(location: $0.location,
+                                          advertisingInfo: self.advertisingInfo,
+                                          networkInfo: networkInfo,
+                                          context: $0.context)
             }
-            self.lastKnownLocation = location
 
-            let openLocateLocation = OpenLocateLocation(
-                location: location,
-                advertisingInfo: self.advertisingInfo
-            )
+            self.locationDataSource.addAll(locations: openLocateLocations)
 
-            do {
-                try self.locationDataSource.add(location: openLocateLocation)
-            } catch let error {
-                debugPrint(
-                    "Could not add location to database for url : \(self.url)." +
-                    " Reason : \(error.localizedDescription)"
-                )
-                debugPrint(error.localizedDescription)
-            }
             debugPrint(self.locationDataSource.count)
+
+            self.postAllLocationsIfNeeded()
         }
+
+        UserDefaults.standard.set(true, forKey: isStartedKey)
     }
 
     func stop() {
-        unschedule()
         locationManager.cancel()
+        UserDefaults.standard.set(false, forKey: isStartedKey)
+        postAllLocations()
     }
+
 }
 
 extension LocationService {
-    private func schedule() {
-        scheduleLocationDispatch()
-    }
 
-    private func scheduleLocationDispatch() {
-        locationTask = PeriodicTask.Builder()
-            .set { _ in
-                let indexedLocations = self.locationDataSource.popAll()
-                let locations = indexedLocations.map { $1 }
-                self.postLocations(locations: locations)
+    private func postAllLocationsIfNeeded() {
+        if let earliestIndexedLocation = locationDataSource.first() {
+            let earliestLocation = OpenLocateLocation(data: earliestIndexedLocation.1.data)
+            if abs(earliestLocation.location.timestamp.timeIntervalSinceNow) > self.transmissionInterval {
+                postAllLocations()
             }
-            .build()
-        scheduler.schedule(task: locationTask!)
+        }
     }
 
-    private func unschedule() {
-        if let task = locationTask {
-            scheduler.cancel(task: task)
+    private func postAllLocations() {
+        let indexedLocations = locationDataSource.all()
+        if indexedLocations.isEmpty == false {
+            locationDataSource.clear()
+            let locations = indexedLocations.map { $1 }
+            self.postLocations(locations: locations)
         }
     }
 
     private func postLocations(locations: [OpenLocateLocationType]) {
+
         if locations.isEmpty {
             return
         }
 
         let params = [locationsKey: locations.map { $0.json }]
+
+        beginBackgroundTask()
+
+        let requestParameters
+            = URLRequestParamters(url: url,
+                                  params: params,
+                                  queryParams: nil,
+                                  additionalHeaders: headers)
+
         do {
             try httpClient.post(
-                params: params,
-                queryParams: nil,
-                url: url,
-                additionalHeaders: headers,
-                success: { _, _ in
+                parameters: requestParameters,
+                success: {  [weak self] _, _ in
+                    self?.endBackgroundTask()
+            },
+                failure: { [weak self] _, error in
+                    debugPrint("failure in posting locations!!! Error: \(error)")
+                    self?.locationDataSource.addAll(locations: locations)
+                    self?.endBackgroundTask()
             }
-            ) { _, _ in
-                self.locationDataSource.addAll(locations: locations)
-                print("failure in posting locations!!!")
-            }
+            )
         } catch let error {
             print(error.localizedDescription)
+            endBackgroundTask()
         }
     }
-}
 
-extension LocationService {
-    static func isEnabled() -> Bool {
-        return LocationManager.locationServicesEnabled()
+    func beginBackgroundTask() {
+        backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
+            self?.endBackgroundTask()
+        }
     }
 
-    static func isAuthorizationDenied() -> Bool {
-        return LocationManager.isAuthorizationDenied()
+    func endBackgroundTask() {
+        UIApplication.shared.endBackgroundTask(backgroundTask)
+        backgroundTask = UIBackgroundTaskInvalid
     }
 
     static func isAuthorizationKeysValid() -> Bool {
         let always = Bundle.main.object(forInfoDictionaryKey: "NSLocationAlwaysUsageDescription")
         let inUse = Bundle.main.object(forInfoDictionaryKey: "NSLocationWhenInUseUsageDescription")
         let alwaysAndinUse = Bundle.main.object(forInfoDictionaryKey: "NSLocationAlwaysAndWhenInUseUsageDescription")
-        return always != nil || inUse != nil || alwaysAndinUse != nil
-    }
-}
 
-extension LocationManager {
-    static func isAuthorizationDenied() -> Bool {
-        let authorizationStatus = LocationManager.authorizationStatus()
-        return authorizationStatus == .denied || authorizationStatus == .restricted
+        if #available(iOS 11, *) {
+            return always != nil && inUse != nil && alwaysAndinUse != nil
+        }
+
+        return always != nil
     }
 }

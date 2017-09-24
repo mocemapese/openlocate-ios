@@ -63,11 +63,13 @@ final class SQLiteDatabase: Database {
 extension SQLiteDatabase {
 
     static func openLocateDatabase() throws -> SQLiteDatabase {
-        guard let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first else {
+        guard let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first,
+            let url = URL(string: path) else {
+
             throw SQLiteError.open(message: "Error getting directory")
         }
 
-        let database = try open(path: path.appending(databaseName))
+        let database = try open(path: url.appendingPathComponent(databaseName).path)
         return database
     }
 

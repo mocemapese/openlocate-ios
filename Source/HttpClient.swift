@@ -57,22 +57,23 @@ extension URLSessionDataTask: URLSessionDataTaskProtocol { }
 
 // Http Client protocols
 
+struct URLRequestParamters {
+    let url: String
+    let params: Parameters?
+    let queryParams: QueryParameters?
+    let additionalHeaders: Headers?
+}
+
 protocol Postable {
     func post(
-        params: Parameters?,
-        queryParams: QueryParameters?,
-        url: String,
-        additionalHeaders: Headers?,
+        parameters: URLRequestParamters,
         success: @escaping HttpClientCompletionHandler,
         failure: @escaping HttpClientCompletionHandler) throws
 }
 
 protocol Getable {
     func get(
-        params: Parameters?,
-        queryParams: QueryParameters?,
-        url: String,
-        additionalHeaders: Headers?,
+        parameters: URLRequestParamters,
         success: @escaping HttpClientCompletionHandler,
         failure: @escaping HttpClientCompletionHandler) throws
 }
@@ -82,8 +83,7 @@ enum HttpClientError: Error {
 }
 
 // Used to make REST API calls to the backend.
-protocol HttpClientType: Postable, Getable {
-}
+protocol HttpClientType: Postable, Getable {}
 
 final class HttpClient: HttpClientType {
     private let session: URLSessionProtocol
@@ -91,6 +91,43 @@ final class HttpClient: HttpClientType {
     init(urlSession: URLSessionProtocol = URLSession(configuration: .default)) {
         self.session = urlSession
     }
+
+    // User-Agent Header; see https://tools.ietf.org/html/rfc7231#section-5.5.3
+    // Example: `iOS Example/1.0 (org.openlocate.iOS-Example; build:1; iOS 11.0.0) OpenLocate/1.0.0`
+    var userAgent: String = {
+        if let info = Bundle.main.infoDictionary {
+            let executable = info[kCFBundleExecutableKey as String] as? String ?? "Unknown"
+            let bundle = info[kCFBundleIdentifierKey as String] as? String ?? "Unknown"
+            let appVersion = info["CFBundleShortVersionString"] as? String ?? "Unknown"
+            let appBuild = info[kCFBundleVersionKey as String] as? String ?? "Unknown"
+
+            let osNameVersion: String = {
+                let version = ProcessInfo.processInfo.operatingSystemVersion
+                let versionString = "\(version.majorVersion).\(version.minorVersion).\(version.patchVersion)"
+
+                let osName: String = {
+                    #if os(iOS)
+                        return "iOS"
+                    #else
+                        return "Unknown"
+                    #endif
+                }()
+
+                return "\(osName) \(versionString)"
+            }()
+
+            let openLocateVersion: String = {
+                guard let openLocateInfo = Bundle(for: OpenLocate.self).infoDictionary,
+                    let build = openLocateInfo["CFBundleShortVersionString"] else {
+                        return "Unknown"
+                }
+                return "OpenLocate/\(build)"
+            }()
+
+            return "\(executable)/\(appVersion) (\(bundle); build:\(appBuild); \(osNameVersion)) \(openLocateVersion)"
+        }
+        return "OpenLocate"
+    }()
 }
 
 extension HttpClient {
@@ -103,6 +140,7 @@ extension HttpClient {
         // make url request from request
         urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
         urlRequest.addValue("application/json", forHTTPHeaderField: "Accept")
+        urlRequest.addValue(userAgent, forHTTPHeaderField: "User-Agent")
 
         // create the task object with the request
         let task = session.dataTask(with: urlRequest) { data, response, error in
@@ -162,18 +200,15 @@ extension HttpClient {
 // Implement Postable protocol methods
 extension HttpClient {
     func post(
-        params: Parameters?,
-        queryParams: QueryParameters?,
-        url: String,
-        additionalHeaders: Headers?,
+        parameters: URLRequestParamters,
         success: @escaping HttpClientCompletionHandler,
         failure: @escaping HttpClientCompletionHandler) throws {
         let request = HttpRequest.Builder()
-            .set(url: url)
+            .set(url: parameters.url)
             .set(method: .post)
-            .set(params: params)
-            .set(queryParams: queryParams)
-            .set(additionalHeaders: additionalHeaders)
+            .set(params: parameters.params)
+            .set(queryParams: parameters.queryParams)
+            .set(additionalHeaders: parameters.additionalHeaders)
             .set(success: success)
             .set(failure: failure)
             .build()
@@ -182,18 +217,15 @@ extension HttpClient {
     }
 
     func get(
-        params: Parameters?,
-        queryParams: QueryParameters?,
-        url: String,
-        additionalHeaders: Headers?,
+        parameters: URLRequestParamters,
         success: @escaping HttpClientCompletionHandler,
         failure: @escaping HttpClientCompletionHandler) throws {
         let request = HttpRequest.Builder()
-            .set(url: url)
+            .set(url: parameters.url)
             .set(method: .get)
-            .set(params: params)
-            .set(queryParams: queryParams)
-            .set(additionalHeaders: additionalHeaders)
+            .set(params: parameters.params)
+            .set(queryParams: parameters.queryParams)
+            .set(additionalHeaders: parameters.additionalHeaders)
             .set(success: success)
             .set(failure: failure)
             .build()

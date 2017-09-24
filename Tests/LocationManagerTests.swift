@@ -26,10 +26,12 @@ import XCTest
 import CoreLocation
 @testable import OpenLocate
 
-class MockCLLocationManager: CLLocationManagerProtocol {
-    func requestAlwaysAuthorization() {
+class MockCLLocationManager: CLLocationManagerType {
+    weak var delegate: CLLocationManagerDelegate?
 
-    }
+    var location: CLLocation?
+
+    var didStartUpdating = false
 
     static func locationServicesEnabled() -> Bool {
         return true
@@ -39,29 +41,21 @@ class MockCLLocationManager: CLLocationManagerProtocol {
         return .authorizedWhenInUse
     }
 
-    var activityType: CLActivityType = .automotiveNavigation
-    var desiredAccuracy: CLLocationAccuracy = kCLLocationAccuracyBestForNavigation
-    var pausesLocationUpdatesAutomatically: Bool = false
-    var allowsBackgroundLocationUpdates: Bool = false
-    weak var delegate: CLLocationManagerDelegate?
-
-    var didStartUpdating = false
-
-    init() {
-
-    }
-
-    func requestWhenInUseAuthorization() {
-
-    }
-
-    func startUpdatingLocation() {
+    func startMonitoringVisits() {
         didStartUpdating = true
     }
 
-    func stopUpdatingLocation() {
+    func startMonitoringSignificantLocationChanges() {}
 
-    }
+    func stopMonitoringVisits() {}
+
+    func stopMonitoringSignificantLocationChanges() {}
+
+    func requestAlwaysAuthorization() {}
+
+    func requestWhenInUseAuthorization() {}
+
+    func stopUpdatingLocation() {}
 }
 
 class LocationManagerTests: BaseTestCase {
@@ -127,24 +121,15 @@ class LocationManagerTests: BaseTestCase {
         // Given
         let locationManager = MockCLLocationManager()
         let manager = LocationManager(manager: locationManager)
+        manager.subscribe { _ in
+            // Nothing
+        }
 
         // When
-        manager.locationManager(CLLocationManager(), didChangeAuthorization: .authorizedWhenInUse)
+        manager.locationManager(CLLocationManager(), didChangeAuthorization: .authorizedAlways)
 
         // Then
         XCTAssertTrue(locationManager.didStartUpdating)
-    }
-
-    func testLocationManagerOnFailure() {
-        // Given
-        let locationManager = MockCLLocationManager()
-        let manager = LocationManager(manager: locationManager)
-
-        // When
-        manager.locationManager(CLLocationManager(), didFailWithError: OpenLocateError.locationDisabled(message: ""))
-
-        // Then
-        XCTAssertTrue(true)
     }
 
 }

@@ -22,7 +22,6 @@
 //  SOFTWARE.
 //
 
-
 import UIKit
 
 class SafeGraphPlaceTableViewCell: UITableViewCell {

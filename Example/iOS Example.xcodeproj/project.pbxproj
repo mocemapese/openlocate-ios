@@ -8,15 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		4843DB081F6BC246004CE5F1 /* SafeGraphPlaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4843DB071F6BC246004CE5F1 /* SafeGraphPlaceListViewController.swift */; };
-		489603241F4AE01400EC4360 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489603231F4AE01400EC4360 /* Settings.swift */; };
-		489603261F4AE97A00EC4360 /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489603251F4AE97A00EC4360 /* SettingsTableViewCell.swift */; };
 		489603281F4D70DF00EC4360 /* SafeGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489603271F4D70DE00EC4360 /* SafeGraph.swift */; };
 		4896F8681F6BCFDE0049E5BD /* SafeGraphPlaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4896F8671F6BCFDE0049E5BD /* SafeGraphPlaceTableViewCell.swift */; };
 		4897011B1F04F7CA00D8C27C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4897011A1F04F7CA00D8C27C /* AppDelegate.swift */; };
 		489701241F04F7ED00D8C27C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4897011D1F04F7ED00D8C27C /* Assets.xcassets */; };
 		489701281F04F8C000D8C27C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4897011F1F04F7ED00D8C27C /* LaunchScreen.storyboard */; };
 		489701291F04F8C000D8C27C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 489701211F04F7ED00D8C27C /* Main.storyboard */; };
-		48A0D5E41F4706CF00E12C54 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A0D5E31F4706CF00E12C54 /* SettingsViewController.swift */; };
 		48A0D5E81F4706E900E12C54 /* TrackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A0D5E71F4706E900E12C54 /* TrackViewController.swift */; };
 		48A171D51F347BBE00AC9F22 /* OpenLocate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48A171D41F347BBE00AC9F22 /* OpenLocate.framework */; };
 		48A171D61F347BBE00AC9F22 /* OpenLocate.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 48A171D41F347BBE00AC9F22 /* OpenLocate.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -57,8 +54,6 @@
 /* Begin PBXFileReference section */
 		326819F92D49F85C167CCB5D /* Pods-iOS Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS Example.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-iOS Example/Pods-iOS Example.debug.xcconfig"; sourceTree = "<group>"; };
 		4843DB071F6BC246004CE5F1 /* SafeGraphPlaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SafeGraphPlaceListViewController.swift; path = Source/SafeGraphPlaceListViewController.swift; sourceTree = "<group>"; };
-		489603231F4AE01400EC4360 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Settings.swift; path = Source/Settings.swift; sourceTree = "<group>"; };
-		489603251F4AE97A00EC4360 /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsTableViewCell.swift; path = Source/SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		489603271F4D70DE00EC4360 /* SafeGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SafeGraph.swift; path = Source/SafeGraph.swift; sourceTree = "<group>"; };
 		4896F8671F6BCFDE0049E5BD /* SafeGraphPlaceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SafeGraphPlaceTableViewCell.swift; path = Source/SafeGraphPlaceTableViewCell.swift; sourceTree = "<group>"; };
 		4897011A1F04F7CA00D8C27C /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Source/AppDelegate.swift; sourceTree = "<group>"; };
@@ -68,7 +63,6 @@
 		489701231F04F7ED00D8C27C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Resources/Info.plist; sourceTree = "<group>"; };
 		489D2D061F38771B00826BE6 /* iOS Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		489D2D071F38772300826BE6 /* OpenLocate.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OpenLocate.xcodeproj; path = ../OpenLocate.xcodeproj; sourceTree = "<group>"; };
-		48A0D5E31F4706CF00E12C54 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsViewController.swift; path = Source/SettingsViewController.swift; sourceTree = "<group>"; };
 		48A0D5E71F4706E900E12C54 /* TrackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TrackViewController.swift; path = Source/TrackViewController.swift; sourceTree = "<group>"; };
 		48A171D41F347BBE00AC9F22 /* OpenLocate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = OpenLocate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DAE725BE77344580A00D223 /* Pods_iOS_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOS_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -112,10 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				4897011A1F04F7CA00D8C27C /* AppDelegate.swift */,
-				48A0D5E31F4706CF00E12C54 /* SettingsViewController.swift */,
 				48A0D5E71F4706E900E12C54 /* TrackViewController.swift */,
-				489603231F4AE01400EC4360 /* Settings.swift */,
-				489603251F4AE97A00EC4360 /* SettingsTableViewCell.swift */,
 				489603271F4D70DE00EC4360 /* SafeGraph.swift */,
 				4843DB071F6BC246004CE5F1 /* SafeGraphPlaceListViewController.swift */,
 				4896F8671F6BCFDE0049E5BD /* SafeGraphPlaceTableViewCell.swift */,
@@ -200,9 +191,8 @@
 				TargetAttributes = {
 					489701011F04F6A900D8C27C = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = FZ4KTEM399;
 						LastSwiftMigration = 0900;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -282,14 +272,14 @@
 		};
 		4877E9091F1E394B002B10F5 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputPaths = (
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Fabric/run\" 3a259bb69225f2b7332f54ad76b8093a6e369077 6cb26519017e3e0c6997801ff9ad7074919081b6eb689f99f32fae2896ad548b";
 		};
@@ -299,9 +289,12 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/../Pods/Target Support Files/Pods-iOS Example/Pods-iOS Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -314,13 +307,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-iOS Example-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F94159A335EFD3C8252C80A5 /* [CP] Copy Pods Resources */ = {
@@ -348,9 +344,6 @@
 				48A0D5E81F4706E900E12C54 /* TrackViewController.swift in Sources */,
 				4897011B1F04F7CA00D8C27C /* AppDelegate.swift in Sources */,
 				4843DB081F6BC246004CE5F1 /* SafeGraphPlaceListViewController.swift in Sources */,
-				489603241F4AE01400EC4360 /* Settings.swift in Sources */,
-				489603261F4AE97A00EC4360 /* SettingsTableViewCell.swift in Sources */,
-				48A0D5E41F4706CF00E12C54 /* SettingsViewController.swift in Sources */,
 				489603281F4D70DF00EC4360 /* SafeGraph.swift in Sources */,
 				4896F8681F6BCFDE0049E5BD /* SafeGraphPlaceTableViewCell.swift in Sources */,
 			);
@@ -491,9 +484,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 2017.07.22.20.44.47;
-				DEVELOPMENT_TEAM = FZ4KTEM399;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.openlocate.ios.example;
@@ -513,9 +506,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 2017.07.22.20.44.47;
-				DEVELOPMENT_TEAM = FZ4KTEM399;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.openlocate.ios.example;

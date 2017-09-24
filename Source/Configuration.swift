@@ -28,14 +28,18 @@ public typealias Headers = [String: String]
 
 // Configuration
 
-public protocol Configuration {
-    var url: String { get }
-    var headers: Headers? { get }
-    var valid: Bool { get }
-}
+public struct Configuration {
 
-extension Configuration {
-    public var valid: Bool {
-        return !url.isEmpty
+    let url: URL
+    let headers: Headers?
+    let isNetworkInfoLogging: Bool
+
+    public init(url: URL,
+                headers: Headers? = nil,
+                isNetworkInfoLogging: Bool = true) {
+
+        self.url = url
+        self.headers = headers
+        self.isNetworkInfoLogging = isNetworkInfoLogging
     }
 }

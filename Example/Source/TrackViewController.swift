@@ -24,61 +24,32 @@
 
 import UIKit
 import OpenLocate
+import CoreLocation
 
-class TrackViewController: UIViewController {
+class TrackViewController: UIViewController, CLLocationManagerDelegate {
+
+    private let locationManager = CLLocationManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         self.navigationItem.titleView = UIImageView(image: UIImage(named: "tab_logo"))
 
-        _ = NotificationCenter.default.addObserver(
-        forName: Notification.Name(rawValue: locationAccuracyDidChange),
-        object: nil,
-        queue: nil) { _ in
-            OpenLocate.shared.locationAccuracy = Settings.shared.accuracy
+        if OpenLocate.shared.isTrackingEnabled {
+            onStartTracking()
         }
 
-        _ = NotificationCenter.default.addObserver(
-            forName: Notification.Name(rawValue: locationIntervalDidChange),
-            object: nil,
-            queue: nil) { _ in
-                OpenLocate.shared.locationInterval = Double(Settings.shared.locationInterval * 60)
-        }
-
-        _ = NotificationCenter.default.addObserver(
-            forName: Notification.Name(rawValue: transmissionIntervalDidChange),
-            object: nil,
-            queue: nil) { _ in
-                OpenLocate.shared.transmissionInterval = Double(Settings.shared.transmissionInterval * 60)
-        }
+        locationManager.delegate = self
     }
 
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var stopButton: UIButton!
+    @IBOutlet weak var errorLabel: UILabel!
+    @IBOutlet weak var appSettingsButton: UIButton!
 
     @IBAction func startTracking(_ sender: Any) {
-
-        do {
-            let uuid = UUID(uuidString: (Bundle.main.object(forInfoDictionaryKey: "ProviderId") as? String)!)
-            let configuration = SafeGraphConfiguration(
-                uuid: uuid!,
-                token: (Bundle.main.object(forInfoDictionaryKey: "Token") as? String)!
-            )
-            try OpenLocate.shared.startTracking(with: configuration)
-            onStartTracking()
-        } catch OpenLocateError.invalidConfiguration(let message) {
-            showError(message: message)
-        } catch OpenLocateError.locationDisabled(let message) {
-            showError(message: message)
-        } catch OpenLocateError.locationUnAuthorized(let message) {
-            showError(message: message)
-        } catch OpenLocateError.locationServiceConflict(let message) {
-            showError(message: message)
-        } catch OpenLocateError.locationMissingAuthorizationKeys(let message) {
-            showError(message: message)
-        } catch {
-            showError(message: error.localizedDescription)
-        }
+        OpenLocate.shared.startTracking()
+        onStartTracking()
     }
 
     @IBAction func stopTracking(_ sender: Any) {
@@ -96,18 +67,26 @@ class TrackViewController: UIViewController {
         stopButton.isHidden = true
     }
 
-    private func showError(message: String) {
-        let alert = UIAlertController(
-            title: "error",
-            message: message,
-            preferredStyle: .alert
-        )
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        errorLabel.isHidden = false
+        appSettingsButton.isHidden = false
 
-        let action = UIAlertAction(title: "OK", style: .default) { _ in
-            alert.dismiss(animated: true, completion: nil)
+        switch status {
+        case .denied:
+            errorLabel.text = "Location Permission Denied"
+        case .authorizedWhenInUse:
+            errorLabel.text = "Location Permission is only When In Use"
+        case .restricted:
+            errorLabel.text = "Location Services is Restricted"
+        default:
+            errorLabel.isHidden = true
+            appSettingsButton.isHidden = true
         }
-        alert.addAction(action)
+    }
 
-        present(alert, animated: true, completion: nil)
+    @IBAction func didTapAppSettingsButton() {
+        if let appSettings = URL(string: UIApplicationOpenSettingsURLString) {
+            UIApplication.shared.open(appSettings, options: [:], completionHandler: nil)
+        }
     }
 }

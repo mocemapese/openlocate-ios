@@ -1,5 +1,5 @@
 //
-//  SettingsTableViewCell.swift
+//  NetworkInfo.swift
 //
 //  Copyright (c) 2017 OpenLocate
 //
@@ -22,11 +22,29 @@
 //  SOFTWARE.
 //
 
-import UIKit
+import Foundation
+import SystemConfiguration.CaptiveNetwork
 
-class SettingsTableViewCell: UITableViewCell {
+struct NetworkInfo {
 
-    @IBOutlet weak var title: UILabel!
-    @IBOutlet weak var value: UILabel!
+    var bssid: String?
+    var ssid: String?
 
+    static func currentNetworkInfo() -> NetworkInfo {
+        var networkInfo = NetworkInfo()
+        if let interface = CNCopySupportedInterfaces() {
+            for i in 0..<CFArrayGetCount(interface) {
+                let interfaceName: UnsafeRawPointer = CFArrayGetValueAtIndex(interface, i)
+                let rec = unsafeBitCast(interfaceName, to: AnyObject.self)
+                if let unsafeInterfaceData = CNCopyCurrentNetworkInfo("\(rec)" as CFString),
+                    let interfaceData = unsafeInterfaceData as? [String : AnyObject] {
+                    networkInfo.bssid = interfaceData["BSSID"] as? String
+                    networkInfo.ssid = interfaceData["SSID"] as? String
+                } else {
+                    // not connected wifi
+                }
+            }
+        }
+        return networkInfo
+    }
 }

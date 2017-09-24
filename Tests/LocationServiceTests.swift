@@ -28,14 +28,6 @@ import CoreLocation
 
 class LocationRequestTests: BaseTestCase {
 
-    func testIsLocationServiceEnabled() {
-        // Given
-        let enabled = LocationService.isEnabled()
-
-        // Then
-        XCTAssertTrue(enabled)
-    }
-
     func testLocationServiceStart() {
         // Given
         let mockLocationManager = MockCLLocationManager()
@@ -43,7 +35,6 @@ class LocationRequestTests: BaseTestCase {
         let locationService = LocationService(
             postable: HttpClient(urlSession: SuccessURLSession()),
             locationDataSource: LocationList(),
-            scheduler: TaskScheduler(timeInterval: 300),
             url: "http://www.google.com",
             headers: nil,
             advertisingInfo: AdvertisingInfo.Builder()
@@ -51,9 +42,8 @@ class LocationRequestTests: BaseTestCase {
                 .set(isLimitedAdTrackingEnabled: true)
                 .build(),
             locationManager: locationManager,
-            locationAccuracy: .high,
-            locationInterval: 300,
-            transmissionInterval: 300
+            transmissionInterval: 300,
+            logNetworkInfo: true
         )
         let location = CLLocation(latitude: 12.43, longitude: 124.43)
 
@@ -72,7 +62,6 @@ class LocationRequestTests: BaseTestCase {
         let locationService = LocationService(
             postable: HttpClient(urlSession: SuccessURLSession()),
             locationDataSource: LocationList(),
-            scheduler: TaskScheduler(timeInterval: 300),
             url: "http://www.google.com",
             headers: nil,
             advertisingInfo: AdvertisingInfo.Builder()
@@ -80,9 +69,8 @@ class LocationRequestTests: BaseTestCase {
                 .set(isLimitedAdTrackingEnabled: true)
                 .build(),
             locationManager: locationManager,
-            locationAccuracy: .high,
-            locationInterval: 300,
-            transmissionInterval: 300
+            transmissionInterval: 300,
+            logNetworkInfo: true
         )
         let location = CLLocation(latitude: 12.43, longitude: 124.43)
 

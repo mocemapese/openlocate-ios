@@ -30,64 +30,36 @@ public typealias LocationCompletionHandler = (OpenLocateLocation?, Error?) -> Vo
 private protocol OpenLocateType {
     static var shared: OpenLocate { get }
 
-    var locationAccuracy: LocationAccuracy { get set }
-    var transmissionInterval: TimeInterval { get set }
-    var locationInterval: TimeInterval { get set }
+    var isTrackingEnabled: Bool { get }
 
-    func startTracking(with configuration: Configuration) throws
+    func initialize(with configuration: Configuration) throws
+
+    func startTracking()
     func stopTracking()
 
     func fetchCurrentLocation(completion: LocationCompletionHandler) throws
-
-    var tracking: Bool { get }
 }
-
-public enum LocationAccuracy: String {
-    case high
-    case medium
-    case low
-}
-
-private let defaultTransmissionInterval: TimeInterval = 300
-private let defaultLocationAccuracy = LocationAccuracy.high
-private let defaultLocationInterval: TimeInterval = 120
 
 public final class OpenLocate: OpenLocateType {
-
-    public static let shared = OpenLocate()
-
-    public var locationAccuracy = defaultLocationAccuracy {
-        didSet {
-            locationService?.locationAccuracy = locationAccuracy
-        }
-    }
-
-    public var transmissionInterval = defaultTransmissionInterval {
-        didSet {
-            locationService?.transmissionInterval = transmissionInterval
-        }
-    }
-
-    public var locationInterval = defaultLocationInterval {
-        didSet {
-            locationService?.locationInterval = locationInterval
-        }
+    private enum Constants {
+        static let defaultTransmissionInterval: TimeInterval = 8 * 60 * 60 // 8 Hours
     }
 
     private var locationService: LocationServiceType?
+
+    public static let shared = OpenLocate()
 }
 
 extension OpenLocate {
     private func initLocationService(configuration: Configuration) {
         let httpClient = HttpClient()
-        let scheduler = TaskScheduler(timeInterval: transmissionInterval)
 
         let locationDataSource: LocationDataSourceType
 
         do {
             let database = try SQLiteDatabase.openLocateDatabase()
             locationDataSource = LocationDatabase(database: database)
-        } catch _ {
+        } catch {
             locationDataSource = LocationList()
         }
 
@@ -96,40 +68,43 @@ extension OpenLocate {
         self.locationService = LocationService(
             postable: httpClient,
             locationDataSource: locationDataSource,
-            scheduler: scheduler,
-            url: configuration.url,
+            url: configuration.url.absoluteString,
             headers: configuration.headers,
             advertisingInfo: advertisingInfo,
             locationManager: locationManager,
-            locationAccuracy: locationAccuracy,
-            locationInterval: locationInterval,
-            transmissionInterval: transmissionInterval
+            transmissionInterval: Constants.defaultTransmissionInterval,
+            logNetworkInfo: configuration.isNetworkInfoLogging
         )
+
+        if let locationService = self.locationService, locationService.isStarted {
+            locationService.start()
+        }
     }
 
-    public func startTracking(with configuration: Configuration) throws {
-        try validateLocationService()
-        try validate(configuration: configuration)
-        try validateLocationEnabled()
-        try validateLocationAuthorization()
+    public func initialize(with configuration: Configuration) throws {
         try validateLocationAuthorizationKeys()
 
         initLocationService(configuration: configuration)
+    }
+
+    public func startTracking() {
         locationService?.start()
     }
 
     public func stopTracking() {
         guard let service = locationService else {
             debugPrint("Trying to stop server even if it was never started.")
+
             return
         }
 
         service.stop()
-        self.locationService = nil
     }
 
-    public var tracking: Bool {
-        return locationService != nil
+    public var isTrackingEnabled: Bool {
+        guard let locationService = self.locationService else { return false }
+
+        return locationService.isStarted
     }
 
     private var advertisingInfo: AdvertisingInfo {
@@ -145,8 +120,6 @@ extension OpenLocate {
 
 extension OpenLocate {
     public func fetchCurrentLocation(completion: (OpenLocateLocation?, Error?) -> Void) throws {
-        try validateLocationEnabled()
-        try validateLocationAuthorization()
         try validateLocationAuthorizationKeys()
 
         let manager = LocationManager()
@@ -155,36 +128,18 @@ extension OpenLocate {
         guard let location = lastLocation else {
             completion(
                 nil,
-                OpenLocateError.locationFailure(message: OpenLocateError.ErrorMessage.locationFailureMessage))
+                OpenLocateError.locationFailure(message: OpenLocateError.ErrorMessage.noCurrentLocationExists))
             return
         }
-
-        let openlocateLocation = OpenLocateLocation(location: location, advertisingInfo: advertisingInfo)
+        let networkInfo = NetworkInfo()
+        let openlocateLocation = OpenLocateLocation(location: location,
+                                                    advertisingInfo: advertisingInfo,
+                                                    networkInfo: networkInfo)
         completion(openlocateLocation, nil)
     }
 }
 
 extension OpenLocate {
-
-    private func validate(configuration: Configuration) throws {
-        // throw error if token is empty
-        if !configuration.valid {
-            debugPrint(OpenLocateError.ErrorMessage.invalidConfigurationMessage)
-            throw OpenLocateError.invalidConfiguration(
-                message: OpenLocateError.ErrorMessage.invalidConfigurationMessage
-            )
-        }
-    }
-
-    private func validateLocationAuthorization() throws {
-        if LocationService.isAuthorizationDenied() {
-            debugPrint(OpenLocateError.ErrorMessage.unauthorizedLocationMessage)
-            throw OpenLocateError.locationUnAuthorized(
-                message: OpenLocateError.ErrorMessage.unauthorizedLocationMessage
-            )
-        }
-    }
-
     private func validateLocationAuthorizationKeys() throws {
         if !LocationService.isAuthorizationKeysValid() {
             debugPrint(OpenLocateError.ErrorMessage.missingAuthorizationKeysMessage)
@@ -192,25 +147,5 @@ extension OpenLocate {
                 message: OpenLocateError.ErrorMessage.missingAuthorizationKeysMessage
             )
         }
-    }
-
-    private func validateLocationEnabled() throws {
-        if !LocationService.isEnabled() {
-            debugPrint(OpenLocateError.ErrorMessage.locationDisabledMessage)
-            throw OpenLocateError.locationDisabled(
-                message: OpenLocateError.ErrorMessage.locationDisabledMessage
-            )
-        }
-    }
-
-    private func validateLocationService() throws {
-        guard locationService != nil else {
-            return
-        }
-
-        debugPrint(OpenLocateError.ErrorMessage.locationServiceConflictMessage)
-        throw OpenLocateError.locationServiceConflict(
-            message: OpenLocateError.ErrorMessage.locationServiceConflictMessage
-        )
     }
 }
