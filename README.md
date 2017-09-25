@@ -52,7 +52,11 @@ pod 'OpenLocate'
 <string>This application would like to access your location.</string>
 ```
 
-Build your configuration with your URL and headers and supply it to the `initialize` method. Ensure that the initialize method is invoked in the `application:didFinishLaunchingWithOptions:` method in your `UIApplicationDelegate`
+2. Configure where the SDK should send data to by building the configuration with appropriate URL and headers. Supply the configuration to the `initialize` method. Ensure that the initialize method is invoked in the `application:didFinishLaunchingWithOptions:` method in your `UIApplicationDelegate`
+
+#### For example, to send data to SafeGraph:
+
+Assuming you have a UUID and token from SafeGraph:
 
 ```swift
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]? ) -> Bool {
