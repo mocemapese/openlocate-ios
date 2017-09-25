@@ -112,7 +112,7 @@ The following fields are collected by the SDK to be sent to a private or public 
 2. `longitude` - Longitude of the device
 3. `utc_timestamp` - Timestamp of the recorded location in epoch
 4. `horizontal_accuracy` - The accuracy of the location being recorded
-5. `id_type` - 'aaid' for identifying android advertising type
+5. `id_type` - 'idfa' for identifying Apple device advertising type
 6. `ad_id` - Advertising identifier
 7. `ad_opt_out` - Limited ad tracking enabled flag
 
