@@ -71,7 +71,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
     
     do {
         try OpenLocate.shared.initialize(with: configuration)
-    } catch error {
+    } catch {
         print(error)
     }
 }
