@@ -29,7 +29,7 @@ Mobile application developers can use location data collected via OpenLocate to:
 OpenLocate is supported by mobile app developers, non-profit trade groups, academia, and leading companies across GIS, logistics, marketing, and more.
 
 ## Requirements
-- iOS 10
+- iOS 10 onwards
 
 ## Installation
 
