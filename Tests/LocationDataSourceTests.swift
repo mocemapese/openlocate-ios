@@ -119,11 +119,15 @@ class LocationDataSourceTests: BaseTestCase {
         let firstIndexedLocation = locations.first()
 
         // Then
-        let firstLocation = OpenLocateLocation(data: firstIndexedLocation!.1.data)
-        XCTAssertEqual(firstLocation.location.coordinate.latitude, testLocation.location.coordinate.latitude)
-        XCTAssertEqual(firstLocation.location.coordinate.longitude, testLocation.location.coordinate.longitude)
-        XCTAssertEqual(firstLocation.location.timestamp.timeIntervalSince1970,
-                       testLocation.location.timestamp.timeIntervalSince1970, accuracy: 0.1)
+        do {
+            let firstLocation = try OpenLocateLocation(data: firstIndexedLocation!.1.data)
+            XCTAssertEqual(firstLocation.location.coordinate.latitude, testLocation.location.coordinate.latitude)
+            XCTAssertEqual(firstLocation.location.coordinate.longitude, testLocation.location.coordinate.longitude)
+            XCTAssertEqual(firstLocation.location.timestamp.timeIntervalSince1970,
+                           testLocation.location.timestamp.timeIntervalSince1970, accuracy: 0.1)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 }
 
@@ -215,11 +219,15 @@ class LocationListDataSource: BaseTestCase {
         let firstIndexedLocation = locations.first()
 
         // Then
-        let firstLocation = OpenLocateLocation(data: firstIndexedLocation!.1.data)
-        XCTAssertEqual(firstLocation.location.coordinate.latitude, testLocation.location.coordinate.latitude)
-        XCTAssertEqual(firstLocation.location.coordinate.longitude, testLocation.location.coordinate.longitude)
-        XCTAssertEqual(firstLocation.course, testLocation.location.course)
-        XCTAssertEqual(firstLocation.location.timestamp.timeIntervalSince1970,
-                       testLocation.location.timestamp.timeIntervalSince1970, accuracy: 0.1)
+        do {
+            let firstLocation = try OpenLocateLocation(data: firstIndexedLocation!.1.data)
+            XCTAssertEqual(firstLocation.location.coordinate.latitude, testLocation.location.coordinate.latitude)
+            XCTAssertEqual(firstLocation.location.coordinate.longitude, testLocation.location.coordinate.longitude)
+            XCTAssertEqual(firstLocation.course, testLocation.location.course)
+            XCTAssertEqual(firstLocation.location.timestamp.timeIntervalSince1970,
+                           testLocation.location.timestamp.timeIntervalSince1970, accuracy: 0.1)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 }
