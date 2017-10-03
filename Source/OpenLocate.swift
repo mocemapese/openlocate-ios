@@ -47,6 +47,8 @@ public final class OpenLocate: OpenLocateType {
 
     private var locationService: LocationServiceType?
 
+    fileprivate var configuration: Configuration?
+
     public static let shared = OpenLocate()
 }
 
@@ -65,6 +67,8 @@ extension OpenLocate {
 
         let locationManager = LocationManager()
 
+        self.configuration = configuration
+
         self.locationService = LocationService(
             postable: httpClient,
             locationDataSource: locationDataSource,
@@ -73,7 +77,7 @@ extension OpenLocate {
             advertisingInfo: advertisingInfo,
             locationManager: locationManager,
             transmissionInterval: Constants.defaultTransmissionInterval,
-            logNetworkInfo: configuration.isNetworkInfoLogging
+            logConfiguration: configuration.logConfiguration
         )
 
         if let locationService = self.locationService, locationService.isStarted {
@@ -131,10 +135,15 @@ extension OpenLocate {
                 OpenLocateError.locationFailure(message: OpenLocateError.ErrorMessage.noCurrentLocationExists))
             return
         }
-        let networkInfo = NetworkInfo()
+
+        let logConfiguration = configuration?.logConfiguration ?? .default
+        let networkInfo = logConfiguration.shouldLogNetworkInfo ? NetworkInfo.currentNetworkInfo() : NetworkInfo()
+        let course = logConfiguration.shouldLogDeviceCourse ? location.course : nil
+
         let openlocateLocation = OpenLocateLocation(location: location,
                                                     advertisingInfo: advertisingInfo,
-                                                    networkInfo: networkInfo)
+                                                    networkInfo: networkInfo,
+                                                    course: course)
         completion(openlocateLocation, nil)
     }
 }

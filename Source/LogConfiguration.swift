@@ -1,5 +1,5 @@
 //
-//  Configuration.swift
+//  LogConfiguration.swift
 //
 //  Copyright (c) 2017 OpenLocate
 //
@@ -22,22 +22,14 @@
 //  SOFTWARE.
 //
 
-public typealias Headers = [String: String]
+/// Configuration which describes all data which is sending from the device
+public struct LogConfiguration {
+    /// Determines whether network information is sending or not. Default value is true.
+    public let shouldLogNetworkInfo: Bool
 
-// Configuration
+    /// Determines whether device course (bearing) is sending or not. Default value is true.
+    public let shouldLogDeviceCourse: Bool
 
-public struct Configuration {
-
-    let url: URL
-    let headers: Headers?
-    let logConfiguration: LogConfiguration
-
-    public init(url: URL,
-                headers: Headers? = nil,
-                logConfiguration: LogConfiguration = .default) {
-
-        self.url = url
-        self.headers = headers
-        self.logConfiguration = logConfiguration
-    }
+    /// Default configuration. All parameters are set to true.
+    public static let `default` = LogConfiguration(shouldLogNetworkInfo: true, shouldLogDeviceCourse: true)
 }

@@ -40,8 +40,9 @@ final class LocationService: LocationServiceType {
 
     let isStartedKey = "OpenLocate_isStarted"
 
+    let logConfiguration: LogConfiguration
+
     var transmissionInterval: TimeInterval
-    var logNetworkInfo: Bool
 
     var isStarted: Bool {
         return UserDefaults.standard.bool(forKey: isStartedKey)
@@ -65,7 +66,7 @@ final class LocationService: LocationServiceType {
         advertisingInfo: AdvertisingInfo,
         locationManager: LocationManagerType,
         transmissionInterval: TimeInterval,
-        logNetworkInfo: Bool) {
+        logConfiguration: LogConfiguration) {
 
         httpClient = postable
         self.locationDataSource = locationDataSource
@@ -74,19 +75,21 @@ final class LocationService: LocationServiceType {
         self.url = url
         self.headers = headers
         self.transmissionInterval = transmissionInterval
-        self.logNetworkInfo = logNetworkInfo
+        self.logConfiguration = logConfiguration
     }
 
     func start() {
         debugPrint("Location service started for url : \(url)")
 
+        let networkInfo = logConfiguration.shouldLogNetworkInfo ? NetworkInfo.currentNetworkInfo() : NetworkInfo()
+
         locationManager.subscribe { locations in
 
-            let networkInfo = self.logNetworkInfo ? NetworkInfo.currentNetworkInfo() : NetworkInfo()
-            let openLocateLocations = locations.map {
+            let openLocateLocations: [OpenLocateLocation] = locations.map {
                 return OpenLocateLocation(location: $0.location,
                                           advertisingInfo: self.advertisingInfo,
                                           networkInfo: networkInfo,
+                                          course: $0.location.course,
                                           context: $0.context)
             }
 
