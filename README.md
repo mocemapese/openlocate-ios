@@ -1,9 +1,7 @@
 
 ![OpenLocate](http://imageshack.com/a/img922/4800/Pihgqn.png)
 
-# OpenLocate
-
-OpenLocate is an open source Android and iOS SDK for mobile location collection.
+We’re building an open SDK to collect location data (like GPS) from phones, for apps like yours
 
 ## Purpose
 
