@@ -77,7 +77,7 @@ extension OpenLocate {
             advertisingInfo: advertisingInfo,
             locationManager: locationManager,
             transmissionInterval: Constants.defaultTransmissionInterval,
-            logConfiguration: configuration.logConfiguration
+            logConfiguration: configuration.collectingFieldsConfiguration
         )
 
         if let locationService = self.locationService, locationService.isStarted {
@@ -136,14 +136,16 @@ extension OpenLocate {
             return
         }
 
-        let logConfiguration = configuration?.logConfiguration ?? .default
-        let networkInfo = logConfiguration.shouldLogNetworkInfo ? NetworkInfo.currentNetworkInfo() : NetworkInfo()
-        let course = logConfiguration.shouldLogDeviceCourse ? location.course : nil
+        let fieldsConfiguration = configuration?.collectingFieldsConfiguration ?? .default
+
+        let fieldsContainer = CollectingFields.Builder(configuration: fieldsConfiguration)
+            .set(location: location)
+            .set(network: NetworkInfo.currentNetworkInfo())
+            .build()
 
         let openlocateLocation = OpenLocateLocation(location: location,
                                                     advertisingInfo: advertisingInfo,
-                                                    networkInfo: networkInfo,
-                                                    course: course)
+                                                    collectingFields: fieldsContainer)
         completion(openlocateLocation, nil)
     }
 }

@@ -30,17 +30,32 @@ class LocationDataSourceTests: BaseTestCase {
     private var dataSource: LocationDataSourceType?
 
     var testLocation: OpenLocateLocation {
-        let coreLocation = CLLocation(latitude: 123.12, longitude: 123.123)
+        let coreLocation = CLLocation(
+            coordinate: CLLocationCoordinate2DMake(123.12, 123.123),
+            altitude: 30.0,
+            horizontalAccuracy: 10,
+            verticalAccuracy: 0,
+            course: 180,
+            speed: 20,
+            timestamp: Date(timeIntervalSince1970: 1234)
+        )
+
         let advertisingInfo = AdvertisingInfo.Builder()
             .set(isLimitedAdTrackingEnabled: false)
             .set(advertisingId: "123")
             .build()
+
         let networkInfo = NetworkInfo(bssid: "bssid_goes_here", ssid: "ssid_goes_here")
+
+        let info = CollectingFields.Builder(configuration: .default)
+            .set(location: coreLocation)
+            .set(network: networkInfo)
+            .build()
+
         return OpenLocateLocation(
             location: coreLocation,
             advertisingInfo: advertisingInfo,
-            networkInfo: networkInfo,
-            course: 200.0
+            collectingFields: info
         )
     }
 
@@ -135,17 +150,32 @@ class LocationListDataSource: BaseTestCase {
     private var dataSource: LocationDataSourceType?
 
     var testLocation: OpenLocateLocation {
-        let coreLocation = CLLocation(latitude: 123.12, longitude: 123.123)
+        let coreLocation = CLLocation(
+            coordinate: CLLocationCoordinate2DMake(123.12, 123.123),
+            altitude: 30.0,
+            horizontalAccuracy: 10,
+            verticalAccuracy: 0,
+            course: 180,
+            speed: 20,
+            timestamp: Date(timeIntervalSince1970: 1234)
+        )
+
         let advertisingInfo = AdvertisingInfo.Builder()
             .set(isLimitedAdTrackingEnabled: false)
             .set(advertisingId: "123")
             .build()
+
         let networkInfo = NetworkInfo(bssid: "bssid_goes_here", ssid: "ssid_goes_here")
+
+        let info = CollectingFields.Builder(configuration: .default)
+            .set(location: coreLocation)
+            .set(network: networkInfo)
+            .build()
+
         return OpenLocateLocation(
             location: coreLocation,
             advertisingInfo: advertisingInfo,
-            networkInfo: networkInfo,
-            course: 200.0
+            collectingFields: info
         )
     }
 
@@ -223,9 +253,10 @@ class LocationListDataSource: BaseTestCase {
             let firstLocation = try OpenLocateLocation(data: firstIndexedLocation!.1.data)
             XCTAssertEqual(firstLocation.location.coordinate.latitude, testLocation.location.coordinate.latitude)
             XCTAssertEqual(firstLocation.location.coordinate.longitude, testLocation.location.coordinate.longitude)
-            XCTAssertEqual(firstLocation.course, testLocation.location.course)
+            XCTAssertEqual(firstLocation.locationFields.course, testLocation.location.course)
+            XCTAssertEqual(firstLocation.locationFields.speed, testLocation.location.speed)
             XCTAssertEqual(firstLocation.location.timestamp.timeIntervalSince1970,
-                           testLocation.location.timestamp.timeIntervalSince1970, accuracy: 0.1)
+            testLocation.location.timestamp.timeIntervalSince1970, accuracy: 0.1)
         } catch {
             XCTFail(error.localizedDescription)
         }
