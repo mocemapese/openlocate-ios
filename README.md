@@ -31,7 +31,7 @@ OpenLocate is supported by mobile app developers, non-profit trade groups, acade
 
 ## Installation
 
-1. Cocoapods
+Cocoapods
 
 If you use cocoapods, add the following line in your podfile and run `pod install`
 
@@ -143,7 +143,7 @@ For example, you want to send information about network and device speed, but do
 
 ## Communication
 
-- If you **need help**, use [Stack Overflow](https://stackoverflow.com). (Tag 'OpenLocate') 
+- If you **need help**, post a question to the [discussion forum](https://groups.google.com/a/openlocate.org/d/forum/openlocate), or tag a question with 'OpenLocate' on [Stack Overflow](https://stackoverflow.com).
 - If you **found a bug**, open an issue.
 - If you **have a feature request**, open an issue.
 - If you **want to contribute**, submit a pull request.
