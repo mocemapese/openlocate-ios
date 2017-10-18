@@ -144,6 +144,115 @@ For example, you want to send all information except device course. Than you sho
     let configuration = Configuration(url: url, headers: headers, collectingFieldsConfiguration: fieldsConfiguration)
 ```
 
+### Using user's location to query 3rd party Places APIs
+
+To use user's current location, obtain the location by calling `fetchCurrentLocation` method on OpenLocate. Get the instance by calling `shared`. Use the fields collected by SDK to send to 3rd party APIs.
+
+#### For example, to obtain user location:
+
+```swift
+try OpenLocate.shared.fetchCurrentLocation { location, error in
+  if let location = location {
+    fetchNearbyPlaces(location: location)
+  } else {
+    debugPrint(error.localizedDescription)
+  }
+}
+```
+
+#### For example, to query Google Places API using location:
+
+Google Places API: https://developers.google.com/places/web-service/search
+
+```swift
+
+func fetchNearbyPlaces(location: OpenLocateLocation, completion: @escaping GooglePlacesCompletionHandler) {
+        guard let coordinates = location.locationFields.coordinates else {
+            completion(nil, GooglePlacesError.locationNotFound)
+            return
+        }
+
+        let queryParams = [
+            "location": "\(coordinates.latitude),\(coordinates.longitude)",
+            "radius": "500",
+            "type": "restaurant",
+            "keyword": "south",
+            "key": "<YOUR GOOGLE PLACES API KEY>"
+            ] as [String : Any]
+
+        Alamofire.request(
+            "https://maps.googleapis.com/maps/api/place/nearbysearch/json",
+            parameters: queryParams
+        )
+            .responseJSON { response in
+                debugPrint(response)
+                guard let json = response.result.value as? [String: Any],
+                    let placesJson = json["places"] as? [Any], !placesJson.isEmpty else {
+                    completion(nil, GooglePlacesError.placesNotFound)
+                    return
+                }
+
+                var places = [GooglePlace]()
+                for placeJson in placesJson {
+                    let place = (placeJson as? [String: Any])!
+                    places.append(GooglePlace(json: place))
+                }
+
+                completion(places, nil)
+        }
+    }
+
+```
+
+#### For example, to query Safegraph Places API using location:
+
+SafeGraph Places API: https://developers.safegraph.com/docs/places.html
+
+```swift
+
+func fetchNearbyPlaces(location: OpenLocateLocation, completion: @escaping SafePlacesCompletionHandler) {
+        guard let coordinates = location.locationFields.coordinates else {
+            completion(nil, SafeGraphError.locationNotFound)
+            return
+        }
+
+        let queryParams = [
+            "advertising_id": location.advertisingInfo.advertisingId,
+            "advertising_id_type": "aaid",
+            "latitude": coordinates.latitude,
+            "longitude": coordinates.longitude,
+            "horizontal_accuracy": location.locationFields.horizontalAccuracy
+            ] as [String : Any]
+
+        Alamofire.request(
+            "https://api.safegraph.com/places/v1/nearby",
+            parameters: queryParams,
+            headers: ["Authorization": "Bearer <YOUR_TOKEN>"]
+        )
+            .responseJSON { response in
+                debugPrint(response)
+                guard let json = response.result.value as? [String: Any],
+                    let placesJson = json["places"] as? [Any], !placesJson.isEmpty else {
+                    completion(nil, SafeGraphError.placesNotFound)
+                    return
+                }
+
+                var places = [SafeGraphPlace]()
+                for placeJson in placesJson {
+                    let place = (placeJson as? [String: Any])!
+                    places.append(SafeGraphPlace(json: place))
+                }
+
+                completion(places, nil)
+        }
+    }
+
+```
+
+Similarly, OpenLocate SDK can be used to query additional APIs such as Facebook Places Graph or any other 3rd party places API.
+
+- Facebook Places API - https://developers.facebook.com/docs/places/
+
 ## Communication
 
 - If you **need help**, post a question to the [discussion forum](https://groups.google.com/a/openlocate.org/d/forum/openlocate), or tag a question with 'OpenLocate' on [Stack Overflow](https://stackoverflow.com).
