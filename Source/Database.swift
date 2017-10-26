@@ -68,13 +68,14 @@ extension SQLiteDatabase {
 
             throw SQLiteError.open(message: "Error getting directory")
         }
-        
+
         let url = URL(fileURLWithPath: path).appendingPathComponent(bundleIdentifier, isDirectory: true)
-        
+
+        let attributes = [FileAttributeKey.protectionKey: FileProtectionType.completeUntilFirstUserAuthentication]
         try FileManager.default.createDirectory(at: url,
                                                 withIntermediateDirectories: true,
-                                                attributes: [FileAttributeKey.protectionKey: FileProtectionType.none])
-        
+                                                attributes: attributes)
+
         return try open(path: url.appendingPathComponent(databaseName, isDirectory: false).path)
     }
 
