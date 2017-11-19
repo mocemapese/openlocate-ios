@@ -46,6 +46,10 @@ platform :ios do
       xcodeproj: xcodeproj,
     )
 
+    # set secret keys
+    set_info_plist_value(path: "./Example/Resources/Info.plist", key: "Token", value: ENV['OPEN_LOCATE_TOKEN'])
+    set_info_plist_value(path: "./Example/Resources/Info.plist", key: "ProviderId", value: ENV['OPEN_LOCATE_PROVIDER_ID'])
+
     # build example app
     gym(
       scheme: scheme,
