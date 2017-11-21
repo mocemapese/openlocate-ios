@@ -116,6 +116,20 @@ Call `isTrackingEnabled` method on the `OpenLocate`. Get the instance by calling
 OpenLocate.shared.isTrackingEnabled()
 ```
 
+### Additional location updates via Background Fetch
+If you would like more periodic location updates, you can enable background fetch to allow the application to poll for location updates periodically.
+
+Ensure that `Background Fetch` mode is enabled in your project:
+<p align="center"><img width="500" src="https://raw.githubusercontent.com/OpenLocate/openlocate-ios/secondary_location_updates/Screenshots/BackgroundFetch-Cabability.png" /></p>
+
+Additionally, implement the following method in your `AppDelegate`
+
+```swift
+func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+     OpenLocate.shared.performFetchWithCompletionHandler(completionHandler)
+}
+```
+
 ### Using user's location to query 3rd party Places APIs
 
 To use user's current location, obtain the location by calling `fetchCurrentLocation` method on OpenLocate. Get the instance by calling `shared`. Use the fields collected by SDK to send to 3rd party APIs.
