@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.license      = { :type => "MIT", :file => "LICENSE" }
   s.authors      = "OpenLocate"
   s.homepage     = 'https://github.com/OpenLocate/openlocate-ios'
-  s.source       = { :http => "https://s3-us-west-2.amazonaws.com/openlocate-ios/#{s.version}.zip" }
+  s.source = { :git => 'https://github.com/OpenLocate/openlocate-ios.git', :tag => s.version }
   
   s.ios.deployment_target = '9.0'
   
