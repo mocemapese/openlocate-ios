@@ -34,9 +34,9 @@
 	</dict>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>OpenLocate would like to access location.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>OpenLocate would like to access location.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
 	<string>OpenLocate would like to access location.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>OpenLocate would like to access location.</string>
@@ -46,7 +46,7 @@
 	<string>***REMOVED***</string>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>location</string>
+		<string>fetch</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
