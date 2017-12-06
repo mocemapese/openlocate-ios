@@ -239,6 +239,38 @@ Similarly, OpenLocate SDK can be used to query additional APIs such as Facebook 
 
 - Facebook Places API - https://developers.facebook.com/docs/places/
 
+#### Connecting user's location data to Wolfram Cloud for analytics using [Wolfram Data Drop](https://datadrop.wolframcloud.com/)
+
+Data Drop is a service from Wolfram Research that makes it easy to collect data in a manner that proactively sets it up for computation, visualization, analysis, or other data processing operations. **Databins** store and add semantics to data while making it instantly accessible from all Wolfram Language and other systems through the Wolfram Cloud.
+
+Once in a Databin, you can use Wolfram Language to create visualizations like the following, which were generated using UFO sighting location data from the [Wolfram Data Repository](https://datarepository.wolframcloud.com/):
+
+<p align="center"><img src="https://www.wolframcloud.com/objects/q-partnerships/openlocate/geohistogram" alt="UFO Sightings GeoHistogram" align="center"></p>
+
+<p align="center"><img src="https://www.wolframcloud.com/objects/q-partnerships/openlocate/geoplot" alt="UFO Sightings Plot" align="center"></p>
+
+<p align="center"><img src="https://www.wolframcloud.com/objects/q-partnerships/openlocate/vertical-bar" alt="UFO Sightings Vertical Bar Chart" align="center"></p>
+
+<p align="center"><img src="https://www.wolframcloud.com/objects/q-partnerships/openlocate/horizontal-bar" alt="UFO Sightings Horizontal Bar Chart" align="center"></p>
+
+Refer to the [Data Drop Quick Reference](https://www.wolfram.com/datadrop/quick-reference/home/) to learn more.
+
+To send user's location data to a databin via the Data Drop Web API:
+
+```swift
+Alamofire.request("https://datadrop.wolframcloud.com/api/v1.0/Add?bin=pHUeJojI", method: .post, parameters: parameters, encoding: JSONEncoding.default)
+func pushLocationToDataDrop(location: OpenLocateLocation) {
+
+        Alamofire.request(
+            "https://datadrop.wolframcloud.com/api/v1.0/Add?bin=<YOUR BIN ID>",
+            parameters: location.locationFields
+        )
+            .responseJSON { response in
+                debugPrint(response)
+        }
+    }
+```
+
 ## Fields collected for request
 
 | Fields | Type | Description | Flag to enable |
