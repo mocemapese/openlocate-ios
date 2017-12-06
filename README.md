@@ -29,6 +29,17 @@ OpenLocate is supported by mobile app developers, non-profit trade groups, acade
 ## Requirements
 - iOS 9+
 
+## How OpenLocate Works
+
+OpenLocate utilizes  several services within iOS’s CoreLocation API to provide timely and relevant location updates.
+- `Visit Monitoring` API is used to determine locations the user has frequented by logging a location update for the entry and exit of a visit.
+- `Significant Location Change` API is used to log significant movement in the user’s location. 
+- Lastly, `Background Fetch` is used to periodically fetch the user’s current location.
+
+Given that location updates are sparse, the context in which the location updates occurred in is recorded in location_context.
+
+In order to minimize battery usage and network traffic to your server, the location updates are not transmitted immediately to minimize battery usage and network traffic to your server, but rather batched locally for sending at a defined interval. The default transmission interval is eight hours. Once successfully transmitted, the location updates are no longer stored on the device.
+
 ## Installation
 
 Cocoapods
@@ -120,7 +131,7 @@ OpenLocate.shared.isTrackingEnabled()
 If you would like more periodic location updates, you can enable background fetch to allow the application to poll for location updates periodically.
 
 Ensure that `Background Fetch` mode is enabled in your project:
-<p align="center"><img width="500" src="https://raw.githubusercontent.com/OpenLocate/openlocate-ios/secondary_location_updates/Screenshots/BackgroundFetch-Cabability.png" /></p>
+<p align="center"><img width="400" src="https://raw.githubusercontent.com/OpenLocate/openlocate-ios/master/Screenshots/BackgroundFetch-Cabability.png" /></p>
 
 Additionally, implement the following method in your `AppDelegate`
 
@@ -340,6 +351,18 @@ This is a sample request body sent by the SDK.
 ```
 
 If you want to have the SDK send data to your own AWS s3 environment for example, look into setting up an [Kinesis firehose](https://aws.amazon.com/kinesis/firehose/) according to the SDK request above.
+
+## Location Permission Opt-In Best Practices
+
+OpenLocate requires users to accept the iOS's Location Permission in order to work correctly. It is therefore important to understand when and how to prompt for the location permission in order to maximize opt-in rates from users. OpenLocate takes care of prompting the location permission atomically for you when the `startTracking()` method is invoked. OpenLocate also takes care of remembering this started state across app launches, so you only need to invoke `startTracking()` once. You must decide  the optimal time to invoke `startTracking()` within your app however. Below are several articles that explain the different approaches that can be taken. Ensure you choose one that fits your app’s needs:
+- https://medium.com/product-breakdown/5-ways-to-ask-users-for-ios-permissions-a8e199cc83ad
+- https://www.doronkatz.com/articles/the-right-way-to-ask-users-for-ios-permissions-medium-1
+
+## App Submission with OpenLocate
+OpenLocate collects the advertising ID by default. If this is kept as-is, during the app submission process, please ensure that you disclose that you are collecting the advertising ID and the reason. This requires checking certain checkboxes under the section “Advertising Identifier” in the app store submission form; we recommend checking at least the following options, but you may want to check others depending on your app’s specific usage of the advertising ID.
+Attribute this app installation to a previously served advertisement
+Attribute an action taken within this app to a previously served advertisement
+Limit Ad Tracking pledge: i.e. that the limit ad tracking setting will be honoured appropriately (see app submission form for more details)
 
 ## Communication
 
