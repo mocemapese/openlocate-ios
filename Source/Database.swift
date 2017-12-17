@@ -46,7 +46,7 @@ final class SQLiteDatabase: Database {
         static let databaseQueue = "openlocate.sqlite3.queue"
     }
 
-    private let sqliteTransient = unsafeBitCast(-1, to:sqlite3_destructor_type.self)
+    private let sqliteTransient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
     private let queue = DispatchQueue(label: Constants.databaseQueue, attributes: [])
 
     private let database: OpaquePointer
@@ -61,7 +61,7 @@ final class SQLiteDatabase: Database {
     }
 
     private var errorMessage: String {
-        return String(cString:sqlite3_errmsg(database))
+        return String(cString: sqlite3_errmsg(database))
     }
 }
 
@@ -143,7 +143,7 @@ extension SQLiteDatabase {
         } else if let data = object as? NSData {
             flag = sqlite3_bind_blob(statement, CInt(column), data.bytes, CInt(data.length), sqliteTransient)
         } else if let date = object as? Date {
-            let txt = fmt.string(from:date)
+            let txt = fmt.string(from: date)
             flag = sqlite3_bind_text(statement, CInt(column), txt, -1, sqliteTransient)
         } else if let val = object as? Bool {
             let num = val ? 1 : 0

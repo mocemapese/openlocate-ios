@@ -72,8 +72,7 @@ extension OpenLocate {
         self.locationService = LocationService(
             postable: httpClient,
             locationDataSource: locationDataSource,
-            url: configuration.url.absoluteString,
-            headers: configuration.headers,
+            endpoints: configuration.endpoints,
             advertisingInfo: advertisingInfo,
             locationManager: locationManager,
             transmissionInterval: Constants.defaultTransmissionInterval,

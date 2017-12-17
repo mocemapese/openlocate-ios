@@ -41,6 +41,8 @@ private let locationsKey = "locations"
 final class LocationService: LocationServiceType {
 
     let isStartedKey = "OpenLocate_isStarted"
+    let endpointsInfoKey = "OpenLocate_EndpointsInfo"
+    let endpointLastTransmitDate = "lastTransmitDate"
 
     let collectingFieldsConfiguration: CollectingFieldsConfiguration
 
@@ -54,19 +56,19 @@ final class LocationService: LocationServiceType {
     private let httpClient: Postable
     private let locationDataSource: LocationDataSourceType
     private var advertisingInfo: AdvertisingInfo
-
-    private var url: String
-    private var headers: Headers?
-
     private let executionQueue: DispatchQueue = DispatchQueue(label: "openlocate.queue.async", qos: .background)
 
-    var backgroundTask: UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid
+    private let endpoints: [Configuration.Endpoint]
+    private var isPostingLocations = false
+    private var endpointsInfo: [String: [String: Any]]
+
+    private let dispatchGroup = DispatchGroup()
+    private var backgroundTask: UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid
 
     init(
         postable: Postable,
         locationDataSource: LocationDataSourceType,
-        url: String,
-        headers: Headers?,
+        endpoints: [Configuration.Endpoint],
         advertisingInfo: AdvertisingInfo,
         locationManager: LocationManagerType,
         transmissionInterval: TimeInterval,
@@ -76,14 +78,19 @@ final class LocationService: LocationServiceType {
         self.locationDataSource = locationDataSource
         self.locationManager = locationManager
         self.advertisingInfo = advertisingInfo
-        self.url = url
-        self.headers = headers
+        self.endpoints = endpoints
         self.transmissionInterval = transmissionInterval
         self.collectingFieldsConfiguration = logConfiguration
+
+        if let endpointsInfo = UserDefaults.standard.dictionary(forKey: endpointsInfoKey) as? [String: [String: Any]] {
+            self.endpointsInfo = endpointsInfo
+        } else {
+            self.endpointsInfo = [String: [String: Any]]()
+        }
     }
 
     func start() {
-        debugPrint("Location service started for url : \(url)")
+        debugPrint("Location service started for urls : \(endpoints.map({$0.url}))")
 
         locationManager.subscribe { [weak self] locations in
             self?.executionQueue.async {
@@ -108,7 +115,7 @@ final class LocationService: LocationServiceType {
 
                 //debugPrint(strongSelf.locationDataSource.all())
 
-                strongSelf.postAllLocationsIfNeeded()
+                strongSelf.postLocationsIfNeeded()
             }
         }
 
@@ -118,7 +125,7 @@ final class LocationService: LocationServiceType {
 
     func stop() {
         locationManager.cancel()
-        postAllLocations()
+        locationDataSource.clear()
 
         UserDefaults.standard.set(false, forKey: isStartedKey)
         UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplicationBackgroundFetchIntervalNever)
@@ -132,12 +139,12 @@ final class LocationService: LocationServiceType {
 
 extension LocationService {
 
-    private func postAllLocationsIfNeeded() {
+    func postLocationsIfNeeded() {
         if let earliestIndexedLocation = locationDataSource.first() {
             do {
-                let earliestLocation = try OpenLocateLocation(data: earliestIndexedLocation.1.data)
+                let earliestLocation = try OpenLocateLocation(data: earliestIndexedLocation.data)
                 if abs(earliestLocation.timestamp.timeIntervalSinceNow) > self.transmissionInterval {
-                    postAllLocations()
+                    postLocations()
                 }
             } catch {
                 debugPrint(error)
@@ -145,59 +152,101 @@ extension LocationService {
         }
     }
 
-    private func postAllLocations() {
-        let indexedLocations = locationDataSource.all()
-        if indexedLocations.isEmpty == false {
-            locationDataSource.clear()
-            let locations = indexedLocations.map { $1 }
-            self.postLocations(locations: locations)
-        }
-    }
+    private func postLocations() {
 
-    private func postLocations(locations: [OpenLocateLocationType]) {
-
-        if locations.isEmpty {
-            return
-        }
-
-        let params = [locationsKey: locations.map { $0.json }]
+        if isPostingLocations == true || endpoints.isEmpty { return }
 
         beginBackgroundTask()
 
-        let requestParameters
-            = URLRequestParamters(url: url,
-                                  params: params,
-                                  queryParams: nil,
-                                  additionalHeaders: headers)
+        for endpoint in endpoints {
+            dispatchGroup.enter()
+            do {
+                let date = lastKnownTransmissionDate(for: endpoint)
+                let locations = locationDataSource.all(since: date)
 
-        do {
-            try httpClient.post(
-                parameters: requestParameters,
-                success: {  [weak self] _, _ in
-                    self?.endBackgroundTask()
-            },
-                failure: { [weak self] _, error in
-                    self?.executionQueue.async {
-                        self?.locationDataSource.addAll(locations: locations)
+                let params = [locationsKey: locations.map { $0.json }]
+                let requestParameters = URLRequestParamters(url: endpoint.url.absoluteString,
+                                                            params: params,
+                                                            queryParams: nil,
+                                                            additionalHeaders: endpoint.headers)
+                try httpClient.post(
+                    parameters: requestParameters,
+                    success: {  [weak self] _, _ in
+                        if let lastLocation = locations.last {
+                            self?.setLastKnownTransmissionDate(for: endpoint, with: lastLocation.timestamp)
+                        }
+                        self?.dispatchGroup.leave()
+                    },
+                    failure: { [weak self] _, error in
+                        debugPrint("failure in posting locations!!! Error: \(error)")
+                        self?.dispatchGroup.leave()
                     }
-
-                    self?.endBackgroundTask()
-                    debugPrint("failure in posting locations!!! Error: \(error)")
+                )
+            } catch let error {
+                print(error.localizedDescription)
+                dispatchGroup.leave()
             }
-            )
-        } catch let error {
-            print(error.localizedDescription)
-            endBackgroundTask()
+        }
+
+        dispatchGroup.notify(queue: .main) { [weak self] in
+            guard let strongSelf = self else { return }
+
+            strongSelf.locationDataSource.clear(before: strongSelf.transmissionDateCutoff())
+            strongSelf.isPostingLocations = false
+            strongSelf.endBackgroundTask()
         }
     }
 
-    func beginBackgroundTask() {
+    private func lastKnownTransmissionDate(for endpoint: Configuration.Endpoint) -> Date {
+        let key = infoKeyForEndpoint(endpoint)
+        if let endpointInfo = endpointsInfo[key],
+            let date = endpointInfo[endpointLastTransmitDate] as? Date, date <= Date() {
+
+            return date
+        }
+        return Date.distantPast
+    }
+
+    private func setLastKnownTransmissionDate(for endpoint: Configuration.Endpoint, with date: Date) {
+        let key = infoKeyForEndpoint(endpoint)
+        if var endpointInfo = endpointsInfo[key] {
+            endpointInfo[endpointLastTransmitDate] = date
+            persistEndPointsInfo()
+        }
+    }
+
+    private func transmissionDateCutoff() -> Date {
+        var cutoffDate = Date()
+        for (_, endpointInfo) in endpointsInfo {
+            if let date = endpointInfo[endpointLastTransmitDate] as? Date, date < cutoffDate {
+                cutoffDate = date
+            }
+        }
+        
+        if let maxCutoffDate = Calendar.current.date(byAdding: .day, value: -10, to: Date()),
+            maxCutoffDate < cutoffDate {
+            
+            return maxCutoffDate
+        }
+        return cutoffDate
+    }
+
+    private func infoKeyForEndpoint(_ endpoint: Configuration.Endpoint) -> String {
+        return endpoint.url.absoluteString.lowercased()
+    }
+
+    private func persistEndPointsInfo() {
+        UserDefaults.standard.set(endpointsInfo, forKey: endpointsInfoKey)
+        UserDefaults.standard.synchronize()
+    }
+
+    private func beginBackgroundTask() {
         backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
             self?.endBackgroundTask()
         }
     }
 
-    func endBackgroundTask() {
+    private func endBackgroundTask() {
         UIApplication.shared.endBackgroundTask(backgroundTask)
         backgroundTask = UIBackgroundTaskInvalid
     }

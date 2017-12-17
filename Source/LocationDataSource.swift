@@ -24,19 +24,20 @@
 
 import Foundation
 
-typealias IndexedLocation = (Int, OpenLocateLocationType)
-
 protocol LocationDataSourceType {
 
     var count: Int { get }
 
-    func add(location: OpenLocateLocationType) throws
-    func addAll(locations: [OpenLocateLocationType])
+    func add(location: OpenLocateLocation) throws
+    func addAll(locations: [OpenLocateLocation])
 
-    func first() -> IndexedLocation?
-    func all() -> [IndexedLocation]
+    func first() -> OpenLocateLocation?
+
+    func all() -> [OpenLocateLocation]
+    func all(since: Date) -> [OpenLocateLocation]
 
     func clear()
+    func clear(before: Date)
 }
 
 final class LocationDatabase: LocationDataSourceType {
@@ -45,11 +46,12 @@ final class LocationDatabase: LocationDataSourceType {
         static let tableName = "Location"
         static let columnId = "_id"
         static let columnLocation = "location"
+        static let columnCreatedAt = "created_at"
     }
 
     private let database: Database
 
-    func add(location: OpenLocateLocationType) throws {
+    func add(location: OpenLocateLocation) throws {
         let query = "INSERT INTO " +
         "\(Constants.tableName) " +
         "(\(Constants.columnLocation)) " +
@@ -63,7 +65,7 @@ final class LocationDatabase: LocationDataSourceType {
         try database.execute(statement: statement)
     }
 
-    func addAll(locations: [OpenLocateLocationType]) {
+    func addAll(locations: [OpenLocateLocation]) {
         if locations.isEmpty {
             return
         }
@@ -124,7 +126,11 @@ final class LocationDatabase: LocationDataSourceType {
         }
     }
 
-    func first() -> IndexedLocation? {
+    func clear(before: Date) {
+        // TODO
+    }
+
+    func first() -> OpenLocateLocation? {
         let query = "SELECT * FROM \(Constants.tableName) LIMIT 1"
         let statement = SQLStatement.Builder()
             .set(query: query)
@@ -134,11 +140,10 @@ final class LocationDatabase: LocationDataSourceType {
         do {
             let result = try database.execute(statement: statement)
             if result.next() {
-                let index = result.intValue(column: Constants.columnId)
                 let data = result.dataValue(column: Constants.columnLocation)
 
                 if let data = data {
-                    return (index, try OpenLocateLocation(data: data))
+                    return try OpenLocateLocation(data: data)
                 }
             }
         } catch let error {
@@ -148,25 +153,24 @@ final class LocationDatabase: LocationDataSourceType {
         return nil
     }
 
-    func all() -> [IndexedLocation] {
+    func all() -> [OpenLocateLocation] {
         let query = "SELECT * FROM \(Constants.tableName)"
         let statement = SQLStatement.Builder()
             .set(query: query)
             .set(cached: true)
             .build()
 
-        var locations = [IndexedLocation]()
+        var locations = [OpenLocateLocation]()
 
         do {
             let result = try database.execute(statement: statement)
 
             while result.next() {
-                let index = result.intValue(column: Constants.columnId)
                 let data = result.dataValue(column: Constants.columnLocation)
 
                 if let data = data {
                     locations.append(
-                        (index, try OpenLocateLocation(data: data))
+                        try OpenLocateLocation(data: data)
                     )
                 }
             }
@@ -178,16 +182,22 @@ final class LocationDatabase: LocationDataSourceType {
         return locations
     }
 
+    func all(since: Date) -> [OpenLocateLocation] {
+        return [] // TODO
+    }
+
     init(database: Database) {
         self.database = database
         createTableIfNotExists()
+        // TODO Migration
     }
 
     private func createTableIfNotExists() {
         let query = "CREATE TABLE IF NOT EXISTS " +
         "\(Constants.tableName) (" +
         "\(Constants.columnId) INTEGER PRIMARY KEY AUTOINCREMENT, " +
-        "\(Constants.columnLocation) BLOB NOT NULL" +
+        "\(Constants.columnLocation) BLOB NOT NULL, " +
+        "\(Constants.columnCreatedAt) datetime default current_timestamp" +
         ");"
 
         let statement = SQLStatement.Builder()
@@ -204,40 +214,53 @@ final class LocationDatabase: LocationDataSourceType {
 
 final class LocationList: LocationDataSourceType {
 
-    private var locations: [OpenLocateLocationType]
+    private var locations: [OpenLocateLocation]
 
     var count: Int {
         return self.locations.count
     }
 
     init() {
-        self.locations = [OpenLocateLocationType]()
+        self.locations = [OpenLocateLocation]()
     }
 
-    func add(location: OpenLocateLocationType) {
+    func add(location: OpenLocateLocation) {
         self.locations.append(location)
     }
 
-    func addAll(locations: [OpenLocateLocationType]) {
+    func addAll(locations: [OpenLocateLocation]) {
         self.locations.append(contentsOf: locations)
     }
 
-    func first() -> IndexedLocation? {
-        if let location = self.locations.first {
-            return (0, location)
-        }
-        return nil
+    func first() -> OpenLocateLocation? {
+        return self.locations.first
     }
 
-    func all() -> [IndexedLocation] {
-        var locations = [IndexedLocation]()
-        self.locations.enumerated().forEach { indexedLocation in
-            locations.append(indexedLocation)
+    func all() -> [OpenLocateLocation] {
+        return self.locations
+    }
+
+    func all(since: Date) -> [OpenLocateLocation] {
+        var locations = [OpenLocateLocation]()
+        self.locations.forEach { location in
+            if location.timestamp > since {
+                locations.append(location)
+            }
         }
         return locations
     }
 
     func clear() {
         self.locations.removeAll()
+    }
+
+    func clear(before: Date) {
+        var locations = [OpenLocateLocation]()
+        self.locations.forEach { location in
+            if location.timestamp <= before {
+                locations.append(location)
+            }
+        }
+        self.locations = locations
     }
 }

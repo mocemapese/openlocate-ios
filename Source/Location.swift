@@ -39,13 +39,7 @@ protocol DataType {
 
 // MARK: - Location
 
-/**
- LocationType protocol defines a location type object.
- */
-
-protocol OpenLocateLocationType: JsonParameterType, DataType {}
-
-public struct OpenLocateLocation: OpenLocateLocationType {
+public struct OpenLocateLocation: JsonParameterType, DataType {
 
     private struct Keys {
         static let privateTimestamp = "private_utc_timestamp"

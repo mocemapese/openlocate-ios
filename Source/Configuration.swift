@@ -28,16 +28,24 @@ public typealias Headers = [String: String]
 
 public struct Configuration {
 
-    let url: URL
-    let headers: Headers?
+    public struct Endpoint {
+        let url: URL
+        let headers: Headers?
+    }
+
+    let endpoints: [Endpoint]
     let collectingFieldsConfiguration: CollectingFieldsConfiguration
+
+    public init(endpoints: [Endpoint], collectingFieldsConfiguration: CollectingFieldsConfiguration = .default) {
+        self.endpoints = endpoints
+        self.collectingFieldsConfiguration = collectingFieldsConfiguration
+    }
 
     public init(url: URL,
                 headers: Headers? = nil,
                 collectingFieldsConfiguration: CollectingFieldsConfiguration = .default) {
 
-        self.url = url
-        self.headers = headers
-        self.collectingFieldsConfiguration = collectingFieldsConfiguration
+        self.init(endpoints: [Endpoint(url: url, headers: headers)],
+                  collectingFieldsConfiguration: collectingFieldsConfiguration)
     }
 }
