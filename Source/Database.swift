@@ -143,7 +143,7 @@ extension SQLiteDatabase {
         } else if let data = object as? NSData {
             flag = sqlite3_bind_blob(statement, CInt(column), data.bytes, CInt(data.length), sqliteTransient)
         } else if let date = object as? Date {
-            let txt = fmt.string(from: date)
+            let txt = Formatter.sqliteDateFormatter.string(from: date)
             flag = sqlite3_bind_text(statement, CInt(column), txt, -1, sqliteTransient)
         } else if let val = object as? Bool {
             let num = val ? 1 : 0

@@ -127,7 +127,17 @@ final class LocationDatabase: LocationDataSourceType {
     }
 
     func clear(before: Date) {
-        // TODO
+        let query = "DELETE FROM \(Constants.tableName) WHERE created_at <= ?;"
+        let statement = SQLStatement.Builder()
+            .set(query: query)
+            .set(args: [before])
+            .build()
+
+        do {
+            try database.execute(statement: statement)
+        } catch let error {
+            debugPrint(error.localizedDescription)
+        }
     }
 
     func first() -> OpenLocateLocation? {
@@ -141,9 +151,10 @@ final class LocationDatabase: LocationDataSourceType {
             let result = try database.execute(statement: statement)
             if result.next() {
                 let data = result.dataValue(column: Constants.columnLocation)
+                let createdAtDate = result.dateValue(column: Constants.columnCreatedAt)
 
-                if let data = data {
-                    return try OpenLocateLocation(data: data)
+                if let data = data, let createdAtDate = createdAtDate {
+                    return try OpenLocateLocation(data: data, createdAt: createdAtDate)
                 }
             }
         } catch let error {
@@ -154,7 +165,7 @@ final class LocationDatabase: LocationDataSourceType {
     }
 
     func all() -> [OpenLocateLocation] {
-        let query = "SELECT * FROM \(Constants.tableName)"
+        let query = "SELECT * FROM \(Constants.tableName) ORDER BY created_at ASC"
         let statement = SQLStatement.Builder()
             .set(query: query)
             .set(cached: true)
@@ -167,10 +178,11 @@ final class LocationDatabase: LocationDataSourceType {
 
             while result.next() {
                 let data = result.dataValue(column: Constants.columnLocation)
+                let createdAtDate = result.dateValue(column: Constants.columnCreatedAt)
 
-                if let data = data {
+                if let data = data, let createdAtDate = createdAtDate {
                     locations.append(
-                        try OpenLocateLocation(data: data)
+                        try OpenLocateLocation(data: data, createdAt: createdAtDate)
                     )
                 }
             }
@@ -183,7 +195,32 @@ final class LocationDatabase: LocationDataSourceType {
     }
 
     func all(since: Date) -> [OpenLocateLocation] {
-        return [] // TODO
+        let query = "SELECT * FROM \(Constants.tableName) WHERE created_at > ? ORDER BY created_at ASC;"
+        let statement = SQLStatement.Builder()
+            .set(query: query)
+            .set(args: [since])
+            .set(cached: true)
+            .build()
+
+        var locations = [OpenLocateLocation]()
+        do {
+            let result = try database.execute(statement: statement)
+            while result.next() {
+
+                let data = result.dataValue(column: Constants.columnLocation)
+                let createdAtDate = result.dateValue(column: Constants.columnCreatedAt)
+
+                if let data = data, let createdAtDate = createdAtDate {
+                    locations.append(
+                        try OpenLocateLocation(data: data, createdAt: createdAtDate)
+                    )
+                }
+            }
+        } catch let error {
+            debugPrint(error.localizedDescription)
+        }
+
+        return locations
     }
 
     init(database: Database) {

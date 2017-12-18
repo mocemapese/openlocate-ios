@@ -82,6 +82,7 @@ public struct OpenLocateLocation: JsonParameterType, DataType {
     public let locationFields: LocationCollectingFields
     public let deviceInfo: DeviceCollectingFields
     public let context: Context
+    var createdAt: Date?
 
     var debugDescription: String {
         return "OpenLocateLocation(location: \(locationFields), advertisingInfo: \(advertisingInfo))"
@@ -163,7 +164,7 @@ extension OpenLocateLocation {
 }
 
 extension OpenLocateLocation {
-    init(data: Data) throws {
+    init(data: Data, createdAt: Date) throws {
         guard let coding = NSKeyedUnarchiver.unarchiveObject(with: data) as? Coding else {
             throw OpenLocateLocationError.unarchivingCannotBeDone
         }
@@ -205,6 +206,8 @@ extension OpenLocateLocation {
         } else {
             self.context = .unknown
         }
+
+        self.createdAt = createdAt
     }
 
     var data: Data {

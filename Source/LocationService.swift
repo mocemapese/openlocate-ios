@@ -140,15 +140,10 @@ final class LocationService: LocationServiceType {
 extension LocationService {
 
     func postLocationsIfNeeded() {
-        if let earliestIndexedLocation = locationDataSource.first() {
-            do {
-                let earliestLocation = try OpenLocateLocation(data: earliestIndexedLocation.data)
-                if abs(earliestLocation.timestamp.timeIntervalSinceNow) > self.transmissionInterval {
-                    postLocations()
-                }
-            } catch {
-                debugPrint(error)
-            }
+        if let earliestLocation = locationDataSource.first(), let createdAt = earliestLocation.createdAt,
+            abs(createdAt.timeIntervalSinceNow) > self.transmissionInterval {
+
+            postLocations()
         }
     }
 
@@ -172,8 +167,8 @@ extension LocationService {
                 try httpClient.post(
                     parameters: requestParameters,
                     success: {  [weak self] _, _ in
-                        if let lastLocation = locations.last {
-                            self?.setLastKnownTransmissionDate(for: endpoint, with: lastLocation.timestamp)
+                        if let lastLocation = locations.last, let createdAt = lastLocation.createdAt {
+                            self?.setLastKnownTransmissionDate(for: endpoint, with: createdAt)
                         }
                         self?.dispatchGroup.leave()
                     },
@@ -209,23 +204,25 @@ extension LocationService {
 
     private func setLastKnownTransmissionDate(for endpoint: Configuration.Endpoint, with date: Date) {
         let key = infoKeyForEndpoint(endpoint)
-        if var endpointInfo = endpointsInfo[key] {
-            endpointInfo[endpointLastTransmitDate] = date
-            persistEndPointsInfo()
-        }
+        endpointsInfo[key] = [endpointLastTransmitDate: date]
+        persistEndPointsInfo()
     }
 
     private func transmissionDateCutoff() -> Date {
         var cutoffDate = Date()
         for (_, endpointInfo) in endpointsInfo {
-            if let date = endpointInfo[endpointLastTransmitDate] as? Date, date < cutoffDate {
-                cutoffDate = date
+            if let date = endpointInfo[endpointLastTransmitDate] as? Date {
+                if date < cutoffDate {
+                    cutoffDate = date
+                }
+            } else {
+                cutoffDate = Date.distantPast
             }
         }
-        
+
         if let maxCutoffDate = Calendar.current.date(byAdding: .day, value: -10, to: Date()),
-            maxCutoffDate < cutoffDate {
-            
+            maxCutoffDate > cutoffDate {
+
             return maxCutoffDate
         }
         return cutoffDate

@@ -32,6 +32,7 @@ protocol Result {
     func intValue(column: Int) -> Int
     func intValue(column: String) -> Int
     func dataValue(column: String) -> Data?
+    func dateValue(column: String) -> Date?
 }
 
 final class SQLResult: Result {
@@ -103,6 +104,14 @@ extension SQLResult {
             return Data(bytes: buf, count: Int(size))
         }
     }
+
+    func dateValue(column: String) -> Date? {
+        return sync {
+            let index = CInt(columnNames.index(of: column)!)
+            let dateString = String(cString: sqlite3_column_text(statement, index))
+            return Formatter.sqliteDateFormatter.date(from: dateString)
+        }
+    }
 }
 
 extension SQLResult {
@@ -141,4 +150,14 @@ extension SQLResult {
             block()
         }
     }
+}
+
+extension Formatter {
+    static let sqliteDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.dateFormat = "yyyy-MM-dd hh:mm:ss"
+        return formatter
+    }()
 }
