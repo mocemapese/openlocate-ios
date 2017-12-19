@@ -235,16 +235,23 @@ final class LocationDatabase: LocationDataSourceType {
         "\(Constants.columnId) INTEGER PRIMARY KEY AUTOINCREMENT, " +
         "\(Constants.columnLocation) BLOB NOT NULL, " +
         "\(Constants.columnCreatedAt) datetime default current_timestamp" +
-        "); " +
-        "CREATE INDEX IF NOT EXISTS `\(Constants.columnCreatedAt)_index` " +
+        "); "
+
+        let index = "CREATE INDEX IF NOT EXISTS `\(Constants.columnCreatedAt)_index` " +
         "ON `\(Constants.tableName)` (`\(Constants.columnCreatedAt)` ASC);"
 
-        let statement = SQLStatement.Builder()
+        let createTableStatement = SQLStatement.Builder()
         .set(query: query)
         .build()
 
+        let createIndexStatement = SQLStatement.Builder()
+            .set(query: index)
+            .build()
+
         do {
-            try database.execute(statement: statement)
+            try database.execute(statement: dropStatement)
+            try database.execute(statement: createTableStatement)
+            try database.execute(statement: createIndexStatement)
         } catch let error {
             debugPrint(error.localizedDescription)
         }

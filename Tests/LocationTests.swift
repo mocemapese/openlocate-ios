@@ -80,10 +80,11 @@ final class OpenLocateLocationTests: BaseTestCase {
     func testInitMethodWithIncorrectData() {
         // Given
         let data = Data()
+        let date = Date()
 
         // Then
         do {
-            _ = try OpenLocateLocation(data: data)
+            _ = try OpenLocateLocation(data: data, createdAt: date)
         } catch OpenLocateLocationError.unarchivingCannotBeDone {
 
         } catch {

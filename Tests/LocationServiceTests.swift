@@ -35,8 +35,7 @@ class LocationRequestTests: BaseTestCase {
         let locationService = LocationService(
             postable: HttpClient(urlSession: SuccessURLSession()),
             locationDataSource: LocationList(),
-            url: "http://www.google.com",
-            headers: nil,
+            endpoints: [Configuration.Endpoint(url: URL(string: "http://www.google.com")!, headers: nil)],
             advertisingInfo: AdvertisingInfo.Builder()
                 .set(advertisingId: "1234")
                 .set(isLimitedAdTrackingEnabled: true)
@@ -62,8 +61,7 @@ class LocationRequestTests: BaseTestCase {
         let locationService = LocationService(
             postable: HttpClient(urlSession: SuccessURLSession()),
             locationDataSource: LocationList(),
-            url: "http://www.google.com",
-            headers: nil,
+            endpoints: [Configuration.Endpoint(url: URL(string: "http://www.google.com")!, headers: nil)],
             advertisingInfo: AdvertisingInfo.Builder()
                 .set(advertisingId: "1234")
                 .set(isLimitedAdTrackingEnabled: true)
