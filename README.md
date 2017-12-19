@@ -38,7 +38,7 @@ OpenLocate utilizes  several services within iOS’s CoreLocation API to provide
 
 Given that location updates are sparse, the context in which the location updates occurred in is recorded in location_context.
 
-In order to minimize battery usage and network traffic to your server, the location updates are not transmitted immediately to minimize battery usage and network traffic to your server, but rather batched locally for sending at a defined interval. The default transmission interval is eight hours. Once successfully transmitted, the location updates are no longer stored on the device.
+In order to minimize battery usage and network traffic to your server, the location updates are not transmitted immediately to minimize battery usage and network traffic to your server, but rather batched locally for sending at a defined interval. The default transmission interval is six hours. Once successfully transmitted, the location updates are no longer stored on the device.
 
 ## Installation
 
@@ -101,6 +101,30 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 }
 ```
 
+#### Configuring multiple endpoints
+
+If you would like to send the data to multiple endpoints, you can do so by creating multiple `Configuration.Endpoint` objects and passing them in to the `Configuration` object.
+
+```swift
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]? ) -> Bool {
+
+    let url1 = URL(string: "https://example-url.com/endpoint1")!
+    let headers1 = ["Authorization": "Bearer example_auth_token"]
+    let endpoint1 = Configuration.Endpoint(url: url1, headers: headers1)
+
+    let url2 = URL(string: "https://example-url2.com/endpoint2")!
+    let headers2 = ["Authorization": "Bearer example_auth_token]
+    let endpoint2 = Configuration.Endpoint(url: url2, headers: headers2)
+
+    let configuration = Configuration(endpoints: [endpoint1, endpoint2])
+    do {
+        try OpenLocate.shared.initialize(with: configuration)
+    } catch {
+        print(error)
+    }
+}
+```
+
 
 ### Start tracking of location
 
@@ -125,6 +149,14 @@ Call `isTrackingEnabled` method on the `OpenLocate`. Get the instance by calling
 
 ```swift
 OpenLocate.shared.isTrackingEnabled()
+```
+
+### Configuring the location data transmission interval
+
+By default, the location data transmission interval is six hours. If you would like to change that. Simply pass a different value when constructing your `Configuration` object:
+
+```swift
+let configuration = Configuration(endpoints: [endpoint], transmissionInterval: 3 * 60.0 * 60.0) // 3 Hours
 ```
 
 ### Additional location updates via Background Fetch
