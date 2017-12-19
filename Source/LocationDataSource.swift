@@ -49,7 +49,8 @@ final class LocationDatabase: LocationDataSourceType {
         static let columnCreatedAt = "created_at"
     }
 
-    private let database: Database
+    private var database: Database
+    private let currentDatabaseVersion: Int = 2
 
     func add(location: OpenLocateLocation) throws {
         let query = "INSERT INTO " +
@@ -226,10 +227,15 @@ final class LocationDatabase: LocationDataSourceType {
     init(database: Database) {
         self.database = database
         createTableIfNotExists()
-        // TODO Migration
     }
 
     private func createTableIfNotExists() {
+
+        let userVersion = database.userVersion
+        if userVersion != currentDatabaseVersion {
+            dropTableIfExists()
+        }
+
         let query = "CREATE TABLE IF NOT EXISTS " +
         "\(Constants.tableName) (" +
         "\(Constants.columnId) INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -251,6 +257,19 @@ final class LocationDatabase: LocationDataSourceType {
         do {
             try database.execute(statement: createTableStatement)
             try database.execute(statement: createIndexStatement)
+            database.userVersion = currentDatabaseVersion
+        } catch let error {
+            debugPrint(error.localizedDescription)
+        }
+    }
+
+    private func dropTableIfExists() {
+        let dropTableStatement = SQLStatement.Builder()
+            .set(query: "DROP TABLE IF EXISTS \(Constants.tableName)")
+            .build()
+
+        do {
+            try database.execute(statement: dropTableStatement)
         } catch let error {
             debugPrint(error.localizedDescription)
         }
