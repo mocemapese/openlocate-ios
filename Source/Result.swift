@@ -157,7 +157,7 @@ extension Formatter {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
-        formatter.dateFormat = "yyyy-MM-dd hh:mm:ss"
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         return formatter
     }()
 }
