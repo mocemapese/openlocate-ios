@@ -43,6 +43,7 @@ final class LocationService: LocationServiceType {
     let isStartedKey = "OpenLocate_isStarted"
     let endpointsInfoKey = "OpenLocate_EndpointsInfo"
     let endpointLastTransmitDate = "lastTransmitDate"
+    let maxNumberOfDaysStored = 10
 
     let collectingFieldsConfiguration: CollectingFieldsConfiguration
 
@@ -220,7 +221,7 @@ extension LocationService {
             }
         }
 
-        if let maxCutoffDate = Calendar.current.date(byAdding: .day, value: -10, to: Date()),
+        if let maxCutoffDate = Calendar.current.date(byAdding: .day, value: -maxNumberOfDaysStored, to: Date()),
             maxCutoffDate > cutoffDate {
 
             return maxCutoffDate
