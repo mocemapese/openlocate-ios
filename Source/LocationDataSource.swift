@@ -249,7 +249,6 @@ final class LocationDatabase: LocationDataSourceType {
             .build()
 
         do {
-            try database.execute(statement: dropStatement)
             try database.execute(statement: createTableStatement)
             try database.execute(statement: createIndexStatement)
         } catch let error {
