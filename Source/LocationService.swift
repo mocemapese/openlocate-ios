@@ -61,6 +61,7 @@ final class LocationService: LocationServiceType {
 
     private let endpoints: [Configuration.Endpoint]
     private var isPostingLocations = false
+    private var lastTransmissionDate: Date?
     private var endpointsInfo: [String: [String: Any]]
 
     private let dispatchGroup = DispatchGroup()
@@ -144,7 +145,14 @@ extension LocationService {
         if let earliestLocation = locationDataSource.first(), let createdAt = earliestLocation.createdAt,
             abs(createdAt.timeIntervalSinceNow) > self.transmissionInterval {
 
-            postLocations()
+            if let lastTransmissionDate = self.lastTransmissionDate,
+                lastTransmissionDate.timeIntervalSinceNow < self.transmissionInterval / 2 {
+                return
+            }
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0, execute: { [weak self] in
+                self?.postLocations()
+            })
         }
     }
 
@@ -152,13 +160,16 @@ extension LocationService {
 
         if isPostingLocations == true || endpoints.isEmpty { return }
 
+        isPostingLocations = true
+
         beginBackgroundTask()
 
+        let endingDate = Calendar.current.date(byAdding: .second, value: -1, to: Date()) ?? Date()
         for endpoint in endpoints {
             dispatchGroup.enter()
             do {
                 let date = lastKnownTransmissionDate(for: endpoint)
-                let locations = locationDataSource.all(since: date)
+                let locations = locationDataSource.all(starting: date, ending: endingDate)
 
                 let params = [locationsKey: locations.map { $0.json }]
                 let requestParameters = URLRequestParamters(url: endpoint.url.absoluteString,
@@ -187,6 +198,7 @@ extension LocationService {
         dispatchGroup.notify(queue: .main) { [weak self] in
             guard let strongSelf = self else { return }
 
+            strongSelf.lastTransmissionDate = Date()
             strongSelf.locationDataSource.clear(before: strongSelf.transmissionDateCutoff())
             strongSelf.isPostingLocations = false
             strongSelf.endBackgroundTask()

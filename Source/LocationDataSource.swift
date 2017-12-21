@@ -34,7 +34,7 @@ protocol LocationDataSourceType {
     func first() -> OpenLocateLocation?
 
     func all() -> [OpenLocateLocation]
-    func all(since: Date) -> [OpenLocateLocation]
+    func all(starting: Date, ending: Date) -> [OpenLocateLocation]
 
     func clear()
     func clear(before: Date)
@@ -195,11 +195,13 @@ final class LocationDatabase: LocationDataSourceType {
         return locations
     }
 
-    func all(since: Date) -> [OpenLocateLocation] {
-        let query = "SELECT * FROM \(Constants.tableName) WHERE created_at > ? ORDER BY created_at ASC;"
+    func all(starting: Date, ending: Date) -> [OpenLocateLocation] {
+        let query = """
+                    SELECT * FROM \(Constants.tableName) WHERE created_at > ? AND created_at < ? ORDER BY created_at ASC
+                    """
         let statement = SQLStatement.Builder()
             .set(query: query)
-            .set(args: [since])
+            .set(args: [starting, ending])
             .set(cached: true)
             .build()
 
@@ -304,10 +306,10 @@ final class LocationList: LocationDataSourceType {
         return self.locations
     }
 
-    func all(since: Date) -> [OpenLocateLocation] {
+    func all(starting: Date, ending: Date) -> [OpenLocateLocation] {
         var locations = [OpenLocateLocation]()
         self.locations.forEach { location in
-            if location.timestamp > since {
+            if location.timestamp > starting && location.timestamp < ending {
                 locations.append(location)
             }
         }
