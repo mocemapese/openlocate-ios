@@ -38,7 +38,7 @@ OpenLocate utilizes  several services within iOS’s CoreLocation API to provide
 
 Given that location updates are sparse, the context in which the location updates occurred in is recorded in location_context.
 
-In order to minimize battery usage and network traffic to your server, the location updates are not transmitted immediately to minimize battery usage and network traffic to your server, but rather batched locally for sending at a defined interval. The default transmission interval is six hours. Once successfully transmitted, the location updates are no longer stored on the device.
+In order to minimize battery usage and network traffic to your server, the location updates are not transmitted immediately to minimize battery usage and network traffic to your server, but rather batched locally for sending at a defined interval. The default transmission interval is six hours, though this interval can be configured. Once successfully transmitted, the location updates are no longer stored on the device.
 
 ## Installation
 
