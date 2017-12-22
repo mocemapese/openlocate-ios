@@ -38,7 +38,7 @@ OpenLocate utilizes  several services within iOS’s CoreLocation API to provide
 
 Given that location updates are sparse, the context in which the location updates occurred in is recorded in location_context.
 
-In order to minimize battery usage and network traffic to your server, the location updates are not transmitted immediately to minimize battery usage and network traffic to your server, but rather batched locally for sending at a defined interval. The default transmission interval is six hours, though this interval can be configured. Once successfully transmitted, the location updates are no longer stored on the device.
+In order to minimize battery usage and network traffic to your server, the location updates are not transmitted immediately, but rather batched locally for transmission at a defined interval. The default transmission interval is six hours, though this interval can be configured. Once successfully transmitted, the location updates are no longer stored on the device.
 
 ## Installation
 
@@ -103,7 +103,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
 #### Configuring multiple endpoints
 
-If you would like to send the data to multiple endpoints, you can do so by creating multiple `Configuration.Endpoint` objects and passing them in to the `Configuration` object.
+If you would like to send the data to multiple endpoints, you can do so by creating multiple `Configuration.Endpoint` objects and passing them in to the `Configuration` object. If data fails to be sent to any given endpoint, data will be saved locally and re-tried in later transmissions. A maximum of 10 days worth of data is kept.
 
 ```swift
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]? ) -> Bool {
