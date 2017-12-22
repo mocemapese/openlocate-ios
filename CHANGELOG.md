@@ -12,7 +12,7 @@
 
 #### Fixed
 
-- Fix duplicate location data being sent. #71
+- Fix duplicate location data being sent. (#71)
 
 ---
 
@@ -32,6 +32,6 @@
 
 ---
 
-## [0.1.0]
+## 0.1.0
 
 Initial release!
