@@ -37,7 +37,7 @@ public struct NetworkInfo {
                 let interfaceName: UnsafeRawPointer = CFArrayGetValueAtIndex(interface, i)
                 let rec = unsafeBitCast(interfaceName, to: AnyObject.self)
                 if let unsafeInterfaceData = CNCopyCurrentNetworkInfo("\(rec)" as CFString),
-                    let interfaceData = unsafeInterfaceData as? [String : AnyObject] {
+                    let interfaceData = unsafeInterfaceData as? [String: AnyObject] {
                     networkInfo.bssid = interfaceData["BSSID"] as? String
                     networkInfo.ssid = interfaceData["SSID"] as? String
                 } else {

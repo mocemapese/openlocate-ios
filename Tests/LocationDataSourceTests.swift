@@ -137,7 +137,8 @@ class LocationDataSourceTests: BaseTestCase {
 
         // Then
         do {
-            let firstLocation = try OpenLocateLocation(data: firstIndexedLocation!.1.data)
+            let firstLocation = try OpenLocateLocation(data: firstIndexedLocation!.data,
+                                                       createdAt: firstIndexedLocation!.createdAt!)
             XCTAssertEqual(firstLocation.locationFields.coordinates?.latitude,
                            testLocation.locationFields.coordinates?.latitude)
             XCTAssertEqual(firstLocation.locationFields.coordinates?.longitude,
@@ -257,7 +258,8 @@ class LocationListDataSource: BaseTestCase {
 
         // Then
         do {
-            let firstLocation = try OpenLocateLocation(data: firstIndexedLocation!.1.data)
+            let firstLocation = try OpenLocateLocation(data: firstIndexedLocation!.data,
+                                                       createdAt: firstIndexedLocation!.timestamp)
             XCTAssertEqual(firstLocation.locationFields.coordinates?.latitude,
                            testLocation.locationFields.coordinates?.latitude)
             XCTAssertEqual(firstLocation.locationFields.coordinates?.longitude,

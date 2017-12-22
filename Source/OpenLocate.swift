@@ -41,9 +41,6 @@ private protocol OpenLocateType {
 }
 
 public final class OpenLocate: OpenLocateType {
-    private enum Constants {
-        static let defaultTransmissionInterval: TimeInterval = 8 * 60 * 60 // 8 Hours
-    }
 
     private var locationService: LocationServiceType?
 
@@ -72,11 +69,10 @@ extension OpenLocate {
         self.locationService = LocationService(
             postable: httpClient,
             locationDataSource: locationDataSource,
-            url: configuration.url.absoluteString,
-            headers: configuration.headers,
+            endpoints: configuration.endpoints,
             advertisingInfo: advertisingInfo,
             locationManager: locationManager,
-            transmissionInterval: Constants.defaultTransmissionInterval,
+            transmissionInterval: configuration.transmissionInterval,
             logConfiguration: configuration.collectingFieldsConfiguration
         )
 
