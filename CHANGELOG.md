@@ -10,6 +10,10 @@
 - Add ability to set the location data transmission interval via `Configuration` class
 - Change default transmission interval to 6 hours instead of 8 hours
 
+#### Fixed
+
+- Fix duplicate location data being sent. #71
+
 ---
 
 ## [1.0.0](https://github.com/OpenLocate/openlocate-ios/tag/1.0.0)
