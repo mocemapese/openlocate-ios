@@ -33,6 +33,8 @@ enum SQLiteError: Error {
 }
 
 protocol Database {
+    var userVersion: Int { get set }
+
     @discardableResult
     func execute(statement: Statement) throws -> Result
     func begin()
@@ -46,7 +48,7 @@ final class SQLiteDatabase: Database {
         static let databaseQueue = "openlocate.sqlite3.queue"
     }
 
-    private let sqliteTransient = unsafeBitCast(-1, to:sqlite3_destructor_type.self)
+    private let sqliteTransient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
     private let queue = DispatchQueue(label: Constants.databaseQueue, attributes: [])
 
     private let database: OpaquePointer
@@ -61,7 +63,7 @@ final class SQLiteDatabase: Database {
     }
 
     private var errorMessage: String {
-        return String(cString:sqlite3_errmsg(database))
+        return String(cString: sqlite3_errmsg(database))
     }
 }
 
@@ -143,7 +145,7 @@ extension SQLiteDatabase {
         } else if let data = object as? NSData {
             flag = sqlite3_bind_blob(statement, CInt(column), data.bytes, CInt(data.length), sqliteTransient)
         } else if let date = object as? Date {
-            let txt = fmt.string(from:date)
+            let txt = Formatter.sqliteDateFormatter.string(from: date)
             flag = sqlite3_bind_text(statement, CInt(column), txt, -1, sqliteTransient)
         } else if let val = object as? Bool {
             let num = val ? 1 : 0
@@ -181,10 +183,8 @@ extension SQLiteDatabase {
 
     private func checkResult(_ code: CInt) throws {
         switch code {
-        case SQLITE_DONE, SQLITE_OK:
+        case SQLITE_DONE, SQLITE_OK, SQLITE_ROW:
             break
-        case SQLITE_ROW:
-            throw SQLiteError.step(message: errorMessage)
         case SQLITE_CONSTRAINT:
             throw SQLiteError.step(message: errorMessage)
         default:
@@ -194,6 +194,22 @@ extension SQLiteDatabase {
 }
 
 extension SQLiteDatabase {
+
+    public var userVersion: Int {
+        get {
+            let statement = SQLStatement.Builder().set(query: "PRAGMA user_version;").build()
+            if let result = try? execute(statement: statement) {
+                _ = result.next()
+                return Int(result.intValue(column: 0))
+            }
+            return 0
+        }
+        set {
+            let statement = SQLStatement.Builder().set(query: "PRAGMA user_version = \(newValue)").build()
+            _ = try? execute(statement: statement)
+        }
+    }
+
     func begin() {
         let query = "BEGIN EXCLUSIVE"
         let statement = SQLStatement.Builder()

@@ -28,16 +28,36 @@ public typealias Headers = [String: String]
 
 public struct Configuration {
 
-    let url: URL
-    let headers: Headers?
+    public struct Endpoint {
+        let url: URL
+        let headers: Headers?
+
+        public init(url: URL, headers: Headers?) {
+            self.url = url
+            self.headers = headers
+        }
+    }
+
+    let endpoints: [Endpoint]
     let collectingFieldsConfiguration: CollectingFieldsConfiguration
+    let transmissionInterval: TimeInterval
+
+    public static let defaultTransmissionInterval: TimeInterval = 6 * 60 * 60 // 6 Hours
+
+    public init(endpoints: [Endpoint],
+                collectingFieldsConfiguration: CollectingFieldsConfiguration = .default,
+                transmissionInterval: TimeInterval = defaultTransmissionInterval) {
+
+        self.endpoints = endpoints
+        self.collectingFieldsConfiguration = collectingFieldsConfiguration
+        self.transmissionInterval = transmissionInterval
+    }
 
     public init(url: URL,
                 headers: Headers? = nil,
                 collectingFieldsConfiguration: CollectingFieldsConfiguration = .default) {
 
-        self.url = url
-        self.headers = headers
-        self.collectingFieldsConfiguration = collectingFieldsConfiguration
+        self.init(endpoints: [Endpoint(url: url, headers: headers)],
+                  collectingFieldsConfiguration: collectingFieldsConfiguration)
     }
 }

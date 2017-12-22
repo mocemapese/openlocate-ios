@@ -39,13 +39,7 @@ protocol DataType {
 
 // MARK: - Location
 
-/**
- LocationType protocol defines a location type object.
- */
-
-protocol OpenLocateLocationType: JsonParameterType, DataType {}
-
-public struct OpenLocateLocation: OpenLocateLocationType {
+public struct OpenLocateLocation: JsonParameterType, DataType {
 
     private struct Keys {
         static let privateTimestamp = "private_utc_timestamp"
@@ -88,6 +82,7 @@ public struct OpenLocateLocation: OpenLocateLocationType {
     public let locationFields: LocationCollectingFields
     public let deviceInfo: DeviceCollectingFields
     public let context: Context
+    var createdAt: Date?
 
     var debugDescription: String {
         return "OpenLocateLocation(location: \(locationFields), advertisingInfo: \(advertisingInfo))"
@@ -169,7 +164,7 @@ extension OpenLocateLocation {
 }
 
 extension OpenLocateLocation {
-    init(data: Data) throws {
+    init(data: Data, createdAt: Date) throws {
         guard let coding = NSKeyedUnarchiver.unarchiveObject(with: data) as? Coding else {
             throw OpenLocateLocationError.unarchivingCannotBeDone
         }
@@ -211,6 +206,8 @@ extension OpenLocateLocation {
         } else {
             self.context = .unknown
         }
+
+        self.createdAt = createdAt
     }
 
     var data: Data {

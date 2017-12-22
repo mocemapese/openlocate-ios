@@ -24,19 +24,20 @@
 
 import Foundation
 
-typealias IndexedLocation = (Int, OpenLocateLocationType)
-
 protocol LocationDataSourceType {
 
     var count: Int { get }
 
-    func add(location: OpenLocateLocationType) throws
-    func addAll(locations: [OpenLocateLocationType])
+    func add(location: OpenLocateLocation) throws
+    func addAll(locations: [OpenLocateLocation])
 
-    func first() -> IndexedLocation?
-    func all() -> [IndexedLocation]
+    func first() -> OpenLocateLocation?
+
+    func all() -> [OpenLocateLocation]
+    func all(starting: Date, ending: Date) -> [OpenLocateLocation]
 
     func clear()
+    func clear(before: Date)
 }
 
 final class LocationDatabase: LocationDataSourceType {
@@ -45,11 +46,13 @@ final class LocationDatabase: LocationDataSourceType {
         static let tableName = "Location"
         static let columnId = "_id"
         static let columnLocation = "location"
+        static let columnCreatedAt = "created_at"
     }
 
-    private let database: Database
+    private var database: Database
+    private let currentDatabaseVersion: Int = 2
 
-    func add(location: OpenLocateLocationType) throws {
+    func add(location: OpenLocateLocation) throws {
         let query = "INSERT INTO " +
         "\(Constants.tableName) " +
         "(\(Constants.columnLocation)) " +
@@ -63,7 +66,7 @@ final class LocationDatabase: LocationDataSourceType {
         try database.execute(statement: statement)
     }
 
-    func addAll(locations: [OpenLocateLocationType]) {
+    func addAll(locations: [OpenLocateLocation]) {
         if locations.isEmpty {
             return
         }
@@ -124,7 +127,21 @@ final class LocationDatabase: LocationDataSourceType {
         }
     }
 
-    func first() -> IndexedLocation? {
+    func clear(before: Date) {
+        let query = "DELETE FROM \(Constants.tableName) WHERE created_at <= ?;"
+        let statement = SQLStatement.Builder()
+            .set(query: query)
+            .set(args: [before])
+            .build()
+
+        do {
+            try database.execute(statement: statement)
+        } catch let error {
+            debugPrint(error.localizedDescription)
+        }
+    }
+
+    func first() -> OpenLocateLocation? {
         let query = "SELECT * FROM \(Constants.tableName) LIMIT 1"
         let statement = SQLStatement.Builder()
             .set(query: query)
@@ -134,11 +151,11 @@ final class LocationDatabase: LocationDataSourceType {
         do {
             let result = try database.execute(statement: statement)
             if result.next() {
-                let index = result.intValue(column: Constants.columnId)
                 let data = result.dataValue(column: Constants.columnLocation)
+                let createdAtDate = result.dateValue(column: Constants.columnCreatedAt)
 
-                if let data = data {
-                    return (index, try OpenLocateLocation(data: data))
+                if let data = data, let createdAtDate = createdAtDate {
+                    return try OpenLocateLocation(data: data, createdAt: createdAtDate)
                 }
             }
         } catch let error {
@@ -148,29 +165,60 @@ final class LocationDatabase: LocationDataSourceType {
         return nil
     }
 
-    func all() -> [IndexedLocation] {
-        let query = "SELECT * FROM \(Constants.tableName)"
+    func all() -> [OpenLocateLocation] {
+        let query = "SELECT * FROM \(Constants.tableName) ORDER BY created_at ASC"
         let statement = SQLStatement.Builder()
             .set(query: query)
             .set(cached: true)
             .build()
 
-        var locations = [IndexedLocation]()
+        var locations = [OpenLocateLocation]()
 
         do {
             let result = try database.execute(statement: statement)
 
             while result.next() {
-                let index = result.intValue(column: Constants.columnId)
                 let data = result.dataValue(column: Constants.columnLocation)
+                let createdAtDate = result.dateValue(column: Constants.columnCreatedAt)
 
-                if let data = data {
+                if let data = data, let createdAtDate = createdAtDate {
                     locations.append(
-                        (index, try OpenLocateLocation(data: data))
+                        try OpenLocateLocation(data: data, createdAt: createdAtDate)
                     )
                 }
             }
 
+        } catch let error {
+            debugPrint(error.localizedDescription)
+        }
+
+        return locations
+    }
+
+    func all(starting: Date, ending: Date) -> [OpenLocateLocation] {
+        let query = """
+                    SELECT * FROM \(Constants.tableName) WHERE created_at > ? AND created_at < ? ORDER BY created_at ASC
+                    """
+        let statement = SQLStatement.Builder()
+            .set(query: query)
+            .set(args: [starting, ending])
+            .set(cached: true)
+            .build()
+
+        var locations = [OpenLocateLocation]()
+        do {
+            let result = try database.execute(statement: statement)
+            while result.next() {
+
+                let data = result.dataValue(column: Constants.columnLocation)
+                let createdAtDate = result.dateValue(column: Constants.columnCreatedAt)
+
+                if let data = data, let createdAtDate = createdAtDate {
+                    locations.append(
+                        try OpenLocateLocation(data: data, createdAt: createdAtDate)
+                    )
+                }
+            }
         } catch let error {
             debugPrint(error.localizedDescription)
         }
@@ -184,18 +232,46 @@ final class LocationDatabase: LocationDataSourceType {
     }
 
     private func createTableIfNotExists() {
+
+        let userVersion = database.userVersion
+        if userVersion != currentDatabaseVersion {
+            dropTableIfExists()
+        }
+
         let query = "CREATE TABLE IF NOT EXISTS " +
         "\(Constants.tableName) (" +
         "\(Constants.columnId) INTEGER PRIMARY KEY AUTOINCREMENT, " +
-        "\(Constants.columnLocation) BLOB NOT NULL" +
-        ");"
+        "\(Constants.columnLocation) BLOB NOT NULL, " +
+        "\(Constants.columnCreatedAt) datetime default current_timestamp" +
+        "); "
 
-        let statement = SQLStatement.Builder()
+        let index = "CREATE INDEX IF NOT EXISTS `\(Constants.columnCreatedAt)_index` " +
+        "ON `\(Constants.tableName)` (`\(Constants.columnCreatedAt)` ASC);"
+
+        let createTableStatement = SQLStatement.Builder()
         .set(query: query)
         .build()
 
+        let createIndexStatement = SQLStatement.Builder()
+            .set(query: index)
+            .build()
+
         do {
-            try database.execute(statement: statement)
+            try database.execute(statement: createTableStatement)
+            try database.execute(statement: createIndexStatement)
+            database.userVersion = currentDatabaseVersion
+        } catch let error {
+            debugPrint(error.localizedDescription)
+        }
+    }
+
+    private func dropTableIfExists() {
+        let dropTableStatement = SQLStatement.Builder()
+            .set(query: "DROP TABLE IF EXISTS \(Constants.tableName)")
+            .build()
+
+        do {
+            try database.execute(statement: dropTableStatement)
         } catch let error {
             debugPrint(error.localizedDescription)
         }
@@ -204,40 +280,53 @@ final class LocationDatabase: LocationDataSourceType {
 
 final class LocationList: LocationDataSourceType {
 
-    private var locations: [OpenLocateLocationType]
+    private var locations: [OpenLocateLocation]
 
     var count: Int {
         return self.locations.count
     }
 
     init() {
-        self.locations = [OpenLocateLocationType]()
+        self.locations = [OpenLocateLocation]()
     }
 
-    func add(location: OpenLocateLocationType) {
+    func add(location: OpenLocateLocation) {
         self.locations.append(location)
     }
 
-    func addAll(locations: [OpenLocateLocationType]) {
+    func addAll(locations: [OpenLocateLocation]) {
         self.locations.append(contentsOf: locations)
     }
 
-    func first() -> IndexedLocation? {
-        if let location = self.locations.first {
-            return (0, location)
-        }
-        return nil
+    func first() -> OpenLocateLocation? {
+        return self.locations.first
     }
 
-    func all() -> [IndexedLocation] {
-        var locations = [IndexedLocation]()
-        self.locations.enumerated().forEach { indexedLocation in
-            locations.append(indexedLocation)
+    func all() -> [OpenLocateLocation] {
+        return self.locations
+    }
+
+    func all(starting: Date, ending: Date) -> [OpenLocateLocation] {
+        var locations = [OpenLocateLocation]()
+        self.locations.forEach { location in
+            if location.timestamp > starting && location.timestamp < ending {
+                locations.append(location)
+            }
         }
         return locations
     }
 
     func clear() {
         self.locations.removeAll()
+    }
+
+    func clear(before: Date) {
+        var locations = [OpenLocateLocation]()
+        self.locations.forEach { location in
+            if location.timestamp <= before {
+                locations.append(location)
+            }
+        }
+        self.locations = locations
     }
 }
