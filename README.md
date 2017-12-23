@@ -301,17 +301,17 @@ Refer to the [Data Drop Quick Reference](https://www.wolfram.com/datadrop/quick-
 To send user's location data to a databin via the Data Drop Web API:
 
 ```swift
-Alamofire.request("https://datadrop.wolframcloud.com/api/v1.0/Add?bin=pHUeJojI", method: .post, parameters: parameters, encoding: JSONEncoding.default)
 func pushLocationToDataDrop(location: OpenLocateLocation) {
-
-        Alamofire.request(
-            "https://datadrop.wolframcloud.com/api/v1.0/Add?bin=<YOUR BIN ID>",
-            parameters: location.locationFields
-        )
-            .responseJSON { response in
-                debugPrint(response)
-        }
-    }
+  Alamofire.request(
+    "https://datadrop.wolframcloud.com/api/v1.0/Add?bin=<YOUR BIN ID>",
+		method: .post,
+    parameters: location.locationFields,
+		encoding: JSONEncoding.default
+  )
+  .responseJSON { response in
+    debugPrint(response)
+  }
+}
 ```
 
 ## Fields collected for request
