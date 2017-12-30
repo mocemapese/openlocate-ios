@@ -340,46 +340,49 @@ func pushLocationToDataDrop(location: OpenLocateLocation) {
 
 This is a sample request body sent by the SDK. 
 ```json
-[
-  {
-    "ad_id": "12a451dd-3539-4092-b134-8cb0ef62ab8a",
-    "ad_opt_out": true,
-    "id_type": "idfa",
-    "latitude": "37.773972",
-    "longitude": "-122.431297",
-    "utc_timestamp": "1508356559",
-    "horizontal_accuracy": 12.323,
-    "vertical_accuracy": 5.3,
-    "altitude": 0.456,
-    "wifi_ssid": "OpenLocate_Guest",
-    "wifi_bssid": "OpenLocate_Guest",
-    "location_context": "regular",
-    "course": 175.0,
-    "speed": 11.032,
-    "is_charging": true,
-    "device_model": "iPhone 7",
-    "os_version": "iOS 11.0.3"
-  },
-  {
-    "ad_id": "12a451dd-3539-4092-b134-8cb0ef62ab8a",
-    "ad_opt_out": true,
-    "id_type": "idfa",
-    "latitude": "37.773972",
-    "longitude": "-122.431297",
-    "utc_timestamp": "1508356559",
-    "horizontal_accuracy": 12.323,
-    "vertical_accuracy": 5.3,
-    "altitude": 0.456,
-    "wifi_ssid": "OpenLocate_Guest",
-    "wifi_bssid": "OpenLocate_Guest",
-    "location_context": "regular",
-    "course": 175.0,
-    "speed": 11.032,
-    "is_charging": true,
-    "device_model": "iPhone 7",
-    "os_version": "iOS 11.0.3"
-  }
-]
+{
+"locations":
+	[
+		{
+			"ad_id": "12a451dd-3539-4092-b134-8cb0ef62ab8a",
+			"ad_opt_out": true,
+			"id_type": "idfa",
+			"latitude": "37.773972",
+			"longitude": "-122.431297",
+			"utc_timestamp": "1508356559",
+			"horizontal_accuracy": 12.323,
+			"vertical_accuracy": 5.3,
+			"altitude": 0.456,
+			"wifi_ssid": "OpenLocate_Guest",
+			"wifi_bssid": "OpenLocate_Guest",
+			"location_context": "regular",
+			"course": 175.0,
+			"speed": 11.032,
+			"is_charging": true,
+			"device_model": "iPhone 7",
+			"os_version": "iOS 11.0.3"
+		},
+		{
+			"ad_id": "12a451dd-3539-4092-b134-8cb0ef62ab8a",
+			"ad_opt_out": true,
+			"id_type": "idfa",
+			"latitude": "37.773972",
+			"longitude": "-122.431297",
+			"utc_timestamp": "1508356559",
+			"horizontal_accuracy": 12.323,
+			"vertical_accuracy": 5.3,
+			"altitude": 0.456,
+			"wifi_ssid": "OpenLocate_Guest",
+			"wifi_bssid": "OpenLocate_Guest",
+			"location_context": "regular",
+			"course": 175.0,
+			"speed": 11.032,
+			"is_charging": true,
+			"device_model": "iPhone 7",
+			"os_version": "iOS 11.0.3"
+		}
+	]
+}
 ```
 
 If you want to have the SDK send data to your own AWS s3 environment for example, look into setting up an [Kinesis firehose](https://aws.amazon.com/kinesis/firehose/) according to the SDK request above.
