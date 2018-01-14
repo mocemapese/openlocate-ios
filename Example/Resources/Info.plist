@@ -41,9 +41,9 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>OpenLocate would like to access location.</string>
 	<key>ProviderId</key>
-	<string>***REMOVED***</string>
+	<string>YOUR_PROVIDER_ID</string>
 	<key>Token</key>
-	<string>***REMOVED***</string>
+	<string>YOUR_TOKEN</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
