@@ -2,6 +2,12 @@
 
 `OpenLocate-iOS` adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.1.1](https://github.com/OpenLocate/openlocate-ios/tag/1.1.1)
+
+#### Fixed
+
+- Fix duplicate location data being sent.
+
 ## [1.1.0](https://github.com/OpenLocate/openlocate-ios/tag/1.1.0)
 
 #### Added

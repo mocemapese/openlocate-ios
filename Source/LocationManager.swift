@@ -126,7 +126,9 @@ final class LocationManager: NSObject, LocationManagerType, CLLocationManagerDel
             for request in requests {
                 request([(location: location, context: OpenLocateLocation.Context.geofenceExit)])
             }
-            startMonitoringVisitRegion(with: location.coordinate, maxRadius: location.horizontalAccuracy)
+            if manager.monitoredRegions.contains(region) {
+                startMonitoringVisitRegion(with: location.coordinate, maxRadius: location.horizontalAccuracy)
+            }
         }
     }
 
@@ -149,7 +151,9 @@ final class LocationManager: NSObject, LocationManagerType, CLLocationManagerDel
     // MARK: LocationManagerType
 
     func subscribe(_ locationHandler: @escaping LocationsHandler) {
-        requests.append(locationHandler)
+        if requests.isEmpty {
+            requests.append(locationHandler)
+        }
         requestAuthorizationIfNeeded()
         manager.startMonitoringVisits()
         manager.startMonitoringSignificantLocationChanges()
