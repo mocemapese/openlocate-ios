@@ -62,7 +62,7 @@ extension OpenLocate {
             locationDataSource = LocationList()
         }
 
-        let locationManager = LocationManager()
+        let locationManager = LocationManager(requestAuthorizationStatus: configuration.authorizationStatus)
 
         self.configuration = configuration
 
@@ -112,7 +112,7 @@ extension OpenLocate {
             completionHandler(.noData)
             return
         }
-        locationService.fetchLocation { (success) in
+        locationService.backgroundFetchLocation { (success) in
             if success {
                 completionHandler(.newData)
             } else {
@@ -145,7 +145,7 @@ extension OpenLocate {
     public func fetchCurrentLocation(completion: (OpenLocateLocation?, Error?) -> Void) throws {
         try validateLocationAuthorizationKeys()
 
-        let manager = LocationManager()
+        let manager = LocationManager(requestAuthorizationStatus: .authorizedWhenInUse)
         let lastLocation = manager.lastLocation
 
         guard let location = lastLocation else {

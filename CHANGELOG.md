@@ -2,6 +2,13 @@
 
 `OpenLocate-iOS` adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.2.0](https://github.com/OpenLocate/openlocate-ios/tag/1.2.0)
+
+#### Added
+
+- Add ability to collect location data while in foreground
+- Add ability to only collect location data with "While In Use" location authorization
+
 ## [1.1.1](https://github.com/OpenLocate/openlocate-ios/tag/1.1.1)
 
 #### Fixed

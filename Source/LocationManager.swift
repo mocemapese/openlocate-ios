@@ -45,11 +45,15 @@ final class LocationManager: NSObject, LocationManagerType, CLLocationManagerDel
     static let minimumVisitRegionRadius = 25.0
 
     private let manager: CLLocationManagerType
+    private let requestAuthorizationStatus: CLAuthorizationStatus
+
     private var requests: [LocationsHandler] = []
     private var fetchLocationCompletionHandler: ((Bool) -> Void)?
 
-    required init(manager: CLLocationManagerType = CLLocationManager()) {
+    required init(manager: CLLocationManagerType = CLLocationManager(),
+                  requestAuthorizationStatus: CLAuthorizationStatus) {
         self.manager = manager
+        self.requestAuthorizationStatus = requestAuthorizationStatus
 
         super.init()
 
@@ -142,10 +146,7 @@ final class LocationManager: NSObject, LocationManagerType, CLLocationManagerDel
     }
 
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        if status == .authorizedAlways && updatingLocation {
-            manager.startMonitoringVisits()
-            manager.startMonitoringSignificantLocationChanges()
-        }
+        updateRunningLocationServicesForAuthorizationStatus(status)
     }
 
     // MARK: LocationManagerType
@@ -155,8 +156,7 @@ final class LocationManager: NSObject, LocationManagerType, CLLocationManagerDel
             requests.append(locationHandler)
         }
         requestAuthorizationIfNeeded()
-        manager.startMonitoringVisits()
-        manager.startMonitoringSignificantLocationChanges()
+        updateRunningLocationServicesForAuthorizationStatus(LocationManager.authorizationStatus())
     }
 
     func cancel() {
@@ -183,10 +183,31 @@ final class LocationManager: NSObject, LocationManagerType, CLLocationManagerDel
         regions.forEach { manager.stopMonitoring(for: $0) }
     }
 
+    private func updateRunningLocationServicesForAuthorizationStatus(_ status: CLAuthorizationStatus) {
+        if status == .authorizedAlways && requestAuthorizationStatus == .authorizedAlways && updatingLocation {
+            manager.startMonitoringVisits()
+            manager.startMonitoringSignificantLocationChanges()
+        } else {
+            manager.stopMonitoringVisits()
+            manager.stopMonitoringSignificantLocationChanges()
+        }
+    }
+
     private func requestAuthorizationIfNeeded() {
         let status = CLLocationManager.authorizationStatus()
-        if status == .notDetermined || status == .authorizedWhenInUse {
-            manager.requestAlwaysAuthorization()
+        switch status {
+        case .notDetermined:
+            if requestAuthorizationStatus == .authorizedWhenInUse {
+                manager.requestWhenInUseAuthorization()
+            } else if requestAuthorizationStatus == .authorizedAlways {
+                manager.requestAlwaysAuthorization()
+            }
+        case .authorizedWhenInUse:
+            if requestAuthorizationStatus == .authorizedAlways {
+                manager.requestAlwaysAuthorization()
+            }
+        default:
+            break
         }
     }
 

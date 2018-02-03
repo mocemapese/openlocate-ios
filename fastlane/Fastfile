@@ -1,6 +1,6 @@
 require 'fileutils'
 
-fastlane_version "2.47.0"
+fastlane_version "2.75.1"
 
 default_platform :ios
 
@@ -14,8 +14,7 @@ platform :ios do
       scheme: 'OpenLocate',
       device: 'iPhone 7',
       code_coverage: true,
-      skip_build: true,
-      slack_message: 'OpenLocate Unit Tests'
+      skip_build: true
     )
     
     xcov(
@@ -26,52 +25,42 @@ platform :ios do
   end
 
   desc 'Ensure git is clean'
-  desc 'Test framework'
   desc 'build'
-  desc 'Push to testflight'
-  lane :testflight_debug do
+  desc 'Push to Fabric BETA'
+  lane :deploy_beta do
     xcodeproj = 'Example/iOS Example.xcodeproj'
-    scheme = 'iOS Example'
+    scheme = ‘OpenLocate’
 
     # ensure that the branch is clean
     ensure_git_status_clean
-
-    # test framework
-    test
 
     # Change build number to current time stamp
     build_number = Time.new.strftime("%Y.%m.%d.%H.%M.%S")
     increment_build_number(
       build_number: build_number,
-      xcodeproj: xcodeproj,
+      xcodeproj: xcodeproj
     )
 
     # set secret keys
     set_info_plist_value(path: "./Example/Resources/Info.plist", key: "Token", value: ENV['OPEN_LOCATE_TOKEN'])
     set_info_plist_value(path: "./Example/Resources/Info.plist", key: "ProviderId", value: ENV['OPEN_LOCATE_PROVIDER_ID'])
 
+    cert(username: ENV["APPLE_DEVELOPER_EMAIL"])
+
+    sigh(username: ENV["APPLE_DEVELOPER_EMAIL"], adhoc: true)
+
     # build example app
     gym(
       scheme: scheme,
-      output_directory: 'build',
-      output_name: 'example',
+      export_method: "ad-hoc"
     )
 
-    # release to testflight
-    pilot(
-      skip_submission: true,
-      ipa: 'build/example.ipa',
-    )
-    
-    # post message to slack
-    slack(
-      message: 'Latest and greatest example app uploaded to TestFlight :rocket:',
-      success: true,
-      payload: {
-        'Build Number' => build_number,
-      },
-    )
-    
+    crashlytics(api_token: ENV["FABRIC_API_TOKEN"],
+             build_secret: ENV["FABRIC_BUILD_SECRET"],
+                   groups: ENV["FABRIC_GROUPS"],
+            notifications: true)
+
+    clean_build_artifacts
   end
 
   desc "Zip and copy to right folder"
@@ -106,7 +95,7 @@ platform :ios do
     file = "build/#{version}.zip"
 
     upload_to_s3(
-      region: "ENV['S3_REGION'],
+      region: ENV['S3_REGION'],
       bucket: ENV['S3_BUCKET'],
       access_key: ENV['S3_ACCESS_KEY'],
       secret_access_key: ENV['S3_SECRET_ACCESS_KEY'],
@@ -169,23 +158,20 @@ platform :ios do
     update_podspec version: version
     push_podspec
 
-    # post message to slack
-    slack(
-      message: 'Published new version of the SDK :rocket:',
-      success: true,
-      payload: {
-        'Version' => version,
-      },
-    )
+    # # post message to slack
+    # slack(
+    #   message: 'Published new version of the SDK :rocket:',
+    #   success: true,
+    #   payload: {
+    #     'Version' => version,
+    #   },
+    # )
     
   end
 
   desc 'Post to slack if error'
   error do |lane, exception|
-    slack(
-      message: exception.message,
-      success: false,
-    )
+    clean_build_artifacts
   end
 
 end

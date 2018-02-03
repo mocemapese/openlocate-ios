@@ -26,6 +26,7 @@ import UIKit
 import OpenLocate
 import Fabric
 import Crashlytics
+import CoreLocation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -37,15 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         Fabric.with([Crashlytics.self])
 
-        if let token = Bundle.main.object(forInfoDictionaryKey: "Token") as? String,
-            let uuid = Bundle.main.object(forInfoDictionaryKey: "ProviderId") as? String {
-
-            let url = URL(string: "https://api.safegraph.com/v1/provider/\(uuid)/devicelocation")!
-            let headers = ["Authorization": "Bearer \(token)"]
-
-            let configuration = Configuration(url: url, headers: headers)
-            try? OpenLocate.shared.initialize(with: configuration)
-        }
+        configureOpenLocate()
 
         return true
     }
@@ -53,6 +46,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         OpenLocate.shared.performFetchWithCompletionHandler(completionHandler)
+    }
+
+    func configureOpenLocate() {
+        if let token = Bundle.main.object(forInfoDictionaryKey: "Token") as? String,
+            let uuid = Bundle.main.object(forInfoDictionaryKey: "ProviderId") as? String {
+
+            let url = URL(string: "https://api.safegraph.com/v1/provider/\(uuid)/devicelocation")!
+            let headers = ["Authorization": "Bearer \(token)"]
+
+            let configuration = Configuration(url: url,
+                                              headers: headers,
+                                              authorizationStatus: storedAuthorizationStatus())
+            try? OpenLocate.shared.initialize(with: configuration)
+        }
+    }
+
+    private func storedAuthorizationStatus() -> CLAuthorizationStatus {
+        let authorizationStatusRaw = Int32(UserDefaults.standard.integer(forKey: "authorization_status"))
+        return CLAuthorizationStatus(rawValue: authorizationStatusRaw) ?? .authorizedAlways
     }
 
 }

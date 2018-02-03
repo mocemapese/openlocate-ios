@@ -20,23 +20,6 @@
 		E2E33C69BC71D4991E5BA3CB /* Pods_iOS_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DAE725BE77344580A00D223 /* Pods_iOS_Example.framework */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		489D2D0C1F38772400826BE6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 489D2D071F38772300826BE6 /* OpenLocate.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 489701171F04F6AE00D8C27C;
-			remoteInfo = OpenLocate;
-		};
-		489D2D0E1F38772400826BE6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 489D2D071F38772300826BE6 /* OpenLocate.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 48E45DDF1F052344006EAF6F;
-			remoteInfo = "OpenLocate Tests";
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		489701591F04FF0C00D8C27C /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -62,7 +45,6 @@
 		489701221F04F7ED00D8C27C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Main.storyboard; sourceTree = "<group>"; };
 		489701231F04F7ED00D8C27C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Resources/Info.plist; sourceTree = "<group>"; };
 		489D2D061F38771B00826BE6 /* iOS Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		489D2D071F38772300826BE6 /* OpenLocate.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OpenLocate.xcodeproj; path = ../OpenLocate.xcodeproj; sourceTree = "<group>"; };
 		48A0D5E71F4706E900E12C54 /* TrackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TrackViewController.swift; path = Source/TrackViewController.swift; sourceTree = "<group>"; };
 		48A171D41F347BBE00AC9F22 /* OpenLocate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = OpenLocate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DAE725BE77344580A00D223 /* Pods_iOS_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOS_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -95,7 +77,6 @@
 			isa = PBXGroup;
 			children = (
 				489701191F04F79B00D8C27C /* Source */,
-				489D2D071F38772300826BE6 /* OpenLocate.xcodeproj */,
 				8573011B6CEC68CA7DE1D705 /* Frameworks */,
 				489D2D061F38771B00826BE6 /* iOS Example.app */,
 				096E78CF797C9CD59991061E /* Pods */,
@@ -133,15 +114,6 @@
 			);
 			name = Base.lproj;
 			path = Resources/Base.lproj;
-			sourceTree = "<group>";
-		};
-		489D2D081F38772300826BE6 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				489D2D0D1F38772400826BE6 /* OpenLocate.framework */,
-				489D2D0F1F38772400826BE6 /* OpenLocate Tests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		8573011B6CEC68CA7DE1D705 /* Frameworks */ = {
@@ -191,7 +163,7 @@
 				TargetAttributes = {
 					489701011F04F6A900D8C27C = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = 8XNJ93W9ZP;
+						DevelopmentTeam = N7C984W2M5;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -213,35 +185,12 @@
 			mainGroup = 489700F91F04F6A900D8C27C;
 			productRefGroup = 489700F91F04F6A900D8C27C;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 489D2D081F38772300826BE6 /* Products */;
-					ProjectRef = 489D2D071F38772300826BE6 /* OpenLocate.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				489701011F04F6A900D8C27C /* iOS Example */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		489D2D0D1F38772400826BE6 /* OpenLocate.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = OpenLocate.framework;
-			remoteRef = 489D2D0C1F38772400826BE6 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		489D2D0F1F38772400826BE6 /* OpenLocate Tests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "OpenLocate Tests.xctest";
-			remoteRef = 489D2D0E1F38772400826BE6 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		489701001F04F6A900D8C27C /* Resources */ = {
@@ -273,16 +222,16 @@
 		};
 		4877E9091F1E394B002B10F5 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Fabric/run\" 3a259bb69225f2b7332f54ad76b8093a6e369077 6cb26519017e3e0c6997801ff9ad7074919081b6eb689f99f32fae2896ad548b";
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" 4f46919dc21e5b2645ebb47a192c69c5fe42e6a5 e10e7939387edd8220e29440075ff2b7aeedffa27a0bdb18a5949a8d1018913a";
 		};
 		C91174EBC6A74172B5D15FAD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -486,16 +435,18 @@
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2017.07.22.20.44.47;
-				DEVELOPMENT_TEAM = 8XNJ93W9ZP;
+				CURRENT_PROJECT_VERSION = 2018.01.27.22.10.32;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = N7C984W2M5;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.openlocate.ios.example;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.openlocate.ios.example-app";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
@@ -508,15 +459,16 @@
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2017.07.22.20.44.47;
-				DEVELOPMENT_TEAM = 8XNJ93W9ZP;
+				CURRENT_PROJECT_VERSION = 2018.01.27.22.10.32;
+				DEVELOPMENT_TEAM = N7C984W2M5;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.openlocate.ios.example;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.openlocate.ios.example-app";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};

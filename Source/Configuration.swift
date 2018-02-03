@@ -25,6 +25,7 @@
 public typealias Headers = [String: String]
 
 // Configuration
+import CoreLocation
 
 public struct Configuration {
 
@@ -41,23 +42,28 @@ public struct Configuration {
     let endpoints: [Endpoint]
     let collectingFieldsConfiguration: CollectingFieldsConfiguration
     let transmissionInterval: TimeInterval
+    let authorizationStatus: CLAuthorizationStatus
 
     public static let defaultTransmissionInterval: TimeInterval = 6 * 60 * 60 // 6 Hours
 
     public init(endpoints: [Endpoint],
                 collectingFieldsConfiguration: CollectingFieldsConfiguration = .default,
-                transmissionInterval: TimeInterval = defaultTransmissionInterval) {
+                transmissionInterval: TimeInterval = defaultTransmissionInterval,
+                authorizationStatus: CLAuthorizationStatus = .authorizedAlways) {
 
         self.endpoints = endpoints
         self.collectingFieldsConfiguration = collectingFieldsConfiguration
         self.transmissionInterval = transmissionInterval
+        self.authorizationStatus = authorizationStatus
     }
 
     public init(url: URL,
                 headers: Headers? = nil,
-                collectingFieldsConfiguration: CollectingFieldsConfiguration = .default) {
+                collectingFieldsConfiguration: CollectingFieldsConfiguration = .default,
+                authorizationStatus: CLAuthorizationStatus = .authorizedAlways) {
 
         self.init(endpoints: [Endpoint(url: url, headers: headers)],
-                  collectingFieldsConfiguration: collectingFieldsConfiguration)
+                  collectingFieldsConfiguration: collectingFieldsConfiguration,
+                  authorizationStatus: authorizationStatus)
     }
 }

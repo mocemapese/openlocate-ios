@@ -49,6 +49,7 @@ public struct OpenLocateLocation: JsonParameterType, DataType {
         static let latitude = "latitude"
         static let longitude = "longitude"
         static let timeStamp = "utc_timestamp"
+        static let timestampReceived = "utc_timestamp_received"
         static let horizontalAccuracy = "horizontal_accuracy"
         static let verticalAccuracy = "vertical_accuracy"
         static let altitude = "altitude"
@@ -82,8 +83,9 @@ public struct OpenLocateLocation: JsonParameterType, DataType {
     public let locationFields: LocationCollectingFields
     public let deviceInfo: DeviceCollectingFields
     public let context: Context
+    public let timestampReceived: Date?
     var createdAt: Date?
-
+    
     var debugDescription: String {
         return "OpenLocateLocation(location: \(locationFields), advertisingInfo: \(advertisingInfo))"
     }
@@ -93,6 +95,7 @@ public struct OpenLocateLocation: JsonParameterType, DataType {
          collectingFields: CollectingFields,
          context: Context = .unknown) {
 
+        self.timestampReceived = Date()
         self.timestamp = timestamp
         self.advertisingInfo = advertisingInfo
         self.networkInfo = collectingFields.networkInfo
@@ -127,6 +130,10 @@ extension OpenLocateLocation {
             jsonParameters[Keys.timeStamp] = Int(timestamp)
         }
 
+        if let timestampReceived = timestampReceived?.timeIntervalSince1970 {
+            jsonParameters[Keys.timestampReceived] = Int(timestampReceived)
+        }
+        
         if let horizontalAccuracy = locationFields.horizontalAccuracy {
             jsonParameters[Keys.horizontalAccuracy] = horizontalAccuracy
         }
@@ -206,6 +213,12 @@ extension OpenLocateLocation {
         } else {
             self.context = .unknown
         }
+        
+        if let timeIntervalTimestampReceived = coding.timestampReceived {
+            self.timestampReceived = Date(timeIntervalSince1970: timeIntervalTimestampReceived)
+        } else {
+            self.timestampReceived = nil
+        }
 
         self.createdAt = createdAt
     }
@@ -220,6 +233,7 @@ extension OpenLocateLocation {
         let latitude: CLLocationDegrees?
         let longitude: CLLocationDegrees?
         let timestamp: TimeInterval?
+        let timestampReceived: TimeInterval?
         let horizontalAccuracy: CLLocationAccuracy?
         let verticalAccuracy: CLLocationAccuracy?
         let altitude: CLLocationDistance?
@@ -239,6 +253,7 @@ extension OpenLocateLocation {
             latitude = location.locationFields.coordinates?.latitude
             longitude = location.locationFields.coordinates?.longitude
             timestamp = location.locationFields.timestamp?.timeIntervalSince1970
+            timestampReceived = location.timestampReceived?.timeIntervalSince1970
             horizontalAccuracy = location.locationFields.horizontalAccuracy
             verticalAccuracy = location.locationFields.verticalAccuracy
             altitude = location.locationFields.altitude
@@ -261,6 +276,7 @@ extension OpenLocateLocation {
             latitude = aDecoder.decodeObject(forKey: OpenLocateLocation.Keys.latitude) as? CLLocationDegrees
             longitude = aDecoder.decodeObject(forKey: OpenLocateLocation.Keys.longitude) as? CLLocationDegrees
             timestamp = aDecoder.decodeObject(forKey: OpenLocateLocation.Keys.timeStamp) as? TimeInterval
+            timestampReceived = aDecoder.decodeObject(forKey: OpenLocateLocation.Keys.timestampReceived) as? TimeInterval
             altitude = aDecoder.decodeObject(forKey: OpenLocateLocation.Keys.altitude) as? CLLocationDistance
             advertisingId = aDecoder.decodeObject(forKey: OpenLocateLocation.Keys.adId) as? String
             isLimitedAdTrackingEnabled = aDecoder.decodeObject(forKey: OpenLocateLocation.Keys.adOptOut) as? Bool
@@ -285,6 +301,7 @@ extension OpenLocateLocation {
             aCoder.encode(latitude, forKey: OpenLocateLocation.Keys.latitude)
             aCoder.encode(longitude, forKey: OpenLocateLocation.Keys.longitude)
             aCoder.encode(timestamp, forKey: OpenLocateLocation.Keys.timeStamp)
+            aCoder.encode(timestampReceived, forKey: OpenLocateLocation.Keys.timestampReceived)
             aCoder.encode(altitude, forKey: OpenLocateLocation.Keys.altitude)
             aCoder.encode(advertisingId, forKey: OpenLocateLocation.Keys.adId)
             aCoder.encode(isLimitedAdTrackingEnabled, forKey: OpenLocateLocation.Keys.adOptOut)

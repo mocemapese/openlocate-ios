@@ -33,7 +33,7 @@ protocol LocationServiceType {
     func start()
     func stop()
 
-    func fetchLocation(onCompletion: @escaping ((Bool) -> Void))
+    func backgroundFetchLocation(onCompletion: @escaping ((Bool) -> Void))
 }
 
 private let locationsKey = "locations"
@@ -44,6 +44,7 @@ final class LocationService: LocationServiceType {
     let endpointsInfoKey = "OpenLocate_EndpointsInfo"
     let endpointLastTransmitDate = "lastTransmitDate"
     let maxNumberOfDaysStored = 10
+    let maxForegroundLocationUpdateInterval: TimeInterval = 15 * 60.0 // 15 minutes
 
     let collectingFieldsConfiguration: CollectingFieldsConfiguration
 
@@ -91,55 +92,73 @@ final class LocationService: LocationServiceType {
         }
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
     func start() {
         debugPrint("Location service started for urls : \(endpoints.map({$0.url}))")
 
         locationManager.subscribe { [weak self] locations in
-            self?.executionQueue.async {
-                guard let strongSelf = self else { return }
-
-                let collectingFields = DeviceCollectingFields.configure(with: strongSelf.collectingFieldsConfiguration)
-
-                let openLocateLocations: [OpenLocateLocation] = locations.map {
-                    let info = CollectingFields.Builder(configuration: strongSelf.collectingFieldsConfiguration)
-                        .set(location: $0.location)
-                        .set(network: NetworkInfo.currentNetworkInfo())
-                        .set(deviceInfo: collectingFields)
-                        .build()
-
-                    return OpenLocateLocation(timestamp: $0.location.timestamp,
-                                              advertisingInfo: strongSelf.advertisingInfo,
-                                              collectingFields: info,
-                                              context: $0.context)
-                }
-
-                strongSelf.locationDataSource.addAll(locations: openLocateLocations)
-
-                //debugPrint(strongSelf.locationDataSource.all())
-
-                strongSelf.postLocationsIfNeeded()
-            }
+            self?.addUpdatedLocations(locations: locations)
         }
 
         UserDefaults.standard.set(true, forKey: isStartedKey)
         UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplicationBackgroundFetchIntervalMinimum)
+
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationDidBecomeActive),
+                                               name: NSNotification.Name.UIApplicationDidBecomeActive,
+                                               object: nil)
     }
 
+    // swiftlint:disable notification_center_detachment
     func stop() {
         locationManager.cancel()
         locationDataSource.clear()
 
         UserDefaults.standard.set(false, forKey: isStartedKey)
         UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplicationBackgroundFetchIntervalNever)
+        NotificationCenter.default.removeObserver(self)
     }
 
-    func fetchLocation(onCompletion: @escaping ((Bool) -> Void)) {
+    func backgroundFetchLocation(onCompletion: @escaping ((Bool) -> Void)) {
+        if let lastKnownLocation = locationManager.lastLocation {
+            addUpdatedLocations(locations: [(location: lastKnownLocation, context: .passive)])
+        }
         locationManager.fetchLocation(onCompletion: onCompletion)
     }
 
 }
 
 extension LocationService {
+
+    private func addUpdatedLocations(locations: [(location: CLLocation, context: OpenLocateLocation.Context)]) {
+        self.executionQueue.async { [weak self] in
+            guard let strongSelf = self else { return }
+
+            let collectingFields = DeviceCollectingFields.configure(with: strongSelf.collectingFieldsConfiguration)
+
+            let openLocateLocations: [OpenLocateLocation] = locations.map {
+                let info = CollectingFields.Builder(configuration: strongSelf.collectingFieldsConfiguration)
+                    .set(location: $0.location)
+                    .set(network: NetworkInfo.currentNetworkInfo())
+                    .set(deviceInfo: collectingFields)
+                    .build()
+
+                return OpenLocateLocation(timestamp: $0.location.timestamp,
+                                          advertisingInfo: strongSelf.advertisingInfo,
+                                          collectingFields: info,
+                                          context: $0.context)
+            }
+
+            strongSelf.locationDataSource.addAll(locations: openLocateLocations)
+
+            //debugPrint(strongSelf.locationDataSource.all())
+
+            strongSelf.postLocationsIfNeeded()
+        }
+    }
 
     func postLocationsIfNeeded() {
         if let earliestLocation = locationDataSource.first(), let createdAt = earliestLocation.createdAt,
@@ -259,6 +278,17 @@ extension LocationService {
     private func endBackgroundTask() {
         UIApplication.shared.endBackgroundTask(backgroundTask)
         backgroundTask = UIBackgroundTaskInvalid
+    }
+
+    @objc private func applicationDidBecomeActive(notification: NSNotification) {
+        if UIApplication.shared.applicationState == .active {
+            if let lastKnownLocation = locationManager.lastLocation {
+                addUpdatedLocations(locations: [(location: lastKnownLocation, context: .passive)])
+                if abs(lastKnownLocation.timestamp.timeIntervalSinceNow) > maxForegroundLocationUpdateInterval {
+                    locationManager.fetchLocation(onCompletion: { _ in })
+                }
+            }
+        }
     }
 
     static func isAuthorizationKeysValid() -> Bool {

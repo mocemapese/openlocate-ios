@@ -33,7 +33,8 @@ OpenLocate is supported by mobile app developers, non-profit trade groups, acade
 
 OpenLocate utilizes  several services within iOS’s CoreLocation API to provide timely and relevant location updates.
 - `Visit Monitoring` API is used to determine locations the user has frequented by logging a location update for the entry and exit of a visit.
-- `Significant Location Change` API is used to log significant movement in the user’s location. 
+- `Significant Location Change` API is used to log significant movement in the user’s location.
+- Cached location update when application becomes active. If cached fix is older than 15 minutes, a new location update is fetched when in foreground.
 - Lastly, `Background Fetch` is used to periodically fetch the user’s current location.
 
 Given that location updates are sparse, the context in which the location updates occurred in is recorded in location_context.
@@ -125,6 +126,28 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 }
 ```
 
+#### Configuring for "When In Use" location authorization
+
+By default, open locate will use and prompt the `.authorizedAlways` authorization status for `CLLocationManager`. If you prefer to use the `.authroizedWhenInUse` status, you can specify this before calling  `initialize`. Note that you will receive significantly less location updates when compared to the default. Example:
+
+```swift
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]? ) -> Bool {
+
+    let uuid = UUID(uuidString: "<YOUR_UUID>")!
+    let token = "YOUR_TOKEN"
+
+    let url = URL(string: "https://api.safegraph.com/v1/provider/\(uuid)/devicelocation")!
+    let headers = ["Authorization": "Bearer \(token)"]
+
+    let configuration = Configuration(url: url, headers: headers, authorizationStatus: .authorizedWhenInUse)
+
+    do {
+        try OpenLocate.shared.initialize(with: configuration)
+    } catch {
+        print(error)
+    }
+}
+```
 
 ### Start tracking of location
 
@@ -324,6 +347,7 @@ func pushLocationToDataDrop(location: OpenLocateLocation) {
 |latitude|Decimal|The latitude in degrees.|CollectingFieldsConfiguration.shouldLogLocation|
 |longitude|Decimal|The longitude in degrees.|CollectingFieldsConfiguration.shouldLogLocation|
 |utc_timestamp|Long|The time at which this location was determined.|CollectingFieldsConfiguration.shouldLogTimestamp|
+|utc_timestamp_received|Long|The time at which this location update was delivered to the client. Location updates may come at a much later than time they were determined.||
 |horizontal_accuracy|Float|The radius of uncertainty for the location, measured in meters.|CollectingFieldsConfiguration.shouldLogHorizontalAccuracy|
 |veritcal_accuracy|Float|The accuracy of the altitude value, measured in meters.|CollectingFieldsConfiguration.shouldLogHorizontalAccuracy|
 |altitude|Float|The altitude, measured in meters.|CollectingFieldsConfiguration.shouldLogAltitude|

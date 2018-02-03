@@ -28,6 +28,13 @@ import CoreLocation
 
 class TrackViewController: UIViewController, CLLocationManagerDelegate {
 
+    @IBOutlet weak var startButton: UIButton!
+    @IBOutlet weak var stopButton: UIButton!
+    @IBOutlet weak var authorizationStatusSegmentedControl: UISegmentedControl!
+    @IBOutlet weak var errorLabel: UILabel!
+    @IBOutlet weak var appSettingsButton: UIButton!
+    @IBOutlet weak var sdkVersionLabel: UILabel!
+
     private let locationManager = CLLocationManager()
 
     override func viewDidLoad() {
@@ -35,17 +42,14 @@ class TrackViewController: UIViewController, CLLocationManagerDelegate {
 
         self.navigationItem.titleView = UIImageView(image: UIImage(named: "tab_logo"))
 
+        configureUI()
+
         if OpenLocate.shared.isTrackingEnabled {
             onStartTracking()
         }
 
         locationManager.delegate = self
     }
-
-    @IBOutlet weak var startButton: UIButton!
-    @IBOutlet weak var stopButton: UIButton!
-    @IBOutlet weak var errorLabel: UILabel!
-    @IBOutlet weak var appSettingsButton: UIButton!
 
     @IBAction func startTracking(_ sender: Any) {
         OpenLocate.shared.startTracking()
@@ -57,14 +61,9 @@ class TrackViewController: UIViewController, CLLocationManagerDelegate {
         onStopTracking()
     }
 
-    private func onStartTracking() {
-        startButton.isHidden = true
-        stopButton.isHidden = false
-    }
-
-    private func onStopTracking() {
-        startButton.isHidden = false
-        stopButton.isHidden = true
+    @IBAction func didChangeAuthPermission(_ sender: UISegmentedControl) {
+        UserDefaults.standard.set(sender.selectedSegmentIndex, forKey: "authorization_status")
+        UserDefaults.standard.synchronize()
     }
 
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -74,8 +73,6 @@ class TrackViewController: UIViewController, CLLocationManagerDelegate {
         switch status {
         case .denied:
             errorLabel.text = "Location Permission Denied"
-        case .authorizedWhenInUse:
-            errorLabel.text = "Location Permission is only When In Use"
         case .restricted:
             errorLabel.text = "Location Services is Restricted"
         default:
@@ -92,5 +89,29 @@ class TrackViewController: UIViewController, CLLocationManagerDelegate {
                 UIApplication.shared.openURL(appSettings)
             }
         }
+    }
+
+    private func configureUI() {
+        startButton.layer.borderColor = UIColor.blue.cgColor
+        stopButton.layer.borderColor = UIColor.red.cgColor
+        appSettingsButton.layer.borderColor = UIColor.blue.cgColor
+
+        let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") ?? "x"
+        let appBuildNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") ?? "N/A"
+        let sdkVersion = Bundle(for: OpenLocate.self).object(forInfoDictionaryKey: "CFBundleShortVersionString") ?? "x"
+        let iosVersion = UIDevice.current.systemVersion
+        sdkVersionLabel.text = "OpenLocate v\(appVersion)(\(appBuildNumber)) · SDK v\(sdkVersion) · iOS \(iosVersion)"
+    }
+
+    private func onStartTracking() {
+        startButton.isHidden = true
+        stopButton.isHidden = false
+        authorizationStatusSegmentedControl.isHidden = true
+    }
+
+    private func onStopTracking() {
+        startButton.isHidden = false
+        stopButton.isHidden = true
+        authorizationStatusSegmentedControl.isHidden = false
     }
 }
