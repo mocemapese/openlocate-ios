@@ -55,26 +55,26 @@ pod 'OpenLocate'
 
 ### Initialize tracking
 
-1. Add permission keys for location tracking in the `Info.plist` of your application
+1. Add permission keys for location tracking in the `Info.plist` of your application. **Be sure to fill in your app name where appropriate (or edit the string as you see fit)**
 
 For **Xcode 9:**
 ```xml
 <key>NSLocationAlwaysUsageDescription</key>
-<string>OpenLocate would like to access location.</string>
+<string>[App_name] would like to access location.</string>
 <key>NSLocationWhenInUseUsageDescription</key>
-<string>OpenLocate would like to access location.</string>
+<string>[App_name] would like to access location.</string>
 <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-<string>OpenLocate would like to access location.</string>
+<string>[App_name] would like to access location.</string>
 ```
 
 If you are using **Xcode 8** you need one of these keys:
 ```xml
 <key>NSLocationAlwaysUsageDescription</key>
-<string>OpenLocate would like to access location.</string>
+<string>[App_name] would like to access location.</string>
 ```
 ```xml
 <key>NSLocationWhenInUseUsageDescription</key>
-<string>OpenLocate would like to access location.</string>
+<string>[App_name] would like to access location.</string>
 ```
 
 2. Configure where the SDK should send data to by building the configuration with appropriate URL and headers. Supply the configuration to the `initialize` method. Ensure that the initialize method is invoked in the `application:didFinishLaunchingWithOptions:` method in your `UIApplicationDelegate`
