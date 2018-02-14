@@ -6,7 +6,7 @@
 
 #### Fix
 
-- Tweek scheme name so it doesn't overlap with the Example app
+- Tweak scheme name so it doesn't overlap with the Example app
 
 ## [1.2.0](https://github.com/OpenLocate/openlocate-ios/tag/1.2.0)
 
