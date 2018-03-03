@@ -85,7 +85,7 @@ public struct OpenLocateLocation: JsonParameterType, DataType {
     public let context: Context
     public let timestampReceived: Date?
     var createdAt: Date?
-    
+
     var debugDescription: String {
         return "OpenLocateLocation(location: \(locationFields), advertisingInfo: \(advertisingInfo))"
     }
@@ -133,7 +133,7 @@ extension OpenLocateLocation {
         if let timestampReceived = timestampReceived?.timeIntervalSince1970 {
             jsonParameters[Keys.timestampReceived] = Int(timestampReceived)
         }
-        
+
         if let horizontalAccuracy = locationFields.horizontalAccuracy {
             jsonParameters[Keys.horizontalAccuracy] = horizontalAccuracy
         }
@@ -213,7 +213,7 @@ extension OpenLocateLocation {
         } else {
             self.context = .unknown
         }
-        
+
         if let timeIntervalTimestampReceived = coding.timestampReceived {
             self.timestampReceived = Date(timeIntervalSince1970: timeIntervalTimestampReceived)
         } else {

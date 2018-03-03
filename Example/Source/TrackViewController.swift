@@ -62,8 +62,16 @@ class TrackViewController: UIViewController, CLLocationManagerDelegate {
     }
 
     @IBAction func didChangeAuthPermission(_ sender: UISegmentedControl) {
-        UserDefaults.standard.set(sender.selectedSegmentIndex, forKey: "authorization_status")
+        if sender.selectedSegmentIndex == 0 {
+            UserDefaults.standard.set(CLAuthorizationStatus.authorizedAlways.rawValue,
+                                      forKey: "authorization_status")
+        } else {
+            UserDefaults.standard.set(CLAuthorizationStatus.authorizedWhenInUse.rawValue,
+                                      forKey: "authorization_status")
+        }
         UserDefaults.standard.synchronize()
+
+        (UIApplication.shared.delegate as? AppDelegate)?.configureOpenLocate()
     }
 
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -100,7 +108,7 @@ class TrackViewController: UIViewController, CLLocationManagerDelegate {
         let appBuildNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") ?? "N/A"
         let sdkVersion = Bundle(for: OpenLocate.self).object(forInfoDictionaryKey: "CFBundleShortVersionString") ?? "x"
         let iosVersion = UIDevice.current.systemVersion
-        sdkVersionLabel.text = "OpenLocate v\(appVersion)(\(appBuildNumber)) · SDK v\(sdkVersion) · iOS \(iosVersion)"
+        sdkVersionLabel.text = "OpenLocate v\(appVersion)(\(appBuildNumber))\nSDK v\(sdkVersion) · iOS \(iosVersion)"
     }
 
     private func onStartTracking() {
