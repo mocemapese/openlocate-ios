@@ -29,13 +29,13 @@ platform :ios do
   desc 'Push to Fabric BETA'
   lane :deploy_beta do
     xcodeproj = 'Example/iOS Example.xcodeproj'
-    scheme = ‘OpenLocate’
+    scheme = ‘OpenLocate Example’
 
     # ensure that the branch is clean
     ensure_git_status_clean
 
     # Change build number to current time stamp
-    build_number = Time.new.strftime("%Y.%m.%d.%H.%M.%S")
+    build_number = Time.new.strftime("%Y.%m.%d.%H.%M")
     increment_build_number(
       build_number: build_number,
       xcodeproj: xcodeproj

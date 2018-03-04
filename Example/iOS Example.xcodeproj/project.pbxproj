@@ -423,7 +423,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2018.01.27.22.10.32;
+				CURRENT_PROJECT_VERSION = 2018.03.04.14.19.09;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = N7C984W2M5;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Info.plist";
@@ -447,7 +447,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2018.01.27.22.10.32;
+				CURRENT_PROJECT_VERSION = 2018.03.04.14.19.09;
 				DEVELOPMENT_TEAM = N7C984W2M5;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
