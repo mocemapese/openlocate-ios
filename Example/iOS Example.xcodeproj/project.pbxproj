@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		11BDC477205102930056B6AC /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11BDC476205102930056B6AC /* SettingsViewController.swift */; };
+		11BDC479205106700056B6AC /* TransmissionIntervalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11BDC478205106700056B6AC /* TransmissionIntervalViewController.swift */; };
 		4897011B1F04F7CA00D8C27C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4897011A1F04F7CA00D8C27C /* AppDelegate.swift */; };
 		489701241F04F7ED00D8C27C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4897011D1F04F7ED00D8C27C /* Assets.xcassets */; };
 		489701281F04F8C000D8C27C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4897011F1F04F7ED00D8C27C /* LaunchScreen.storyboard */; };
@@ -32,6 +34,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		11BDC476205102930056B6AC /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsViewController.swift; path = Source/SettingsViewController.swift; sourceTree = "<group>"; };
+		11BDC478205106700056B6AC /* TransmissionIntervalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TransmissionIntervalViewController.swift; path = Source/TransmissionIntervalViewController.swift; sourceTree = "<group>"; };
 		326819F92D49F85C167CCB5D /* Pods-iOS Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS Example.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-iOS Example/Pods-iOS Example.debug.xcconfig"; sourceTree = "<group>"; };
 		4897011A1F04F7CA00D8C27C /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Source/AppDelegate.swift; sourceTree = "<group>"; };
 		4897011D1F04F7ED00D8C27C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Resources/Assets.xcassets; sourceTree = "<group>"; };
@@ -82,6 +86,8 @@
 			children = (
 				4897011A1F04F7CA00D8C27C /* AppDelegate.swift */,
 				48A0D5E71F4706E900E12C54 /* TrackViewController.swift */,
+				11BDC476205102930056B6AC /* SettingsViewController.swift */,
+				11BDC478205106700056B6AC /* TransmissionIntervalViewController.swift */,
 				4897011C1F04F7CF00D8C27C /* Supporting Files */,
 			);
 			name = Source;
@@ -284,6 +290,8 @@
 			files = (
 				48A0D5E81F4706E900E12C54 /* TrackViewController.swift in Sources */,
 				4897011B1F04F7CA00D8C27C /* AppDelegate.swift in Sources */,
+				11BDC479205106700056B6AC /* TransmissionIntervalViewController.swift in Sources */,
+				11BDC477205102930056B6AC /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -423,7 +431,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2018.03.04.14.19.09;
+				CURRENT_PROJECT_VERSION = 2018.03.06.22.00;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = N7C984W2M5;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Info.plist";
@@ -447,7 +455,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2018.03.04.14.19.09;
+				CURRENT_PROJECT_VERSION = 2018.03.06.22.00;
 				DEVELOPMENT_TEAM = N7C984W2M5;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
